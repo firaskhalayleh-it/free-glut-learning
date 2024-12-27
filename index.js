@@ -19,519 +19,587 @@ int main(int argc, char** argv) {
     glutMainLoop();
     return 0;
 }</code></pre>
-`
+`,
+        expectedCode: "glutCreateWindow"
     },
     {
         id: 2,
-        title: "Setting Up Code::Blocks with FreeGLUT",
+        title: "Geometric Primitives",
         content: `
-<p>Follow these steps to set up FreeGLUT in Code::Blocks:</p>
-<ol>
-    <li><strong>Download FreeGLUT:</strong> Visit the <a href="https://sourceforge.net/projects/freeglut/" target="_blank">FreeGLUT SourceForge page</a> and download the latest version.</li>
-    <li><strong>Extract Files:</strong> Extract the downloaded files to a directory, e.g., <code>C:\\FreeGLUT</code>.</li>
-    <li><strong>Configure Code::Blocks:</strong>
-        <ul>
-            <li>Open Code::Blocks and create a new project.</li>
-            <li>Go to <strong>Project &gt; Build options</strong>.</li>
-            <li>Add the FreeGLUT <code>include</code> directory in the Compiler settings.</li>
-            <li>Add the FreeGLUT <code>lib</code> directory in the Linker settings.</li>
-            <li>Link against <code>freeglut.lib</code>, <code>opengl32.lib</code>, <code>glu32.lib</code>, and <code>gdi32.lib</code>.</li>
-        </ul>
-    </li>
-</ol>
-<pre><code>// Example Code::Blocks Configuration
-// Compiler Settings > Search directories > Compiler: C:\\FreeGLUT\\include
-// Linker Settings > Search directories > Linker: C:\\FreeGLUT\\lib
-// Linker Settings > Link libraries: freeglut.lib; opengl32.lib; glu32.lib; gdi32.lib</code></pre>
-`
+<p>In OpenGL, geometric primitives are the basic shapes used to construct more complex 3D models. Understanding these primitives is essential for creating graphics applications.</p>
+<p><strong>Common Primitives:</strong></p>
+<ul>
+    <li>Points</li>
+    <li>Lines</li>
+    <li>Triangles</li>
+    <li>Quads</li>
+</ul>
+<pre><code>#include <GL/freeglut.h>
+
+void display() {
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    glBegin(GL_TRIANGLES);
+        glVertex2f(-0.5f, -0.5f); // Vertex 1
+        glVertex2f(0.5f, -0.5f);  // Vertex 2
+        glVertex2f(0.0f, 0.5f);   // Vertex 3
+    glEnd();
+
+    glFlush();
+}
+
+int main(int argc, char** argv) {
+    glutInit(&argc, argv);
+    glutCreateWindow("Geometric Primitives");
+    glutDisplayFunc(display);
+    glutMainLoop();
+    return 0;
+}</code></pre>
+`,
+        expectedCode: "glBegin(GL_TRIANGLES)"
     },
     {
         id: 3,
-        title: "Basic OpenGL Rendering with FreeGLUT",
+        title: "Geometry Primitives: House",
         content: `
-<p>Learn how to render a simple triangle using FreeGLUT and OpenGL.</p>
+<p>Let's create a simple house using geometric primitives in OpenGL.</p>
+<p><strong>Components:</strong></p>
+<ul>
+    <li>Square for the base</li>
+    <li>Triangle for the roof</li>
+</ul>
 <pre><code>#include <GL/freeglut.h>
 
-// Rotation angle
-float angle = 0.0f;
-
-// Display callback
 void display() {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glLoadIdentity();
+    glClear(GL_COLOR_BUFFER_BIT);
 
-    // Rotate the triangle
-    glRotatef(angle, 0.0f, 1.0f, 0.0f);
-
-    // Draw a colored triangle
-    glBegin(GL_TRIANGLES);
-        glColor3f(1.0f, 0.0f, 0.0f); // Red
-        glVertex3f(-0.5f, -0.5f, 0.0f);
-        
-        glColor3f(0.0f, 1.0f, 0.0f); // Green
-        glVertex3f(0.5f, -0.5f, 0.0f);
-        
-        glColor3f(0.0f, 0.0f, 1.0f); // Blue
-        glVertex3f(0.0f, 0.5f, 0.0f);
+    // Draw base of the house
+    glBegin(GL_QUADS);
+        glColor3f(0.7f, 0.7f, 0.7f); // Gray color
+        glVertex2f(-0.5f, -0.5f); // Bottom Left
+        glVertex2f(0.5f, -0.5f);  // Bottom Right
+        glVertex2f(0.5f, 0.0f);   // Top Right
+        glVertex2f(-0.5f, 0.0f);  // Top Left
     glEnd();
 
-    glutSwapBuffers();
+    // Draw roof of the house
+    glBegin(GL_TRIANGLES);
+        glColor3f(1.0f, 0.0f, 0.0f); // Red color
+        glVertex2f(-0.6f, 0.0f); // Left
+        glVertex2f(0.6f, 0.0f);  // Right
+        glVertex2f(0.0f, 0.5f);  // Top
+    glEnd();
+
+    glFlush();
 }
 
-// Idle callback for animation
-void idle() {
-    angle += 0.1f;
-    if (angle > 360.0f)
-        angle -= 360.0f;
-    glutPostRedisplay();
-}
-
-// Initialize OpenGL settings
-void initGL() {
-    glEnable(GL_DEPTH_TEST);
-    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-}
-
-// Main function
 int main(int argc, char** argv) {
     glutInit(&argc, argv);
-    // Use double buffering and RGB colors with depth buffer
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-    // Set window size
-    glutInitWindowSize(800, 600);
-    // Create window with title
-    glutCreateWindow("FreeGLUT Rotating Triangle");
-
-    initGL();
-
-    // Register callbacks
+    glutCreateWindow("Geometry Primitives: House");
     glutDisplayFunc(display);
-    glutIdleFunc(idle);
-
-    // Enter the main loop
     glutMainLoop();
     return 0;
 }</code></pre>
-`
+`,
+        expectedCode: "glBegin(GL_QUADS)"
     },
     {
         id: 4,
-        title: "Handling Keyboard and Mouse Input",
+        title: "Change Color by Mouse Clicks",
         content: `
-<p>Learn how to handle user input using FreeGLUT's callback functions.</p>
+<p>Learn how to change the color of a shape based on mouse clicks using FreeGLUT's input handling.</p>
+<p><strong>Implementation Steps:</strong></p>
+<ol>
+    <li>Set up the display callback to draw a shape.</li>
+    <li>Implement the mouse callback to detect clicks.</li>
+    <li>Change the color based on mouse button pressed.</li>
+</ol>
 <pre><code>#include <GL/freeglut.h>
 
-// Rotation angle
-float angle = 0.0f;
+float colorR = 0.0f, colorG = 0.0f, colorB = 0.0f;
 
-// Display callback
 void display() {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glLoadIdentity();
+    glClear(GL_COLOR_BUFFER_BIT);
 
-    // Rotate the triangle
-    glRotatef(angle, 0.0f, 1.0f, 0.0f);
-
-    // Draw a colored triangle
+    glColor3f(colorR, colorG, colorB); // Dynamic color
     glBegin(GL_TRIANGLES);
-        glColor3f(1.0f, 0.0f, 0.0f); // Red
-        glVertex3f(-0.5f, -0.5f, 0.0f);
-        
-        glColor3f(0.0f, 1.0f, 0.0f); // Green
-        glVertex3f(0.5f, -0.5f, 0.0f);
-        
-        glColor3f(0.0f, 0.0f, 1.0f); // Blue
-        glVertex3f(0.0f, 0.5f, 0.0f);
+        glVertex2f(-0.5f, -0.5f);
+        glVertex2f(0.5f, -0.5f);
+        glVertex2f(0.0f, 0.5f);
     glEnd();
 
-    glutSwapBuffers();
+    glFlush();
 }
 
-// Idle callback for animation
-void idle() {
-    angle += 0.1f;
-    if (angle > 360.0f)
-        angle -= 360.0f;
-    glutPostRedisplay();
-}
-
-// Keyboard callback
-void handleKeypress(unsigned char key, int x, int y) {
-    switch(key) {
-        case 27: // ESC key
-            exit(0);
-            break;
-        case 'r': // Reset rotation
-            angle = 0.0f;
-            break;
-    }
-}
-
-// Mouse callback
 void handleMouse(int button, int state, int x, int y) {
-    if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-        angle += 10.0f;
+    if(state == GLUT_DOWN) {
+        switch(button) {
+            case GLUT_LEFT_BUTTON:
+                colorR = 1.0f; colorG = 0.0f; colorB = 0.0f; // Red
+                break;
+            case GLUT_MIDDLE_BUTTON:
+                colorR = 0.0f; colorG = 1.0f; colorB = 0.0f; // Green
+                break;
+            case GLUT_RIGHT_BUTTON:
+                colorR = 0.0f; colorG = 0.0f; colorB = 1.0f; // Blue
+                break;
+        }
+        glutPostRedisplay();
     }
 }
 
-// Initialize OpenGL settings
-void initGL() {
-    glEnable(GL_DEPTH_TEST);
-    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-}
-
-// Main function
 int main(int argc, char** argv) {
     glutInit(&argc, argv);
-    // Use double buffering and RGB colors with depth buffer
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-    // Set window size
-    glutInitWindowSize(800, 600);
-    // Create window with title
-    glutCreateWindow("FreeGLUT Input Handling");
-
-    initGL();
-
-    // Register callbacks
+    glutCreateWindow("Change Color by Mouse Clicks");
     glutDisplayFunc(display);
-    glutIdleFunc(idle);
-    glutKeyboardFunc(handleKeypress);
     glutMouseFunc(handleMouse);
-
-    // Enter the main loop
     glutMainLoop();
     return 0;
 }</code></pre>
-`
+`,
+        expectedCode: "glutMouseFunc(handleMouse)"
     },
     {
         id: 5,
-        title: "Animations and Timers",
+        title: "Change Color Gradually by Mouse Motion",
         content: `
-<p>Implement animations using FreeGLUT's timer functions.</p>
+<p>Implement gradual color changes based on mouse movement using FreeGLUT's mouse motion callback.</p>
+<p><strong>Implementation Steps:</strong></p>
+<ol>
+    <li>Set up the display callback to draw a shape.</li>
+    <li>Implement the mouse motion callback to track mouse movement.</li>
+    <li>Adjust the color based on the mouse's x and y positions.</li>
+</ol>
 <pre><code>#include <GL/freeglut.h>
 
-// Rotation angle
-float angle = 0.0f;
+float colorR = 0.0f, colorG = 0.0f, colorB = 0.0f;
 
-// Display callback
 void display() {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glLoadIdentity();
+    glClear(GL_COLOR_BUFFER_BIT);
 
-    // Rotate the triangle
-    glRotatef(angle, 0.0f, 1.0f, 0.0f);
-
-    // Draw a colored triangle
-    glBegin(GL_TRIANGLES);
-        glColor3f(1.0f, 0.0f, 0.0f); // Red
-        glVertex3f(-0.5f, -0.5f, 0.0f);
-        
-        glColor3f(0.0f, 1.0f, 0.0f); // Green
-        glVertex3f(0.5f, -0.5f, 0.0f);
-        
-        glColor3f(0.0f, 0.0f, 1.0f); // Blue
-        glVertex3f(0.0f, 0.5f, 0.0f);
+    glColor3f(colorR, colorG, colorB); // Dynamic color
+    glBegin(GL_QUADS);
+        glVertex2f(-0.5f, -0.5f);
+        glVertex2f(0.5f, -0.5f);
+        glVertex2f(0.5f, 0.5f);
+        glVertex2f(-0.5f, 0.5f);
     glEnd();
 
-    glutSwapBuffers();
+    glFlush();
 }
 
-// Timer callback for animation
-void timer(int value) {
-    angle += 1.0f;
-    if (angle > 360.0f)
-        angle -= 360.0f;
+void handleMotion(int x, int y) {
+    int windowWidth = glutGet(GLUT_WINDOW_WIDTH);
+    int windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
+
+    colorR = (float)x / windowWidth;
+    colorG = (float)y / windowHeight;
+    colorB = 0.5f; // Fixed blue component
+
     glutPostRedisplay();
-    glutTimerFunc(16, timer, 0); // Approximately 60 FPS
 }
 
-// Initialize OpenGL settings
-void initGL() {
-    glEnable(GL_DEPTH_TEST);
-    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-}
-
-// Main function
 int main(int argc, char** argv) {
     glutInit(&argc, argv);
-    // Use double buffering, RGB colors, and depth buffer
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-    // Set window size
-    glutInitWindowSize(800, 600);
-    // Create window with title
-    glutCreateWindow("FreeGLUT Animation");
-
-    initGL();
-
-    // Register callbacks
+    glutCreateWindow("Change Color Gradually by Mouse Motion");
     glutDisplayFunc(display);
-    glutTimerFunc(0, timer, 0);
-
-    // Enter the main loop
+    glutPassiveMotionFunc(handleMotion);
     glutMainLoop();
     return 0;
 }</code></pre>
-`
+`,
+        expectedCode: "glutPassiveMotionFunc(handleMotion)"
     },
     {
         id: 6,
-        title: "3D Rendering with FreeGLUT",
+        title: "Draw Shapes by Mouse Click",
         content: `
-<p>Extend your knowledge to render 3D objects using FreeGLUT and OpenGL.</p>
+<p>Enable drawing shapes at the location of mouse clicks using FreeGLUT's mouse callback.</p>
+<p><strong>Implementation Steps:</strong></p>
+<ol>
+    <li>Set up the display callback to draw all shapes.</li>
+    <li>Implement the mouse callback to capture click positions.</li>
+    <li>Store the positions and render shapes accordingly.</li>
+</ol>
 <pre><code>#include <GL/freeglut.h>
+#include <vector>
 
-// Rotation angles
-float angleX = 0.0f;
-float angleY = 0.0f;
+struct Point {
+    float x, y;
+};
 
-// Display callback
+std::vector<Point> points;
+
 void display() {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glLoadIdentity();
+    glClear(GL_COLOR_BUFFER_BIT);
 
-    // Move back to see the cube
-    glTranslatef(0.0f, 0.0f, -5.0f);
+    glColor3f(0.0f, 0.6f, 0.8f); // Cyan color
+    glBegin(GL_POINTS);
+        for(auto &p : points) {
+            glVertex2f(p.x, p.y);
+        }
+    glEnd();
 
-    // Rotate the cube
-    glRotatef(angleX, 1.0f, 0.0f, 0.0f);
-    glRotatef(angleY, 0.0f, 1.0f, 0.0f);
-
-    // Draw a cube
-    glutSolidCube(2.0f);
-
-    glutSwapBuffers();
+    glFlush();
 }
 
-// Idle callback for animation
-void idle() {
-    angleX += 0.3f;
-    angleY += 0.2f;
-    if (angleX > 360.0f)
-        angleX -= 360.0f;
-    if (angleY > 360.0f)
-        angleY -= 360.0f;
-    glutPostRedisplay();
+void handleMouse(int button, int state, int x, int y) {
+    if(state == GLUT_DOWN) {
+        int windowWidth = glutGet(GLUT_WINDOW_WIDTH);
+        int windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
+
+        float fx = (float)x / windowWidth * 2.0f - 1.0f;
+        float fy = 1.0f - (float)y / windowHeight * 2.0f;
+
+        points.push_back(Point{fx, fy});
+        glutPostRedisplay();
+    }
 }
 
-// Initialize OpenGL settings
-void initGL() {
-    glEnable(GL_DEPTH_TEST);
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-}
-
-// Main function
 int main(int argc, char** argv) {
     glutInit(&argc, argv);
-    // Use double buffering, RGB colors, and depth buffer
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-    // Set window size
-    glutInitWindowSize(800, 600);
-    // Create window with title
-    glutCreateWindow("FreeGLUT 3D Cube");
-
-    initGL();
-
-    // Register callbacks
+    glutCreateWindow("Draw Shapes by Mouse Click");
     glutDisplayFunc(display);
-    glutIdleFunc(idle);
-
-    // Enter the main loop
+    glutMouseFunc(handleMouse);
+    glutInitWindowSize(800, 600);
+    glPointSize(5.0f);
     glutMainLoop();
     return 0;
 }</code></pre>
-`
+`,
+        expectedCode: "glutMouseFunc(handleMouse)"
     },
+    // ... (Add tutorials 7-17 similarly)
     {
         id: 7,
-        title: "Lighting and Shading",
+        title: "3D Projection Examples",
         content: `
-<p>Implement basic lighting and shading to enhance the visual appearance of your 3D objects.</p>
+<p>Understanding 2D and 3D projections is crucial in OpenGL to render objects correctly on the screen.</p>
+<p><strong>Types of Projections:</strong></p>
+<ul>
+    <li><strong>Orthographic Projection:</strong> Parallel projection without perspective.</li>
+    <li><strong>Perspective Projection:</strong> Mimics the human eye with vanishing points.</li>
+</ul>
 <pre><code>#include <GL/freeglut.h>
 
-// Rotation angles
-float angleX = 0.0f;
-float angleY = 0.0f;
-
-// Display callback
 void display() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    // Set up orthographic projection
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(-2.0, 2.0, -2.0, 2.0, -10.0, 10.0);
+
+    glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    // Move back to see the cube
-    glTranslatef(0.0f, 0.0f, -5.0f);
-
-    // Rotate the cube
-    glRotatef(angleX, 1.0f, 0.0f, 0.0f);
-    glRotatef(angleY, 0.0f, 1.0f, 0.0f);
-
-    // Set material properties
-    GLfloat mat_specular[] = {1.0, 1.0, 1.0, 1.0};
-    GLfloat mat_shininess[] = {50.0};
-    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-    glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
-
-    // Enable lighting
-    glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
-
     // Draw a cube
-    glutSolidCube(2.0f);
+    glutSolidCube(1.0f);
 
     glutSwapBuffers();
 }
 
-// Idle callback for animation
-void idle() {
-    angleX += 0.3f;
-    angleY += 0.2f;
-    if (angleX > 360.0f)
-        angleX -= 360.0f;
-    if (angleY > 360.0f)
-        angleY -= 360.0f;
-    glutPostRedisplay();
-}
-
-// Initialize OpenGL settings
-void initGL() {
-    glEnable(GL_DEPTH_TEST);
-    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-
-    glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
-
-    // Light properties
-    GLfloat light_ambient[]  = { 0.2f, 0.2f, 0.2f, 1.0f };
-    GLfloat light_diffuse[]  = { 0.8f, 0.8f, 0.8f, 1.0f };
-    GLfloat light_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-    GLfloat light_position[] = { 1.0f, 1.0f, 1.0f, 0.0f };
-
-    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-    glLightfv(GL_LIGHT0, GL_AMBIENT,  light_ambient);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE,  light_diffuse);
-    glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
-}
-
-// Main function
 int main(int argc, char** argv) {
     glutInit(&argc, argv);
-    // Use double buffering, RGB colors, and depth buffer
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-    // Set window size
-    glutInitWindowSize(800, 600);
-    // Create window with title
-    glutCreateWindow("FreeGLUT Lighting and Shading");
-
-    initGL();
-
-    // Register callbacks
+    glutCreateWindow("Orthographic Projection Example");
     glutDisplayFunc(display);
-    glutIdleFunc(idle);
-
-    // Enter the main loop
+    glEnable(GL_DEPTH_TEST);
     glutMainLoop();
     return 0;
 }</code></pre>
-`
+<p>Switching to perspective projection:</p>
+<pre><code>#include <GL/freeglut.h>
+
+void display() {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    // Set up perspective projection
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluPerspective(45.0, 1.0, 1.0, 100.0);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    gluLookAt(3.0,3.0,3.0, 0.0,0.0,0.0, 0.0,1.0,0.0);
+
+    // Draw a cube
+    glutSolidCube(1.0f);
+
+    glutSwapBuffers();
+}
+
+int main(int argc, char** argv) {
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+    glutCreateWindow("Perspective Projection Example");
+    glutDisplayFunc(display);
+    glEnable(GL_DEPTH_TEST);
+    glutMainLoop();
+    return 0;
+}</code></pre>
+`,
+        expectedCode: "gluPerspective(45.0, 1.0, 1.0, 100.0)"
     },
     {
         id: 8,
-        title: "Texture Mapping",
+        title: "Notes on popMatrix() and pushMatrix()",
         content: `
-<p>Apply textures to your 3D objects to add realism.</p>
+<p>Although FreeGLUT doesn't have &grave;popMatrix()&grave; and &grave;pushMatrix()&grave; functions like Processing, OpenGL provides similar functionality using matrix modes and stack operations.</p>
+<p><strong>Matrix Stack Operations:</strong></p>
+<ul>
+    <li><strong>glPushMatrix():</strong> Saves the current matrix state.</li>
+    <li><strong>glPopMatrix():</strong> Restores the last saved matrix state.</li>
+</ul>
 <pre><code>#include <GL/freeglut.h>
-#include <SOIL/SOIL.h>
 
-// Rotation angles
-float angleX = 0.0f;
-float angleY = 0.0f;
-
-// Texture ID
-GLuint texture;
-
-// Display callback
 void display() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    // Move back to see the cube
-    glTranslatef(0.0f, 0.0f, -5.0f);
+    // Draw first cube
+    glPushMatrix();
+    glTranslatef(-1.0f, 0.0f, -5.0f);
+    glutSolidCube(1.0f);
+    glPopMatrix();
 
-    // Rotate the cube
-    glRotatef(angleX, 1.0f, 0.0f, 0.0f);
-    glRotatef(angleY, 0.0f, 1.0f, 0.0f);
-
-    // Enable texturing
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, texture);
-
-    // Draw a textured cube
-    glutSolidCube(2.0f);
-
-    glDisable(GL_TEXTURE_2D);
+    // Draw second cube
+    glPushMatrix();
+    glTranslatef(1.0f, 0.0f, -5.0f);
+    glutSolidCube(1.0f);
+    glPopMatrix();
 
     glutSwapBuffers();
 }
 
-// Idle callback for animation
-void idle() {
-    angleX += 0.3f;
-    angleY += 0.2f;
-    if (angleX > 360.0f)
-        angleX -= 360.0f;
-    if (angleY > 360.0f)
-        angleY -= 360.0f;
-    glutPostRedisplay();
-}
-
-// Initialize OpenGL settings
-void initGL() {
-    glEnable(GL_DEPTH_TEST);
-    glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
-
-    // Load texture
-    texture = SOIL_load_OGL_texture(
-        "texture.jpg",
-        SOIL_LOAD_AUTO,
-        SOIL_CREATE_NEW_ID,
-        SOIL_FLAG_INVERT_Y
-    );
-
-    if(texture == 0) {
-        printf("Failed to load texture\n");
-    }
-
-    // Texture parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-}
-
-// Main function
 int main(int argc, char** argv) {
     glutInit(&argc, argv);
-    // Use double buffering, RGB colors, and depth buffer
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-    // Set window size
-    glutInitWindowSize(800, 600);
-    // Create window with title
-    glutCreateWindow("FreeGLUT Texture Mapping");
-
-    initGL();
-
-    // Register callbacks
+    glutCreateWindow("pushMatrix and popMatrix Example");
     glutDisplayFunc(display);
-    glutIdleFunc(idle);
-
-    // Enter the main loop
+    glEnable(GL_DEPTH_TEST);
     glutMainLoop();
     return 0;
 }</code></pre>
-`
+`,
+        expectedCode: "glPushMatrix()"
     },
-    // Add tutorials 9-20 similarly following the same structure
-    // For brevity, only 8 tutorials are shown here.
+    {
+        id: 9,
+        title: "Basic Transformations",
+        content: `
+<p>Transformations allow you to move, scale, and rotate objects in OpenGL.</p>
+<p><strong>Types of Transformations:</strong></p>
+<ul>
+    <li><strong>Translation:</strong> Moving objects along the x, y, or z-axis.</li>
+    <li><strong>Scaling:</strong> Increasing or decreasing the size of objects.</li>
+    <li><strong>Rotation:</strong> Rotating objects around an axis.</li>
+</ul>
+<pre><code>#include <GL/freeglut.h>
+
+void display() {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    // Translation
+    glTranslatef(-1.5f, 0.0f, -7.0f);
+    glColor3f(1.0f, 0.0f, 0.0f); // Red
+    glutSolidCube(1.0f);
+
+    // Scaling
+    glLoadIdentity();
+    glTranslatef(1.5f, 0.0f, -7.0f);
+    glScalef(1.0f, 2.0f, 1.0f); // Scale Y-axis
+    glColor3f(0.0f, 1.0f, 0.0f); // Green
+    glutSolidCube(1.0f);
+
+    // Rotation
+    glLoadIdentity();
+    glTranslatef(0.0f, 0.0f, -7.0f);
+    glRotatef(45.0f, 1.0f, 1.0f, 0.0f); // Rotate around X and Y axes
+    glColor3f(0.0f, 0.0f, 1.0f); // Blue
+    glutSolidCube(1.0f);
+
+    glutSwapBuffers();
+}
+
+int main(int argc, char** argv) {
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+    glutCreateWindow("Basic Transformations");
+    glutDisplayFunc(display);
+    glEnable(GL_DEPTH_TEST);
+    glutMainLoop();
+    return 0;
+}</code></pre>
+`,
+        expectedCode: "glTranslatef(-1.5f, 0.0f, -7.0f)"
+    },
+    {
+        id: 10,
+        title: "Translate Animation",
+        content: `
+<p>Create an animation where an object moves continuously along an axis using FreeGLUT's idle callback.</p>
+<p><strong>Implementation Steps:</strong></p>
+<ol>
+    <li>Set up the display callback to draw the object.</li>
+    <li>Implement the idle callback to update the object's position.</li>
+    <li>Ensure the position resets to create a looping animation.</li>
+</ol>
+<pre><code>#include <GL/freeglut.h>
+
+float posX = -2.0f;
+float speed = 0.01f;
+
+void display() {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    glTranslatef(posX, 0.0f, -5.0f);
+    glColor3f(0.8f, 0.2f, 0.2f); // Reddish color
+    glutSolidSphere(0.5f, 20, 20);
+
+    glutSwapBuffers();
+}
+
+void idle() {
+    posX += speed;
+    if(posX > 2.0f) posX = -2.0f; // Reset position
+    glutPostRedisplay();
+}
+
+int main(int argc, char** argv) {
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+    glutCreateWindow("Translate Animation");
+    glutDisplayFunc(display);
+    glutIdleFunc(idle);
+    glEnable(GL_DEPTH_TEST);
+    glutMainLoop();
+    return 0;
+}</code></pre>
+`,
+        expectedCode: "glutIdleFunc(idle)"
+    },
+    // ... (Add tutorials 11-17 similarly)
+    {
+        id: 18,
+        title: "Basic Transformations",
+        content: `
+<p>Transformations allow you to manipulate objects in the 3D space. This tutorial covers the basics of translating, scaling, and rotating objects.</p>
+<p><strong>Translation:</strong> Moving an object along the x, y, or z-axis.</p>
+<p><strong>Scaling:</strong> Increasing or decreasing the size of an object.</p>
+<p><strong>Rotation:</strong> Rotating an object around a specified axis.</p>
+<pre><code>#include <GL/freeglut.h>
+
+float angle = 0.0f;
+
+void display() {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    // Translate
+    glTranslatef(-1.5f, 0.0f, -7.0f);
+    glColor3f(1.0f, 0.0f, 0.0f); // Red
+    glutSolidCube(1.0f);
+
+    // Scale
+    glLoadIdentity();
+    glTranslatef(1.5f, 0.0f, -7.0f);
+    glScalef(1.5f, 1.5f, 1.5f);
+    glColor3f(0.0f, 1.0f, 0.0f); // Green
+    glutSolidCube(1.0f);
+
+    // Rotate
+    glLoadIdentity();
+    glTranslatef(0.0f, 0.0f, -7.0f);
+    glRotatef(angle, 1.0f, 1.0f, 0.0f);
+    glColor3f(0.0f, 0.0f, 1.0f); // Blue
+    glutSolidCube(1.0f);
+
+    glutSwapBuffers();
+}
+
+void idle() {
+    angle += 0.1f;
+    if(angle > 360.0f)
+        angle -= 360.0f;
+    glutPostRedisplay();
+}
+
+int main(int argc, char** argv) {
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+    glutCreateWindow("Basic Transformations");
+    glutDisplayFunc(display);
+    glutIdleFunc(idle);
+    glEnable(GL_DEPTH_TEST);
+    glutMainLoop();
+    return 0;
+}</code></pre>
+`,
+        expectedCode: "glutIdleFunc(idle)"
+    },
+    {
+        id: 19,
+        title: "Translate Animation",
+        content: `
+<p>Animate an object by translating it back and forth along an axis.</p>
+<p><strong>Implementation Steps:</strong></p>
+<ol>
+    <li>Initialize the object's position.</li>
+    <li>Update the position in the idle callback to create motion.</li>
+    <li>Reset the position when it reaches a boundary to create a loop.</li>
+</ol>
+<pre><code>#include <GL/freeglut.h>
+
+float posX = -2.0f;
+float speed = 0.02f;
+
+void display() {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    glTranslatef(posX, 0.0f, -5.0f);
+    glColor3f(0.5f, 0.5f, 1.0f); // Light Blue
+    glutSolidSphere(0.5f, 20, 20);
+
+    glutSwapBuffers();
+}
+
+void idle() {
+    posX += speed;
+    if(posX > 2.0f || posX < -2.0f) {
+        speed = -speed; // Reverse direction
+    }
+    glutPostRedisplay();
+}
+
+int main(int argc, char** argv) {
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+    glutCreateWindow("Translate Animation");
+    glutDisplayFunc(display);
+    glutIdleFunc(idle);
+    glEnable(GL_DEPTH_TEST);
+    glutMainLoop();
+    return 0;
+}</code></pre>
+`,
+        expectedCode: "glutIdleFunc(idle)"
+    },
+    // Add more tutorials as needed up to id: 20
+    // For brevity, only key tutorials are added here
 ];
 
 const quizzesData = [
@@ -550,100 +618,113 @@ const quizzesData = [
     {
         id: 2,
         tutorialId: 2,
-        question: "Which library is NOT required to link when setting up FreeGLUT in Code::Blocks?",
+        question: "Which function is used to specify geometric primitives in OpenGL?",
         options: {
-            a: "freeglut.lib",
-            b: "opengl32.lib",
-            c: "glu32.lib",
-            d: "socket.lib"
+            a: "glBegin()",
+            b: "glVertex2f()",
+            c: "glEnd()",
+            d: "All of the above"
         },
         correct: "d"
     },
     {
         id: 3,
         tutorialId: 3,
-        question: "Which function initializes GLUT and processes command-line arguments?",
+        question: "What shape is created by combining a quad and a triangle in the 'Geometry Primitives House' example?",
         options: {
-            a: "glutInit()",
-            b: "glutCreateWindow()",
-            c: "glutMainLoop()",
-            d: "glutDisplayFunc()"
+            a: "A pyramid",
+            b: "A house",
+            c: "A sphere",
+            d: "A cylinder"
         },
-        correct: "a"
+        correct: "b"
     },
     {
         id: 4,
         tutorialId: 4,
-        question: "Which callback function handles keyboard input in FreeGLUT?",
+        question: "Which mouse button changes the color to blue in the 'Change Color by Mouse Clicks' example?",
         options: {
-            a: "glutKeyboardFunc()",
-            b: "glutMouseFunc()",
-            c: "glutDisplayFunc()",
-            d: "glutIdleFunc()"
+            a: "Left Button",
+            b: "Middle Button",
+            c: "Right Button",
+            d: "None of the above"
         },
-        correct: "a"
+        correct: "c"
     },
     {
         id: 5,
         tutorialId: 5,
-        question: "What is the purpose of glutTimerFunc() in FreeGLUT?",
+        question: "What does the 'glutPassiveMotionFunc' function do in the 'Change Color Gradually by Mouse Motion' example?",
         options: {
-            a: "To handle keyboard input",
-            b: "To create a window",
-            c: "To set up a recurring timer callback",
-            d: "To draw shapes"
+            a: "Handles mouse clicks",
+            b: "Handles keyboard input",
+            c: "Handles mouse movement without button presses",
+            d: "Handles window resizing"
         },
         correct: "c"
     },
     {
         id: 6,
         tutorialId: 6,
-        question: "Which function is used to create a solid cube in FreeGLUT?",
+        question: "In the 'Draw Shapes by Mouse Click' example, what OpenGL primitive is used to draw the shapes?",
         options: {
-            a: "glutWireCube()",
-            b: "glutSolidCube()",
-            c: "glutCube()",
-            d: "glutCreateCube()"
+            a: "GL_TRIANGLES",
+            b: "GL_QUADS",
+            c: "GL_POINTS",
+            d: "GL_LINES"
         },
-        correct: "b"
+        correct: "c"
     },
     {
         id: 7,
         tutorialId: 7,
-        question: "Which function enables lighting in OpenGL?",
+        question: "Which function is used to save the current matrix state in OpenGL?",
         options: {
-            a: "glEnable(GL_DEPTH_TEST)",
-            b: "glEnable(GL_LIGHTING)",
-            c: "glEnable(GL_COLOR_MATERIAL)",
-            d: "glEnable(GL_TEXTURE_2D)"
+            a: "glSaveMatrix()",
+            b: "glPushMatrix()",
+            c: "glStoreMatrix()",
+            d: "glCopyMatrix()"
         },
         correct: "b"
     },
     {
         id: 8,
         tutorialId: 8,
-        question: "Which library is commonly used to load textures in OpenGL?",
+        question: "What is the purpose of 'glPushMatrix()' and 'glPopMatrix()' in OpenGL?",
         options: {
-            a: "SDL",
-            b: "GLFW",
-            c: "SOIL",
-            d: "FreeImage"
+            a: "To handle lighting",
+            b: "To manage the matrix stack for transformations",
+            c: "To load textures",
+            d: "To manage buffers"
         },
-        correct: "c"
+        correct: "b"
     },
     {
         id: 9,
         tutorialId: 9,
-        question: "What property controls the shininess of a material in OpenGL?",
+        question: "Which transformation is not covered in the 'Basic Transformations' tutorial?",
         options: {
-            a: "GL_AMBIENT",
-            b: "GL_DIFFUSE",
-            c: "GL_SPECULAR",
-            d: "GL_SHININESS"
+            a: "Translation",
+            b: "Scaling",
+            c: "Shearing",
+            d: "Rotation"
         },
-        correct: "d"
+        correct: "c"
     },
-    // ... Continue adding quizzes up to id: 20 following the same structure
+    {
+        id: 10,
+        tutorialId: 10,
+        question: "In the 'Translate Animation' example, what happens when the object reaches the boundary?",
+        options: {
+            a: "It disappears",
+            b: "It changes color",
+            c: "It reverses direction",
+            d: "It stops moving"
+        },
+        correct: "c"
+    },
+    // Add more quizzes up to id: 20 following the same structure
+    // For brevity, only 10 quizzes are added here
 ];
 
 // Function to generate Tutorials
@@ -670,8 +751,9 @@ function generateQuizzes() {
         const quizDiv = document.createElement('div');
         quizDiv.classList.add('quiz');
         quizDiv.setAttribute('data-quiz-id', quiz.id);
+        const tutorialTitle = tutorialsData.find(t => t.id === quiz.tutorialId).title;
         quizDiv.innerHTML = `
-            <h3>Quiz ${quiz.id}: ${tutorialsData.find(t => t.id === quiz.tutorialId).title}</h3>
+            <h3>Quiz ${quiz.id}: ${tutorialTitle}</h3>
             <p>${quiz.question}</p>
             <ul class="options">
                 <li><input type="radio" name="quiz${quiz.id}" id="quiz${quiz.id}a" value="a"><label for="quiz${quiz.id}a">A) ${quiz.options.a}</label></li>
@@ -725,6 +807,7 @@ let quizzesCompleted = 0;
 const totalTutorials = tutorialsData.length;
 const totalQuizzes = quizzesData.length;
 
+// Function to update progress
 function updateProgress(type) {
     if(type === 'tutorial') {
         tutorialsCompleted = Math.min(tutorialsCompleted + 1, totalTutorials);
@@ -735,6 +818,7 @@ function updateProgress(type) {
     }
 }
 
+// Function to update progress bar
 function updateProgressBar(elementId, completed, total) {
     const progressPercentage = Math.min((completed / total) * 100, 100);
     const progressBar = document.getElementById(elementId);
@@ -778,6 +862,17 @@ function downloadCode() {
     output.innerHTML = '<span style="color: green;">Code downloaded successfully!</span>';
 }
 
+// Function to validate code (Basic Example)
+function validateCode() {
+    const code = window.codeMirrorInstance.getValue();
+    // Example: Check if 'glutCreateWindow' is present
+    if(code.includes('glutCreateWindow')) {
+        alert('Your code looks good!');
+    } else {
+        alert('Please ensure you have included the glutCreateWindow function.');
+    }
+}
+
 // Mobile Navigation Toggle
  menuToggle = document.querySelector('.menu-toggle');
  navbar = document.querySelector('.navbar');
@@ -802,11 +897,6 @@ function initWebGL() {
 
     if (!gl) {
         alert('WebGL not supported, falling back on experimental-webgl');
-        return;
-    }
-
-    if (!gl) {
-        alert('Your browser does not support WebGL');
         return;
     }
 
@@ -1268,6 +1358,7 @@ function promptCodeWriting(tutorialId) {
  totalTutorials = tutorialsData.length;
  totalQuizzes = quizzesData.length;
 
+// Function to update progress
 function updateProgress(type) {
     if(type === 'tutorial') {
         tutorialsCompleted = Math.min(tutorialsCompleted + 1, totalTutorials);
@@ -1278,6 +1369,7 @@ function updateProgress(type) {
     }
 }
 
+// Function to update progress bar
 function updateProgressBar(elementId, completed, total) {
     const progressPercentage = Math.min((completed / total) * 100, 100);
     const progressBar = document.getElementById(elementId);
@@ -1320,6 +1412,17 @@ function downloadCode() {
     output.innerHTML = '<span style="color: green;">Code downloaded successfully!</span>';
 }
 
+// Function to validate code (Basic Example)
+function validateCode() {
+    const code = window.codeMirrorInstance.getValue();
+    // Example: Check if 'glutCreateWindow' is present
+    if(code.includes('glutCreateWindow')) {
+        alert('Your code looks good!');
+    } else {
+        alert('Please ensure you have included the glutCreateWindow function.');
+    }
+}
+
 // Mobile Navigation Toggle
 const menuToggle = document.querySelector('.menu-toggle');
 const navbar = document.querySelector('.navbar');
@@ -1344,11 +1447,6 @@ function initWebGL() {
 
     if (!gl) {
         alert('WebGL not supported, falling back on experimental-webgl');
-        return;
-    }
-
-    if (!gl) {
-        alert('Your browser does not support WebGL');
         return;
     }
 
