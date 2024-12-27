@@ -439,50 +439,6 @@ int main(int argc, char** argv) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/hint/html-hint.min.js"></script>
 
 
-
-    <script>
-        // Code Editor Initialization
-        const codeEditor = CodeMirror.fromTextArea(document.getElementById('code-editor-textarea'), {
-            lineNumbers: true,
-            mode: 'text/x-csrc',
-            theme: 'dracula',
-            autoCloseBrackets: true,
-            matchBrackets: true,
-            matchTags: true,
-            autoCloseTags: true,
-            extraKeys: {
-                'Ctrl-Space': 'autocomplete'
-            }
-        });
-
-        // Scroll to a specific section
-        function scrollToSection(sectionId) {
-            document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // Download the code from the editor
-        function downloadCode() {
-            const code = codeEditor.getValue();
-            const blob = new Blob([code], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'freeglut-code.c';
-            a.click();
-            URL.revokeObjectURL(url);
-        }
-
-        // WebGL Canvas Initialization
-        const canvas = document.getElementById('webgl-canvas');
-        const gl = canvas.getContext('webgl');
-
-        if (!gl) {
-            console.error('WebGL not supported');
-        }
-
-        // Update the progress bars
-        document.getElementById('tutorial-progress').style.width = '50%';
-        document.getElementById('quiz-progress').style.width = '75%';
-    </script>
+    <script src="index.js"></script>
 </body>
 </html>
