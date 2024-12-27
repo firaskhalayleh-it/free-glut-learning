@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/dracula.min.css">
     <style>
         :root {
-            /* Enhanced Color Palette */
+            /* لوحة الألوان المحسنة */
             --primary: #6366f1;
             --primary-dark: #4f46e5;
             --secondary: #06b6d4;
@@ -27,30 +27,30 @@
             --gray-200: #e5e7eb;
             --gray-800: #1f2937;
             
-            /* Typography */
+            /* الطباعة */
             --font-heading: 'Poppins', system-ui, sans-serif;
             --font-body: 'Poppins', system-ui, sans-serif;
             --font-code: 'JetBrains Mono', monospace;
             
-            /* Spacing */
+            /* المسافات */
             --space-unit: 0.5rem;
             --container-padding: clamp(1rem, 5vw, 3rem);
             --section-spacing: clamp(3rem, 8vw, 6rem);
             
-            /* Effects */
+            /* التأثيرات */
             --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
             --shadow-md: 0 4px 6px rgba(0,0,0,0.07);
             --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
             --transition-fast: 200ms cubic-bezier(0.4, 0, 0.2, 1);
             --transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
             
-            /* Glass Effect */
+            /* تأثير الزجاج */
             --glass-bg: rgba(255, 255, 255, 0.1);
             --glass-border: rgba(255, 255, 255, 0.2);
             --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
 
-        /* Reset & Base Styles */
+        /* إعادة تعيين وأنماط أساسية */
         * {
             margin: 0;
             padding: 0;
@@ -66,7 +66,7 @@
             direction: rtl; /* دعم الاتجاه من اليمين إلى اليسار */
         }
 
-        /* Enhanced Navigation */
+        /* التنقل المحسن */
         .navbar {
             background: rgba(15, 23, 42, 0.95);
             backdrop-filter: blur(10px);
@@ -125,7 +125,7 @@
             width: 100%;
         }
 
-        /* Hero Section */
+        /* قسم البطل (Hero) */
         .hero {
             min-height: 100vh;
             display: flex;
@@ -162,7 +162,7 @@
             color: var(--gray-200);
         }
 
-        /* Enhanced Button Styles */
+        /* أنماط الأزرار المحسنة */
         .btn {
             background: linear-gradient(45deg, var(--primary), var(--accent));
             color: white;
@@ -180,14 +180,14 @@
             box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
         }
 
-        /* Main Container */
+        /* الحاوية الرئيسية */
         .container {
             max-width: 1400px;
             margin: 0 auto;
             padding: var(--container-padding);
         }
 
-        /* Enhanced Section Styles */
+        /* أنماط الأقسام المحسنة */
         section {
             margin: var(--section-spacing) 0;
             padding: 2rem;
@@ -205,7 +205,7 @@
             text-align: left; /* لضمان العنوان يبدأ من اليمين في اللغة العربية */
         }
 
-        /* Enhanced Cards */
+        /* بطاقات الدروس والاختبارات المحسنة */
         .tutorial, .quiz {
             background: rgba(255, 255, 255, 0.03);
             border-radius: 1rem;
@@ -220,7 +220,7 @@
             box-shadow: 0 8px 25px rgba(99, 102, 241, 0.2);
         }
 
-        /* Tutorial Content Layout */
+        /* تخطيط محتوى الدرس */
         .tutorial-content {
             display: flex;
             gap: 2rem;
@@ -243,13 +243,14 @@
             overflow-x: auto;
         }
 
-        /* Code Editor (اختياري إذا أحببت وضعه في نفس الصفحة) */
+        /* محرر الشيفرة */
         .editor-container {
             background: var(--dark);
             border-radius: 1rem;
             overflow: hidden;
             box-shadow: var(--shadow-lg);
         }
+
         .CodeMirror {
             height: 500px !important;
             font-family: var(--font-code);
@@ -257,7 +258,7 @@
             padding: 1rem;
         }
 
-        /* Progress Bars */
+        /* أشرطة التقدم */
         .progress-bar {
             height: 12px;
             background: rgba(255, 255, 255, 0.1);
@@ -276,7 +277,7 @@
             font-size: 0.8rem;
         }
 
-        /* Responsive Design */
+        /* تصميم متجاوب */
         @media (max-width: 768px) {
             .navbar ul {
                 display: none;
@@ -310,7 +311,7 @@
             }
         }
 
-        /* Animations */
+        /* الرسوم المتحركة */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -320,7 +321,7 @@
             animation: fadeIn 0.6s ease-out;
         }
 
-        /* WebGL Canvas */
+        /* Canvas WebGL */
         #webgl-canvas {
             width: 100%;
             height: 400px;
@@ -329,7 +330,7 @@
             margin-top: 1rem;
         }
 
-        /* Quiz Styles */
+        /* أنماط الاختبارات */
         .quiz-options {
             display: grid;
             gap: 1rem;
@@ -348,7 +349,7 @@
             background: rgba(255, 255, 255, 0.1);
         }
 
-        /* Footer */
+        /* التذييل */
         .footer {
             background: var(--dark);
             padding: 3rem var(--container-padding);
@@ -373,11 +374,10 @@
             color: var(--primary);
             transform: translateY(-3px);
         }
-
     </style>
 </head>
 <body>
-    <!-- Enhanced Navigation -->
+    <!-- التنقل المحسن -->
     <nav class="navbar">
         <div class="nav-content">
             <div class="logo">مركز FreeGLUT</div>
@@ -390,7 +390,7 @@
         </div>
     </nav>
 
-    <!-- Enhanced Hero Section -->
+    <!-- قسم البطل المحسن -->
     <section class="hero">
         <div class="hero-content">
             <h1>إتقان FreeGLUT</h1>
@@ -399,21 +399,21 @@
         </div>
     </section>
 
-    <!-- Main Container -->
+    <!-- الحاوية الرئيسية -->
     <div class="container">
-        <!-- Tutorials Section -->
+        <!-- قسم الدروس -->
         <section id="tutorials" class="tutorials">
             <h2>الدروس التفاعلية</h2>
             <!-- سيتم إدراج الدروس ديناميكيًا هنا عبر index.js -->
         </section>
 
-        <!-- Quizzes Section -->
+        <!-- قسم الاختبارات -->
         <section id="quizzes" class="quizzes">
             <h2>الاختبارات</h2>
             <!-- سيتم إدراج الاختبارات ديناميكيًا هنا -->
         </section>
 
-        <!-- Progress Tracker Section -->
+        <!-- قسم تتبع التقدم -->
         <section id="progress" class="progress-tracker">
             <h2>تقدم التعلم</h2>
             <div class="progress">
@@ -429,7 +429,7 @@
         </section>
     </div>
 
-    <!-- Footer -->
+    <!-- التذييل -->
     <footer class="footer">
         <p>&copy; 2024 مركز FreeGLUT. جميع الحقوق محفوظة.</p>
         <div class="social-icons">
@@ -439,7 +439,7 @@
         </div>
     </footer>
 
-    <!-- Scripts -->
+    <!-- السكربتات -->
     <!-- سكربت الشيفرة الرئيسية -->
     <script src="index.js"></script>
 
@@ -450,3 +450,4 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/hint/html-hint.min.js"></script>
 </body>
 </html>
+    

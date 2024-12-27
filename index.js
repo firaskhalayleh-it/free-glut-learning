@@ -1,1488 +1,2317 @@
-// بيانات الدروس والاختبارات
+// بيانات الدروس والاختبارات المصنفة حسب الموضوعات ومستويات الصعوبة
 const tutorialsData = [
-  {
-    id: 1,
-    title: "مقدمة في FreeGLUT",
-    content: `
-<div class="tutorial-content">
-    <div class="tutorial-code">
-        <pre><code>#include <GL/freeglut.h>
-
-int main(int argc, char** argv) {
-    glutInit(&argc, argv);
-    glutCreateWindow("نافذة FreeGLUT");
-    glutMainLoop();
-    return 0;
-}</code></pre>
-    </div>
-    <div class="tutorial-text">
-        <p>FreeGLUT هو بديل مفتوح المصدر لمكتبة OpenGL Utility Toolkit (GLUT). يوفر واجهة برمجة تطبيقات بسيطة لإنشاء النوافذ، ومعالجة المدخلات، وإدارة سياق OpenGL.</p>
-        <p><strong>الميزات الرئيسية:</strong></p>
-        <ul>
-            <li>إنشاء وإدارة النوافذ</li>
-            <li>معالجة المدخلات (لوحة المفاتيح، الماوس)</li>
-            <li>دوال رد النداء للتصيير والأحداث</li>
-        </ul>
-    </div>
-</div>
-        `,
-    expectedCode: "glutCreateWindow",
-  },
-  {
-    id: 2,
-    title: "الأشكال الهندسية الأساسية",
-    content: `
-<div class="tutorial-content">
-    <div class="tutorial-code">
-        <pre><code>#include <GL/freeglut.h>
-
-void display() {
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    glBegin(GL_TRIANGLES);
-        glVertex2f(-0.5f, -0.5f); // النقطة 1
-        glVertex2f(0.5f, -0.5f);  // النقطة 2
-        glVertex2f(0.0f, 0.5f);   // النقطة 3
-    glEnd();
-
-    glFlush();
-}
-
-int main(int argc, char** argv) {
-    glutInit(&argc, argv);
-    glutCreateWindow("الأشكال الهندسية الأساسية");
-    glutDisplayFunc(display);
-    glutMainLoop();
-    return 0;
-}</code></pre>
-    </div>
-    <div class="tutorial-text">
-        <p>في OpenGL، الأشكال الهندسية الأساسية هي الأشكال الأساسية المستخدمة لبناء نماذج ثلاثية الأبعاد أكثر تعقيدًا. فهم هذه الأشكال ضروري لإنشاء تطبيقات رسومية.</p>
-        <p><strong>الأشكال الشائعة:</strong></p>
-        <ul>
-            <li>نقاط</li>
-            <li>خطوط</li>
-            <li>مثلثات</li>
-            <li>أرباعيات</li>
-        </ul>
-    </div>
-</div>
-        `,
-    expectedCode: "glBegin(GL_TRIANGLES)",
-  },
-  {
-    id: 3,
-    title: "الأشكال الهندسية: منزل",
-    content: `
-<div class="tutorial-content">
-    <div class="tutorial-code">
-        <pre><code>#include <GL/freeglut.h>
-
-void display() {
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    // رسم قاعدة المنزل
-    glBegin(GL_QUADS);
-        glColor3f(0.7f, 0.7f, 0.7f); // لون رمادي
-        glVertex2f(-0.5f, -0.5f); // أسفل اليسار
-        glVertex2f(0.5f, -0.5f);  // أسفل اليمين
-        glVertex2f(0.5f, 0.0f);   // أعلى اليمين
-        glVertex2f(-0.5f, 0.0f);  // أعلى اليسار
-    glEnd();
-
-    // رسم سقف المنزل
-    glBegin(GL_TRIANGLES);
-        glColor3f(1.0f, 0.0f, 0.0f); // لون أحمر
-        glVertex2f(-0.6f, 0.0f); // اليسار
-        glVertex2f(0.6f, 0.0f);  // اليمين
-        glVertex2f(0.0f, 0.5f);  // الأعلى
-    glEnd();
-
-    glFlush();
-}
-
-int main(int argc, char** argv) {
-    glutInit(&argc, argv);
-    glutCreateWindow("الأشكال الهندسية: منزل");
-    glutDisplayFunc(display);
-    glutMainLoop();
-    return 0;
-}</code></pre>
-    </div>
-    <div class="tutorial-text">
-        <p>لننشئ منزلًا بسيطًا باستخدام الأشكال الهندسية في OpenGL.</p>
-        <p><strong>المكونات:</strong></p>
-        <ul>
-            <li>مربع للأساس</li>
-            <li>مثلث للسقف</li>
-        </ul>
-    </div>
-</div>
-        `,
-    expectedCode: "glBegin(GL_QUADS)",
-  },
-  {
-    id: 4,
-    title: "تغيير اللون عند النقر بالماوس",
-    content: `
-<div class="tutorial-content">
-    <div class="tutorial-code">
-        <pre><code>#include <GL/freeglut.h>
-
-float colorR = 0.0f, colorG = 0.0f, colorB = 0.0f;
-
-void display() {
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    glColor3f(colorR, colorG, colorB); // لون ديناميكي
-    glBegin(GL_TRIANGLES);
-        glVertex2f(-0.5f, -0.5f);
-        glVertex2f(0.5f, -0.5f);
-        glVertex2f(0.0f, 0.5f);
-    glEnd();
-
-    glFlush();
-}
-
-void handleMouse(int button, int state, int x, int y) {
-    if(state == GLUT_DOWN) {
-        switch(button) {
-            case GLUT_LEFT_BUTTON:
-                colorR = 1.0f; colorG = 0.0f; colorB = 0.0f; // أحمر
-                break;
-            case GLUT_MIDDLE_BUTTON:
-                colorR = 0.0f; colorG = 1.0f; colorB = 0.0f; // أخضر
-                break;
-            case GLUT_RIGHT_BUTTON:
-                colorR = 0.0f; colorG = 0.0f; colorB = 1.0f; // أزرق
-                break;
-        }
-        glutPostRedisplay();
-    }
-}
-
-int main(int argc, char** argv) {
-    glutInit(&argc, argv);
-    glutCreateWindow("تغيير اللون عند النقر بالماوس");
-    glutDisplayFunc(display);
-    glutMouseFunc(handleMouse);
-    glutMainLoop();
-    return 0;
-}</code></pre>
-    </div>
-    <div class="tutorial-text">
-        <p>تعلم كيفية تغيير لون الشكل بناءً على نقرات الماوس باستخدام معالجة المدخلات في FreeGLUT.</p>
-        <p><strong>خطوات التنفيذ:</strong></p>
-        <ol>
-            <li>إعداد دالة العرض لرسم الشكل.</li>
-            <li>تنفيذ دالة الماوس للكشف عن النقرات.</li>
-            <li>تغيير اللون بناءً على زر الماوس المضغوط.</li>
-        </ol>
-    </div>
-</div>
-        `,
-    expectedCode: "glutMouseFunc(handleMouse)",
-  },
-  {
-    id: 5,
-    title: "تغيير اللون تدريجيًا بحركة الماوس",
-    content: `
-<div class="tutorial-content">
-    <div class="tutorial-code">
-        <pre><code>#include <GL/freeglut.h>
-
-float colorR = 0.0f, colorG = 0.0f, colorB = 0.0f;
-
-void display() {
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    glColor3f(colorR, colorG, colorB); // لون ديناميكي
-    glBegin(GL_QUADS);
-        glVertex2f(-0.5f, -0.5f);
-        glVertex2f(0.5f, -0.5f);
-        glVertex2f(0.5f, 0.5f);
-        glVertex2f(-0.5f, 0.5f);
-    glEnd();
-
-    glFlush();
-}
-
-void handleMotion(int x, int y) {
-    int windowWidth = glutGet(GLUT_WINDOW_WIDTH);
-    int windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
-
-    colorR = (float)x / windowWidth;
-    colorG = (float)y / windowHeight;
-    colorB = 0.5f; // مكون أزرق ثابت
-
-    glutPostRedisplay();
-}
-
-int main(int argc, char** argv) {
-    glutInit(&argc, argv);
-    glutCreateWindow("تغيير اللون تدريجيًا بحركة الماوس");
-    glutDisplayFunc(display);
-    glutPassiveMotionFunc(handleMotion);
-    glutMainLoop();
-    return 0;
-}</code></pre>
-    </div>
-    <div class="tutorial-text">
-        <p>تنفيذ تغييرات تدريجية في اللون بناءً على حركة الماوس باستخدام دالة رد النداء لحركة الماوس في FreeGLUT.</p>
-        <p><strong>خطوات التنفيذ:</strong></p>
-        <ol>
-            <li>إعداد دالة العرض لرسم الشكل.</li>
-            <li>تنفيذ دالة حركة الماوس لتتبع حركة الماوس.</li>
-            <li>تعديل اللون بناءً على مواقع x و y للماوس.</li>
-        </ol>
-    </div>
-</div>
-        `,
-    expectedCode: "glutPassiveMotionFunc(handleMotion)",
-  },
-  {
-    id: 6,
-    title: "رسم الأشكال عند نقر الماوس",
-    content: `
-<div class="tutorial-content">
-    <div class="tutorial-code">
-        <pre><code>#include <GL/freeglut.h>
-#include <vector>
-
-struct Point {
-    float x, y;
-};
-
-std::vector<Point> points;
-
-void display() {
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    glColor3f(0.0f, 0.6f, 0.8f); // لون سماوي
-    glBegin(GL_POINTS);
-        for(auto &p : points) {
-            glVertex2f(p.x, p.y);
-        }
-    glEnd();
-
-    glFlush();
-}
-
-void handleMouse(int button, int state, int x, int y) {
-    if(state == GLUT_DOWN) {
-        int windowWidth = glutGet(GLUT_WINDOW_WIDTH);
-        int windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
-
-        float fx = (float)x / windowWidth * 2.0f - 1.0f;
-        float fy = 1.0f - (float)y / windowHeight * 2.0f;
-
-        points.push_back(Point{fx, fy});
-        glutPostRedisplay();
-    }
-}
-
-int main(int argc, char** argv) {
-    glutInit(&argc, argv);
-    glutCreateWindow("رسم الأشكال عند نقر الماوس");
-    glutDisplayFunc(display);
-    glutMouseFunc(handleMouse);
-    glutInitWindowSize(800, 600);
-    glPointSize(5.0f);
-    glutMainLoop();
-    return 0;
-}</code></pre>
-    </div>
-    <div class="tutorial-text">
-        <p>تمكين رسم الأشكال في موقع نقرات الماوس باستخدام دالة رد النداء للماوس في FreeGLUT.</p>
-        <p><strong>خطوات التنفيذ:</strong></p>
-        <ol>
-            <li>إعداد دالة العرض لرسم جميع الأشكال.</li>
-            <li>تنفيذ دالة الماوس لالتقاط مواقع النقر.</li>
-            <li>تخزين المواقع ورسم الأشكال وفقًا لذلك.</li>
-        </ol>
-    </div>
-</div>
-        `,
-    expectedCode: "glutMouseFunc(handleMouse)",
-  },
-  // إضافة المزيد من الدروس حتى id: 20
-  {
-    id: 7,
-    title: "استخدام الألوان في FreeGLUT",
-    content: `
-<div class="tutorial-content">
-    <div class="tutorial-code">
-        <pre><code>#include <GL/freeglut.h>
-
-void display() {
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    // رسم مربع باللون الأخضر
-    glColor3f(0.0f, 1.0f, 0.0f);
-    glBegin(GL_QUADS);
-        glVertex2f(-0.3f, -0.3f);
-        glVertex2f(0.3f, -0.3f);
-        glVertex2f(0.3f, 0.3f);
-        glVertex2f(-0.3f, 0.3f);
-    glEnd();
-
-    glFlush();
-}
-
-int main(int argc, char** argv) {
-    glutInit(&argc, argv);
-    glutCreateWindow("استخدام الألوان في FreeGLUT");
-    glutDisplayFunc(display);
-    glutMainLoop();
-    return 0;
-}</code></pre>
-    </div>
-    <div class="tutorial-text">
-        <p>تعلم كيفية استخدام الألوان لرسم الأشكال المختلفة في FreeGLUT.</p>
-        <p><strong>مثال:</strong> رسم مربع باللون الأخضر.</p>
-    </div>
-</div>
-        `,
-    expectedCode: "glColor3f(0.0f, 1.0f, 0.0f)",
-  },
-  {
-    id: 8,
-    title: "تطبيق التحويلات الهندسية",
-    content: `
-<div class="tutorial-content">
-    <div class="tutorial-code">
-        <pre><code>#include <GL/freeglut.h>
-
-void display() {
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    // تطبيق الترجمة
-    glPushMatrix();
-    glTranslatef(0.5f, 0.0f, 0.0f);
-    glColor3f(1.0f, 0.0f, 0.0f); // أحمر
-    glBegin(GL_TRIANGLES);
-        glVertex2f(-0.2f, -0.2f);
-        glVertex2f(0.2f, -0.2f);
-        glVertex2f(0.0f, 0.2f);
-    glEnd();
-    glPopMatrix();
-
-    // تطبيق الدوران
-    glPushMatrix();
-    glRotatef(45.0f, 0.0f, 0.0f, 1.0f);
-    glColor3f(0.0f, 0.0f, 1.0f); // أزرق
-    glBegin(GL_TRIANGLES);
-        glVertex2f(-0.2f, -0.2f);
-        glVertex2f(0.2f, -0.2f);
-        glVertex2f(0.0f, 0.2f);
-    glEnd();
-    glPopMatrix();
-
-    glFlush();
-}
-
-int main(int argc, char** argv) {
-    glutInit(&argc, argv);
-    glutCreateWindow("تطبيق التحويلات الهندسية");
-    glutDisplayFunc(display);
-    glutMainLoop();
-    return 0;
-}</code></pre>
-    </div>
-    <div class="tutorial-text">
-        <p>تعلم كيفية تطبيق التحويلات الهندسية مثل الترجمة والدوران على الأشكال في FreeGLUT.</p>
-        <p><strong>خطوات التنفيذ:</strong></p>
-        <ol>
-            <li>استخدام \`glPushMatrix()\` و \`glPopMatrix()\` لحفظ واستعادة حالة المصفوفة.</li>
-            <li>تطبيق التحويلات باستخدام &grave;glTranslatef()&grave; و &grave;glRotatef()&grave;.</li>
-            <li>رسم الأشكال بعد تطبيق التحويلات.</li>
-        </ol>
-    </div>
-</div>
-        `,
-    expectedCode: "glTranslatef(0.5f, 0.0f, 0.0f)",
-  },
-  {
-    id: 9,
-    title: "إنشاء دائرة باستخدام FreeGLUT",
-    content: `
-<div class="tutorial-content">
-    <div class="tutorial-code">
-        <pre><code>#include <GL/freeglut.h>
-#include <cmath>
-
-void display() {
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    glColor3f(1.0f, 1.0f, 0.0f); // أصفر
-    glBegin(GL_POLYGON);
-        int numSegments = 100;
-        float radius = 0.5f;
-        for(int i = 0; i < numSegments; i++) {
-            float theta = 2.0f * 3.1415926f * float(i) / float(numSegments);
-            float x = radius * cosf(theta);
-            float y = radius * sinf(theta);
-            glVertex2f(x, y);
-        }
-    glEnd();
-
-    glFlush();
-}
-
-int main(int argc, char** argv) {
-    glutInit(&argc, argv);
-    glutCreateWindow("إنشاء دائرة باستخدام FreeGLUT");
-    glutDisplayFunc(display);
-    glutMainLoop();
-    return 0;
-}</code></pre>
-    </div>
-    <div class="tutorial-text">
-        <p>تعلم كيفية إنشاء دائرة باستخدام FreeGLUT عن طريق رسم متعدد الأضلاع يتكون من عدة مثلثات صغيرة.</p>
-        <p><strong>خطوات التنفيذ:</strong></p>
-        <ol>
-            <li>تحديد عدد الأجزاء (<code>numSegments</code>) لتمثيل الدائرة.</li>
-            <li>حساب الإحداثيات لكل نقطة على محيط الدائرة باستخدام دوال <code>cos</code> و <code>sin</code>.</li>
-            <li>رسم الدائرة باستخدام <code>GL_POLYGON</code>.</li>
-        </ol>
-    </div>
-</div>
-        `,
-    expectedCode: "glBegin(GL_POLYGON)",
-  },
-  {
-    id: 10,
-    title: "استخدام المصفوفات لتحريك الأشكال",
-    content: `
-<div class="tutorial-content">
-    <div class="tutorial-code">
-        <pre><code>#include <GL/freeglut.h>
-#include <vector>
-
-struct Square {
-    float x, y;
-};
-
-std::vector<Square> squares;
-float moveSpeed = 0.01f;
-
-void display() {
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    glColor3f(0.0f, 1.0f, 1.0f); // سماوي
-    glBegin(GL_QUADS);
-        for(auto &sq : squares) {
-            glVertex2f(sq.x - 0.1f, sq.y - 0.1f);
-            glVertex2f(sq.x + 0.1f, sq.y - 0.1f);
-            glVertex2f(sq.x + 0.1f, sq.y + 0.1f);
-            glVertex2f(sq.x - 0.1f, sq.y + 0.1f);
-        }
-    glEnd();
-
-    glFlush();
-}
-
-void update(int value) {
-    for(auto &sq : squares) {
-        sq.x += moveSpeed;
-        if(sq.x > 1.0f || sq.x < -1.0f) {
-            moveSpeed = -moveSpeed;
-        }
-    }
-    glutPostRedisplay();
-    glutTimerFunc(16, update, 0); // تقريبًا 60 FPS
-}
-
-void handleMouse(int button, int state, int x, int y) {
-    if(state == GLUT_DOWN) {
-        int windowWidth = glutGet(GLUT_WINDOW_WIDTH);
-        int windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
-
-        float fx = (float)x / windowWidth * 2.0f - 1.0f;
-        float fy = 1.0f - (float)y / windowHeight * 2.0f;
-
-        squares.push_back(Square{fx, fy});
-    }
-}
-
-int main(int argc, char** argv) {
-    glutInit(&argc, argv);
-    glutCreateWindow("استخدام المصفوفات لتحريك الأشكال");
-    glutDisplayFunc(display);
-    glutMouseFunc(handleMouse);
-    glutTimerFunc(0, update, 0);
-    glutMainLoop();
-    return 0;
-}</code></pre>
-    </div>
-    <div class="tutorial-text">
-        <p>تعلم كيفية استخدام المصفوفات لتحريك الأشكال في FreeGLUT.</p>
-        <p><strong>خطوات التنفيذ:</strong></p>
-        <ol>
-            <li>تعريف هيكل &#96;Square&#96; لتخزين إحداثيات المربع.</li>
-            <li>استخدام مصفوفة &#96;std::vector&#96; لتخزين عدة مربعات.</li>
-            <li>تحديث موقع كل مربع في دالة 'update' لتحريكه.</li>
-            <li>إضافة مربعات جديدة عند نقر الماوس.</li>
-            <li>ضبط مؤقت لتحديث الشاشة باستمرار.</li>
-        </ol>
-    </div>
-</div>
-        `,
-    expectedCode: "glutTimerFunc(16, update, 0)",
-  },
-  {
-    id: 11,
-    title: "إضافة الإضاءة البسيطة",
-    content: `
-<div class="tutorial-content">
-    <div class="tutorial-code">
-        <pre><code>#include <GL/freeglut.h>
-
-void initLighting() {
-    glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
+    // Tutorial 1
+    {
+        id: 1,
+        title: "رسم خط بسيط باستخدام GLUT",
+        category: "الرسم الأساسي",
+        difficulty: "مبتدئ",
+        content: `
+            <div class="tutorial-content">
+                <div class="tutorial-code">
+                    <pre><code class="language-cpp">
+    #include<windows.h>
+    #include<GL/glut.h>
     
-    GLfloat lightPos[] = {0.0f, 0.0f, 2.0f, 1.0f};
-    GLfloat lightColor[] = {1.0f, 1.0f, 1.0f, 1.0f};
+    void init () {
+        glClearColor(1.0,1.0,1.0,0.0);
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        gluOrtho2D(0.0,200.0,0.0,150.0);
+    }
     
-    glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, lightColor);
-}
-
-void display() {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_COLOR_MATERIAL);
-    
-    glColor3f(0.5f, 0.5f, 1.0f); // لون أزرق فاتح
-    glutSolidTeapot(0.5);
-    
-    glFlush();
-}
-
-int main(int argc, char** argv) {
-    glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH);
-    glutCreateWindow("إضافة الإضاءة البسيطة");
-    initLighting();
-    glutDisplayFunc(display);
-    glutMainLoop();
-    return 0;
-}</code></pre>
-    </div>
-    <div class="tutorial-text">
-        <p>تعلم كيفية إضافة الإضاءة البسيطة إلى المشاهد في FreeGLUT.</p>
-        <p><strong>خطوات التنفيذ:</strong></p>
-        <ol>
-            <li>تمكين الإضاءة باستخدام <code>glEnable(GL_LIGHTING)</code> و <code>glEnable(GL_LIGHT0)</code>.</li>
-            <li>تحديد موقع الإضاءة ولونها باستخدام <code>glLightfv</code>.</li>
-            <li>تمكين اختبار العمق والرسم ثلاثي الأبعاد.</li>
-            <li>رسم شكل ثلاثي الأبعاد مثل إبريق الشاي (<code>glutSolidTeapot</code>).</li>
-        </ol>
-    </div>
-</div>
-        `,
-    expectedCode: "glEnable(GL_LIGHTING)",
-  },
-  {
-    id: 12,
-    title: "إضافة الألوان المتعددة للأشكال",
-    content: `
-<div class="tutorial-content">
-    <div class="tutorial-code">
-        <pre><code>#include <GL/freeglut.h>
-
-void display() {
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    // رسم مثلث أحمر
-    glColor3f(1.0f, 0.0f, 0.0f);
-    glBegin(GL_TRIANGLES);
-        glVertex2f(-0.6f, -0.5f);
-        glVertex2f(-0.2f, -0.5f);
-        glVertex2f(-0.4f, 0.0f);
-    glEnd();
-
-    // رسم مثلث أخضر
-    glColor3f(0.0f, 1.0f, 0.0f);
-    glBegin(GL_TRIANGLES);
-        glVertex2f(0.2f, -0.5f);
-        glVertex2f(0.6f, -0.5f);
-        glVertex2f(0.4f, 0.0f);
-    glEnd();
-
-    // رسم مثلث أزرق
-    glColor3f(0.0f, 0.0f, 1.0f);
-    glBegin(GL_TRIANGLES);
-        glVertex2f(-0.2f, 0.0f);
-        glVertex2f(0.2f, 0.0f);
-        glVertex2f(0.0f, 0.5f);
-    glEnd();
-
-    glFlush();
-}
-
-int main(int argc, char** argv) {
-    glutInit(&argc, argv);
-    glutCreateWindow("إضافة الألوان المتعددة للأشكال");
-    glutDisplayFunc(display);
-    glutMainLoop();
-    return 0;
-}</code></pre>
-    </div>
-    <div class="tutorial-text">
-        <p>تعلم كيفية إضافة ألوان متعددة للأشكال المختلفة في FreeGLUT.</p>
-        <p><strong>مثال:</strong> رسم ثلاثة مثلثات بألوان مختلفة (أحمر، أخضر، أزرق).</p>
-    </div>
-</div>
-        `,
-    expectedCode: "glColor3f(1.0f, 0.0f, 0.0f)",
-  },
-  {
-    id: 13,
-    title: "إنشاء حلقة رسم مستمرة",
-    content: `
-<div class="tutorial-content">
-    <div class="tutorial-code">
-        <pre><code>#include <GL/freeglut.h>
-
-float angle = 0.0f;
-
-void display() {
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    glPushMatrix();
-    glRotatef(angle, 0.0f, 0.0f, 1.0f);
-    glColor3f(0.8f, 0.3f, 0.2f); // لون برتقالي
-    glBegin(GL_TRIANGLES);
-        glVertex2f(-0.3f, -0.3f);
-        glVertex2f(0.3f, -0.3f);
-        glVertex2f(0.0f, 0.3f);
-    glEnd();
-    glPopMatrix();
-
-    glFlush();
-}
-
-void update(int value) {
-    angle += 1.0f;
-    if(angle > 360.0f) angle -= 360.0f;
-    glutPostRedisplay();
-    glutTimerFunc(16, update, 0); // تقريبًا 60 FPS
-}
-
-int main(int argc, char** argv) {
-    glutInit(&argc, argv);
-    glutCreateWindow("إنشاء حلقة رسم مستمرة");
-    glutDisplayFunc(display);
-    glutTimerFunc(0, update, 0);
-    glutMainLoop();
-    return 0;
-}</code></pre>
-    </div>
-    <div class="tutorial-text">
-        <p>تعلم كيفية إنشاء حلقة رسم مستمرة لتحريك الأشكال في FreeGLUT.</p>
-        <p><strong>خطوات التنفيذ:</strong></p>
-        <ol>
-            <li>تعريف متغير &grave;angle&grave; للتحكم في زاوية الدوران.</li>
-            <li>استخدام دالة &grave;glRotatef&grave; لتدوير الشكل.</li>
-            <li>إعداد مؤقت لتحديث الزاوية واستدعاء إعادة الرسم باستمرار.</li>
-        </ol>
-    </div>
-</div>
-        `,
-    expectedCode: "glutTimerFunc(16, update, 0)",
-  },
-  {
-    id: 14,
-    title: "إنشاء شبكة باستخدام FreeGLUT",
-    content: `
-<div class="tutorial-content">
-    <div class="tutorial-code">
-        <pre><code>#include <GL/freeglut.h>
-
-void display() {
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    glColor3f(1.0f, 1.0f, 1.0f); // أبيض
-
-    // رسم الخطوط الأفقية
-    for(float y = -1.0f; y <= 1.0f; y += 0.2f) {
+    void lineSegment() {
+        glClear(GL_COLOR_BUFFER_BIT);
+        glColor3f(0.0,0.4,0.2);
         glBegin(GL_LINES);
-            glVertex2f(-1.0f, y);
-            glVertex2f(1.0f, y);
+            glVertex2i(180,100);
+            glVertex2i(10,145);
+        glEnd();
+        glFlush();
+    }
+    
+    int main(int argc, char **argv) {
+        glutInit(&argc, argv);
+        glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+        glutInitWindowPosition(50, 100);
+        glutInitWindowSize(400, 300);
+        glutCreateWindow("An Example OpenGL Program");
+        init();
+        glutDisplayFunc(lineSegment);
+        glutMainLoop();
+    }
+                    </code></pre>
+                </div>
+                <div class="tutorial-text">
+                    <p>في هذا الدرس، سنتعلم كيفية رسم خط بسيط باستخدام مكتبة GLUT في OpenGL. سنقوم بتهيئة النافذة، تحديد نظام الإحداثيات، ورسم خط بين نقطتين محددتين.</p>
+                    <ul>
+                        <li><strong>تهيئة الخلفية:</strong> نستخدم <code>glClearColor</code> لتحديد لون الخلفية.</li>
+                        <li><strong>تحديد نظام الإحداثيات:</strong> نستخدم <code>gluOrtho2D</code> لتحديد نطاق الإحداثيات.</li>
+                        <li><strong>رسم الخط:</strong> نستخدم <code>GL_LINES</code> مع <code>glBegin</code> و <code>glEnd</code> لرسم الخط.</li>
+                    </ul>
+                </div>
+            </div>
+        `,
+        expectedCode: "glBegin(GL_LINES)"
+    },
+    
+    // Tutorial 2
+    {
+        id: 2,
+        title: "رسم مربع متعدد الأشكال باستخدام GLUT",
+        category: "الرسم الأساسي",
+        difficulty: "مبتدئ",
+        content: `
+            <div class="tutorial-content">
+                <div class="tutorial-code">
+                    <pre><code class="language-cpp">
+    #include <windows.h>
+    #include<GL/glut.h>
+    
+    void display(){
+        glClear(GL_COLOR_BUFFER_BIT);
+        glColor3d(0,1,0);
+        glPointSize(10);
+        glBegin(GL_POLYGON);
+            glVertex2d(0,0);
+            glVertex2d(100,0);
+            glVertex2d(100,100);
+            glVertex2d(0,100);
+        glEnd();
+    
+        glColor3d(0,0,1);
+        glBegin(GL_POLYGON);
+            glVertex2d(0,0);
+            glVertex2d(-10,0);
+            glVertex2d(-10,-10);
+            glVertex2d(0,-10);
+        glEnd();
+    
+        glFlush();
+    }
+    
+    int main(int argc, char** argv){
+        glutInit(&argc,argv);
+        glutInitWindowPosition(50,50);
+        glutInitWindowSize(500,500);
+        glutCreateWindow("Program 1 ");
+        glClearColor(1,0,0,1);//background color
+        glutDisplayFunc(display);
+        glutMainLoop();
+    }
+                    </code></pre>
+                </div>
+                <div class="tutorial-text">
+                    <p>في هذا الدرس، سنتعلم كيفية رسم مربعات متعددة الألوان باستخدام GLUT في OpenGL. سنتعرف على كيفية تغيير لون الأشكال وتحديد مواقعها على الشاشة.</p>
+                    <ul>
+                        <li><strong>تحديد لون الأشكال:</strong> نستخدم <code>glColor3d</code> لتغيير لون الأشكال.</li>
+                        <li><strong>رسم المربع:</strong> نستخدم <code>GL_POLYGON</code> مع نقاط الزوايا لرسم المربع.</li>
+                        <li><strong>تغيير حجم النقاط:</strong> نستخدم <code>glPointSize</code> لتحديد حجم النقاط.</li>
+                    </ul>
+                </div>
+            </div>
+        `,
+        expectedCode: "glBegin(GL_POLYGON)"
+    },
+    
+    // Tutorial 3
+    {
+        id: 3,
+        title: "التعامل مع أحداث لوحة المفاتيح والفأرة في GLUT",
+        category: "معالجة الأحداث",
+        difficulty: "متوسط",
+        content: `
+            <div class="tutorial-content">
+                <div class="tutorial-code">
+                    <pre><code class="language-cpp">
+    #include<windows.h>
+    #include<GL/glut.h>
+    #include<stdlib.h>
+    #include<stdio.h>
+    
+    void display(){
+        printf("You displayed the first window\\n");
+    }
+    
+    void myKeyboard(unsigned char key, int x, int y){
+        printf("You clicked keyboard button %c x= %d y= %d \\n", key,x,y);
+    }
+    
+    void myReshape(int x, int y){
+        printf("Window size has been changed x= %d, y=% d\\n",x,y);
+    }
+    
+    void myMouse(int button, int state, int x, int y){
+        printf("Mouse button clicked, button = %d, state= %d, x=%d, y=%d\\n", button, state,x,y);
+    }
+    
+    int main( int argc, char **argv){
+        glutInit(&argc,argv);
+        glutInitDisplayMode(GLUT_SINGLE|GLUT_RGB); //single buffer and RGB colors
+        glClear(GL_COLOR_BUFFER_BIT);
+        glutInitWindowSize(500,500);// for window size
+        glutInitWindowPosition(50,50);// for window position
+        glutCreateWindow("Welcome to this window");
+        glutDisplayFunc(display);
+        glutKeyboardFunc(myKeyboard);
+        glutReshapeFunc(myReshape);
+        glutMouseFunc(myMouse);
+        glutMainLoop();
+    }
+                    </code></pre>
+                </div>
+                <div class="tutorial-text">
+                    <p>في هذا الدرس، سنتعلم كيفية التعامل مع أحداث لوحة المفاتيح والفأرة باستخدام مكتبة GLUT في OpenGL. سنقوم بتسجيل دوال ردود الفعل للأحداث المختلفة مثل الضغط على المفاتيح وتغيير حجم النافذة والنقر بالفأرة.</p>
+                    <ul>
+                        <li><strong>تسجيل دوال ردود الفعل:</strong> نستخدم <code>glutKeyboardFunc</code> و <code>glutMouseFunc</code> لتسجيل الدوال التي تتعامل مع أحداث لوحة المفاتيح والفأرة.</li>
+                        <li><strong>معالجة تغيير حجم النافذة:</strong> نستخدم <code>glutReshapeFunc</code> للتعامل مع تغيير حجم النافذة.</li>
+                        <li><strong>طباعة معلومات الأحداث:</strong> الدوال المسجلة تقوم بطباعة معلومات حول الأحداث التي تحدث.</li>
+                    </ul>
+                </div>
+            </div>
+        `,
+        expectedCode: "glutMouseFunc(myMouse)"
+    },
+    
+    // Tutorial 4
+    {
+        id: 4,
+        title: "رسم مربعات باستخدام التحويلات الهندسية",
+        category: "التحولات الهندسية",
+        difficulty: "متوسط",
+        content: `
+            <div class="tutorial-content">
+                <div class="tutorial-code">
+                    <pre><code class="language-cpp">
+    #include <windows.h>
+    #include <GL/glut.h>
+    
+    void init() {
+        glClearColor(1,1,1,1); // خلفية بيضاء
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        gluOrtho2D(-400, 400, -400, 400); // نظام إحداثيات
+    }
+    
+    void axis(){
+        glBegin(GL_LINES);
+            glVertex2d(0, 400);
+            glVertex2d(0, -400);
+            glVertex2d(-400, 0);
+            glVertex2d(400, 0);
         glEnd();
     }
-
-    // رسم الخطوط العمودية
-    for(float x = -1.0f; x <= 1.0f; x += 0.2f) {
-        glBegin(GL_LINES);
-            glVertex2f(x, -1.0f);
-            glVertex2f(x, 1.0f);
+    
+    void drawSquare(){
+        glBegin(GL_POLYGON);
+            glVertex2d(0, 0);
+            glVertex2d(40, 0);
+            glVertex2d(40, 40);
+            glVertex2d(0, 40);
         glEnd();
     }
-
-    glFlush();
-}
-
-int main(int argc, char** argv) {
-    glutInit(&argc, argv);
-    glutCreateWindow("إنشاء شبكة باستخدام FreeGLUT");
-    glutDisplayFunc(display);
-    glutMainLoop();
-    return 0;
-}</code></pre>
-    </div>
-    <div class="tutorial-text">
-        <p>تعلم كيفية إنشاء شبكة باستخدام FreeGLUT عن طريق رسم خطوط أفقية وعمودية بشكل منتظم.</p>
-        <p><strong>خطوات التنفيذ:</strong></p>
-        <ol>
-            <li>استخدام \`glBegin(GL_LINES)\` لرسم الخطوط.</li>
-            <li>تكرار رسم الخطوط الأفقية والعمودية باستخدام حلقات.</li>
-            <li>ضبط الألوان المناسبة لرسم الشبكة.</li>
-        </ol>
-    </div>
-</div>
-        `,
-    expectedCode: "glBegin(GL_LINES)",
-  },
-  {
-    id: 15,
-    title: "إضافة تفاعل لوحة المفاتيح",
-    content: `
-<div class="tutorial-content">
-    <div class="tutorial-code">
-        <pre><code>#include <GL/freeglut.h>
-
-float posX = 0.0f;
-
-void display() {
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    glColor3f(0.2f, 0.8f, 0.2f); // أخضر فاتح
-    glBegin(GL_QUADS);
-        glVertex2f(posX - 0.1f, -0.1f);
-        glVertex2f(posX + 0.1f, -0.1f);
-        glVertex2f(posX + 0.1f, 0.1f);
-        glVertex2f(posX - 0.1f, 0.1f);
-    glEnd();
-
-    glFlush();
-}
-
-void handleKeypress(unsigned char key, int x, int y) {
-    switch(key) {
-        case 'a': // تحريك إلى اليسار
-            posX -= 0.05f;
-            break;
-        case 'd': // تحريك إلى اليمين
-            posX += 0.05f;
-            break;
-        case 27: // مفتاح Esc للخروج
-            exit(0);
-            break;
+    
+    void display() {
+        glColor3f(0, 0,0); // لون المحاور
+        axis(); // رسم المحاور
+    
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+    
+        glColor3f(0.5, 0.5, 0); // لون المربع الأصلي
+        drawSquare();
+    
+        // تطبيق الترجمة
+        glPushMatrix();
+        glTranslated(100, 50, 0);
+    
+            // تطبيق التكبير
+            glPushMatrix();
+            glScaled(2, 2, 1);
+    
+                // تطبيق التدوير
+                glPushMatrix();
+                glRotated(90, 0, 0, 1);
+    
+                    glColor3f(1, 0, 0); // لون المربع المتحول
+                    drawSquare();
+    
+                glPopMatrix();
+            glPopMatrix();
+    
+        glColor3f(0, 1, 0); // لون المربع بعد الترجمة
+        drawSquare();
+    
+        glFlush();
     }
-    glutPostRedisplay();
-}
-
-int main(int argc, char** argv) {
-    glutInit(&argc, argv);
-    glutCreateWindow("إضافة تفاعل لوحة المفاتيح");
-    glutDisplayFunc(display);
-    glutKeyboardFunc(handleKeypress);
-    glutMainLoop();
-    return 0;
-}</code></pre>
-    </div>
-    <div class="tutorial-text">
-        <p>تعلم كيفية إضافة تفاعل لوحة المفاتيح لتحريك الأشكال في FreeGLUT.</p>
-        <p><strong>خطوات التنفيذ:</strong></p>
-        <ol>
-            <li>تعريف متغير &grave;posX&grave; لتحديد موقع الشكل على المحور الأفقي.</li>
-            <li>استخدام دالة &grave;handleKeypress&grave; لمعالجة مدخلات لوحة المفاتيح.</li>
-            <li>تحديث موقع الشكل بناءً على الأزرار المضغوطة ('a' للتحريك إلى اليسار، 'd' للتحريك إلى اليمين).</li>
-            <li>إعادة رسم الشاشة بعد كل تحديث.</li>
-        </ol>
-    </div>
-</div>
-        `,
-    expectedCode: "glutKeyboardFunc(handleKeypress)",
-  },
-  {
-    id: 16,
-    title: "استخدام الإضاءة المتقدمة",
-    content: `
-<div class="tutorial-content">
-    <div class="tutorial-code">
-        <pre><code>#include <GL/freeglut.h>
-
-void initLighting() {
-    glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
-    glEnable(GL_LIGHT1);
     
-    // إعداد الإضاءة الأولى (منتجعة)
-    GLfloat lightPos0[] = {1.0f, 1.0f, 1.0f, 1.0f};
-    GLfloat lightColor0[] = {1.0f, 1.0f, 1.0f, 1.0f};
-    glLightfv(GL_LIGHT0, GL_POSITION, lightPos0);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, lightColor0);
+    int main(int argc, char** argv){
+        glutInit(&argc, argv);
+        glutInitWindowSize(640, 480);
+        glutInitWindowPosition(100, 100);
+        glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+        glutCreateWindow("تحويلات هندسية");
     
-    // إعداد الإضاءة الثانية (خافتة)
-    GLfloat lightPos1[] = {-1.0f, -1.0f, 1.0f, 1.0f};
-    GLfloat lightColor1[] = {0.3f, 0.3f, 0.3f, 1.0f};
-    glLightfv(GL_LIGHT1, GL_POSITION, lightPos1);
-    glLightfv(GL_LIGHT1, GL_DIFFUSE, lightColor1);
-}
-
-void display() {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_COLOR_MATERIAL);
-    
-    glColor3f(0.8f, 0.2f, 0.2f); // أحمر فاتح
-    glutSolidSphere(0.5, 50, 50);
-    
-    glFlush();
-}
-
-int main(int argc, char** argv) {
-    glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH);
-    glutCreateWindow("استخدام الإضاءة المتقدمة");
-    initLighting();
-    glutDisplayFunc(display);
-    glutMainLoop();
-    return 0;
-}</code></pre>
-    </div>
-    <div class="tutorial-text">
-        <p>تعلم كيفية استخدام الإضاءة المتقدمة لإضفاء واقعية أكبر على الأشكال ثلاثية الأبعاد في FreeGLUT.</p>
-        <p><strong>خطوات التنفيذ:</strong></p>
-        <ol>
-            <li>تمكين الإضاءة باستخدام &#96;glEnable(GL_LIGHTING)&#96;.</li>
-            <li>تمكين مصادر الإضاءة (<code>GL_LIGHT0</code> و <code>GL_LIGHT1</code>).</li>
-            <li>تحديد مواقع وألوان الإضاءة باستخدام <code>glLightfv</code>.</li>
-            <li>تمكين اختبار العمق والرسم ثلاثي الأبعاد.</li>
-            <li>رسم شكل ثلاثي الأبعاد مثل كرة (<code>glutSolidSphere</code>).</li>
-        </ol>
-    </div>
-</div>
-        `,
-    expectedCode: "glEnable(GL_LIGHT1)",
-  },
-  {
-    id: 17,
-    title: "إنشاء مستطيل متحرك",
-    content: `
-<div class="tutorial-content">
-    <div class="tutorial-code">
-        <pre><code>#include <GL/freeglut.h>
-
-float posX = -0.9f;
-float speed = 0.02f;
-
-void display() {
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    glColor3f(0.4f, 0.6f, 0.8f); // أزرق فاتح
-    glBegin(GL_QUADS);
-        glVertex2f(posX, -0.2f);
-        glVertex2f(posX + 0.2f, -0.2f);
-        glVertex2f(posX + 0.2f, 0.2f);
-        glVertex2f(posX, 0.2f);
-    glEnd();
-
-    glFlush();
-}
-
-void update(int value) {
-    posX += speed;
-    if(posX > 1.0f || posX < -1.0f) {
-        speed = -speed; // عكس الاتجاه عند الوصول للحافة
+        init();
+        glutDisplayFunc(display);
+        glutMainLoop();
     }
-    glutPostRedisplay();
-    glutTimerFunc(16, update, 0); // تقريبًا 60 FPS
-}
-
-int main(int argc, char** argv) {
-    glutInit(&argc, argv);
-    glutCreateWindow("إنشاء مستطيل متحرك");
-    glutDisplayFunc(display);
-    glutTimerFunc(0, update, 0);
-    glutMainLoop();
-    return 0;
-}</code></pre>
-    </div>
-    <div class="tutorial-text">
-        <p>تعلم كيفية إنشاء مستطيل متحرك في FreeGLUT باستخدام تحديثات مستمرة لموقع المستطيل.</p>
-        <p><strong>خطوات التنفيذ:</strong></p>
-        <ol>
-            <li>تعريف متغيرات &#96;posX&#96; و &#96;speed&#96; للتحكم في موقع المستطيل وسرعته.</li>
-            <li>استخدام دالة &#96;update&#96; لتحديث موقع المستطيل باستمرار.</li>
-            <li>عكس اتجاه الحركة عند الوصول إلى حدود النافذة.</li>
-            <li>إعادة رسم الشاشة بعد كل تحديث.</li>
-        </ol>
-    </div>
-</div>
+                    </code></pre>
+                </div>
+                <div class="tutorial-text">
+                    <p>في هذا الدرس، سنتعلم كيفية تطبيق التحولات الهندسية مثل الترجمة (Translation)، التدوير (Rotation)، والتكبير (Scaling) على الأشكال في OpenGL باستخدام GLUT.</p>
+                    <ul>
+                        <li><strong>الترجمة:</strong> نستخدم <code>glTranslated</code> لتحريك الشكل إلى موقع جديد.</li>
+                        <li><strong>التدوير:</strong> نستخدم <code>glRotated</code> لتدوير الشكل حول محور معين.</li>
+                        <li><strong>التكبير:</strong> نستخدم <code>glScaled</code> لتكبير أو تصغير الشكل.</li>
+                        <li><strong>الدوال المكدسة:</strong> نستخدم <code>glPushMatrix</code> و <code>glPopMatrix</code> للحفاظ على مصفوفة النموذج السابقة.</li>
+                    </ul>
+                </div>
+            </div>
         `,
-    expectedCode: "glutTimerFunc(16, update, 0)",
-  },
-  {
-    id: 18,
-    title: "إنشاء مستطيل ثلاثي الأبعاد",
-    content: `
-<div class="tutorial-content">
-    <div class="tutorial-code">
-        <pre><code>#include <GL/freeglut.h>
-
-void display() {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glEnable(GL_DEPTH_TEST);
-
-    glColor3f(0.6f, 0.2f, 0.8f); // بنفسجي
-
-    glBegin(GL_QUADS);
-        // الأمام
-        glVertex3f(-0.5f, -0.5f,  0.5f);
-        glVertex3f( 0.5f, -0.5f,  0.5f);
-        glVertex3f( 0.5f,  0.5f,  0.5f);
-        glVertex3f(-0.5f,  0.5f,  0.5f);
-
-        // الخلف
-        glVertex3f(-0.5f, -0.5f, -0.5f);
-        glVertex3f(-0.5f,  0.5f, -0.5f);
-        glVertex3f( 0.5f,  0.5f, -0.5f);
-        glVertex3f( 0.5f, -0.5f, -0.5f);
-
-        // الأعلى
-        glVertex3f(-0.5f,  0.5f, -0.5f);
-        glVertex3f(-0.5f,  0.5f,  0.5f);
-        glVertex3f( 0.5f,  0.5f,  0.5f);
-        glVertex3f( 0.5f,  0.5f, -0.5f);
-
-        // الأسفل
-        glVertex3f(-0.5f, -0.5f, -0.5f);
-        glVertex3f( 0.5f, -0.5f, -0.5f);
-        glVertex3f( 0.5f, -0.5f,  0.5f);
-        glVertex3f(-0.5f, -0.5f,  0.5f);
-
-        // اليمين
-        glVertex3f( 0.5f, -0.5f, -0.5f);
-        glVertex3f( 0.5f,  0.5f, -0.5f);
-        glVertex3f( 0.5f,  0.5f,  0.5f);
-        glVertex3f( 0.5f, -0.5f,  0.5f);
-
-        // اليسار
-        glVertex3f(-0.5f, -0.5f, -0.5f);
-        glVertex3f(-0.5f, -0.5f,  0.5f);
-        glVertex3f(-0.5f,  0.5f,  0.5f);
-        glVertex3f(-0.5f,  0.5f, -0.5f);
-    glEnd();
-
-    glFlush();
-}
-
-void reshape(int width, int height) {
-    if(height == 0) height = 1; // لتجنب القسمة على صفر
-    float aspect = (float)width / (float)height;
-
-    glViewport(0, 0, width, height);
-
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    gluPerspective(45.0, aspect, 1.0, 100.0);
-
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    gluLookAt(
-        2.0, 2.0, 2.0, // موقع الكاميرا
-        0.0, 0.0, 0.0, // النقطة المستهدفة
-        0.0, 1.0, 0.0  // اتجاه الأعلى
-    );
-}
-
-int main(int argc, char** argv) {
-    glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH);
-    glutInitWindowSize(800, 600);
-    glutCreateWindow("إنشاء مستطيل ثلاثي الأبعاد");
-    glutDisplayFunc(display);
-    glutReshapeFunc(reshape);
-    glutMainLoop();
-    return 0;
-}</code></pre>
-    </div>
-    <div class="tutorial-text">
-        <p>تعلم كيفية إنشاء مستطيل ثلاثي الأبعاد في FreeGLUT باستخدام مصفوفات العرض.</p>
-        <p><strong>خطوات التنفيذ:</strong></p>
-        <ol>
-            <li>تمكين اختبار العمق باستخدام <code>glEnable(GL_DEPTH_TEST)</code>.</li>
-            <li>تحديد مصفوفة العرض باستخدام <code>gluPerspective</code> و <code>gluLookAt</code> في دالة <code>reshape</code>.</li>
-            <li>رسم المستطيل ثلاثي الأبعاد باستخدام <code>GL_QUADS</code> ورسم جميع الوجوه الستة.</li>
-        </ol>
-    </div>
-</div>
+        expectedCode: "glTranslated(100, 50, 0)"
+    },
+    
+    // Tutorial 5
+    {
+        id: 5,
+        title: "إنشاء حركة متحركة باستخدام GLUT Timer",
+        category: "الأنيميشن",
+        difficulty: "متقدم",
+        content: `
+            <div class="tutorial-content">
+                <div class="tutorial-code">
+                    <pre><code class="language-cpp">
+    #include <windows.h>
+    #include <GL/glut.h>
+    
+    int tx = 0; // إزاحة الحركة على المحور x
+    int status = 1; // اتجاه الحركة
+    
+    void init() {
+        glClearColor(1,1,1,0); // خلفية بيضاء
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        gluOrtho2D(0, 640, 0, 480); // نظام إحداثيات
+    }
+    
+    void drawSquare(){
+        glBegin(GL_POLYGON);
+            glVertex2d(0,0);
+            glVertex2d(40,0);
+            glVertex2d(40,40);
+            glVertex2d(0,40);
+        glEnd();
+    }
+    
+    void display()
+    {
+        glColor3f(1, 0,0);
+        glClear (GL_COLOR_BUFFER_BIT);
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+        glTranslated(tx,0,0);
+        drawSquare();
+        glFlush();
+    }
+    
+    void update(int){
+        if (tx > 600 || tx < 0)
+            status = -status;
+    
+        tx += 5 * status;
+        glutPostRedisplay();
+        glutTimerFunc(100, update, 0);
+    }
+    
+    int main(int argc, char** argv){
+        glutInit(&argc, argv);
+        glutInitWindowSize(640, 480);
+        glutInitWindowPosition(100, 100);
+        glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+        glutCreateWindow("Template");
+    
+        init();
+        glutDisplayFunc(display);
+        glutTimerFunc(0, update, 0);
+        glutMainLoop();
+    }
+                    </code></pre>
+                </div>
+                <div class="tutorial-text">
+                    <p>في هذا الدرس، سنتعلم كيفية إنشاء حركة متحركة لمربع باستخدام دوال GLUT Timer. سنتحكم في إزاحة المربع على المحور x وعكس اتجاهه عند الوصول إلى حدود الشاشة.</p>
+                    <ul>
+                        <li><strong>الدوال الموقتة:</strong> نستخدم <code>glutTimerFunc</code> لتحديد دالة تُستدعى بعد فترة زمنية معينة.</li>
+                        <li><strong>إزاحة الحركة:</strong> نحدث قيمة <code>tx</code> للتحكم في موقع المربع.</li>
+                        <li><strong>عكس الاتجاه:</strong> نغير قيمة <code>status</code> لعكس اتجاه الحركة عند الوصول إلى الحدود.</li>
+                    </ul>
+                </div>
+            </div>
         `,
-    expectedCode: "gluLookAt(2.0, 2.0, 2.0",
-  },
-  {
-    id: 19,
-    title: "إنشاء دائرة ثلاثية الأبعاد",
-    content: `
-<div class="tutorial-content">
-    <div class="tutorial-code">
-        <pre><code>#include <GL/freeglut.h>
-#include <cmath>
-
-void display() {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glEnable(GL_DEPTH_TEST);
-
-    glColor3f(1.0f, 0.5f, 0.0f); // برتقالي
-
-    glBegin(GL_TRIANGLE_FAN);
-        glVertex3f(0.0f, 0.0f, 0.0f); // المركز
-        int numSegments = 100;
-        float radius = 0.5f;
-        for(int i = 0; i <= numSegments; i++) {
-            float angle = 2.0f * 3.1415926f * i / numSegments;
-            float x = radius * cosf(angle);
-            float y = radius * sinf(angle);
-            glVertex3f(x, y, 0.0f);
+        expectedCode: "glutTimerFunc(100, update, 0)"
+    },
+    
+    // Tutorial 6
+    {
+        id: 6,
+        title: "رسم دوائر وأقواس باستخدام GLUT",
+        category: "الرسم الأساسي",
+        difficulty: "متقدم",
+        content: `
+            <div class="tutorial-content">
+                <div class="tutorial-code">
+                    <pre><code class="language-cpp">
+    #include <windows.h>
+    #include<GL/glut.h>
+    #include <cmath>
+    
+    void init(){
+        glClearColor(1,1,1,1); // خلفية بيضاء
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        gluOrtho2D(0,640,0,480); // نظام إحداثيات
+    }
+    
+    void display(){
+        glClear(GL_COLOR_BUFFER_BIT); // مسح الشاشة
+    
+        // رسم دائرة
+        glColor3f(1, 0, 1); // لون الدائرة
+        double theta, x, y;
+        glBegin(GL_POINTS);
+            for(theta =0; theta <=360; theta+=1){
+                x = 60 * cos(3.14*theta/180) + 0;
+                y = 60 * sin(3.14*theta/180) + 150;
+                glVertex2f(x,y);
+            }
+        glEnd();
+    
+        // رسم دائرة مملوءة
+        glBegin(GL_POLYGON);
+            for(theta =0; theta <=360; theta+=1){
+                x = 60 * cos(3.14*theta/180) + 150;
+                y = 60 * sin(3.14*theta/180) + 150;
+                glVertex2f(x,y);
+            }
+        glEnd();
+    
+        // رسم قوس
+        glBegin(GL_POINTS);
+            for(theta =0; theta <=90; theta+=1){
+                x = 60 * cos(3.14*theta/180) + 300;
+                y = 60 * sin(3.14*theta/180) + 150;
+                glVertex2f(x,y);
+            }
+        glEnd();
+    
+        glFlush(); // تنفيذ الأوامر
+    }
+    
+    int main(int argc, char** argv){
+        glutInit(&argc, argv);
+        glutInitWindowSize(640, 480);
+        glutInitWindowPosition(100, 100);
+        glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+        glutCreateWindow("رسم دوائر وأقواس");
+    
+        init();
+        glutDisplayFunc(display);
+        glutMainLoop();
+    }
+                    </code></pre>
+                </div>
+                <div class="tutorial-text">
+                    <p>في هذا الدرس، سنتعلم كيفية رسم دوائر، دوائر مملوءة، وأقواس باستخدام مكتبة GLUT في OpenGL. سنستخدم الدوال الرياضية لحساب نقاط الدائرة والقوس.</p>
+                    <ul>
+                        <li><strong>رسم الدائرة:</strong> نستخدم <code>GL_POINTS</code> لرسم نقاط الدائرة باستخدام دالة <code>glVertex2f</code>.</li>
+                        <li><strong>رسم دائرة مملوءة:</strong> نستخدم <code>GL_POLYGON</code> لرسم دائرة مملوءة.</li>
+                        <li><strong>رسم القوس:</strong> نستخدم <code>GL_POINTS</code> لرسم قوس بزاوية محددة.</li>
+                    </ul>
+                </div>
+            </div>
+        `,
+        expectedCode: "glBegin(GL_POINTS)"
+    },
+    
+    // Tutorial 7
+    {
+        id: 7,
+        title: "رسم خطوط باستخدام مصفوفات الرؤوس",
+        category: "الرسم الأساسي",
+        difficulty: "متوسط",
+        content: `
+            <div class="tutorial-content">
+                <div class="tutorial-code">
+                    <pre><code class="language-cpp">
+    #include <windows.h>
+    #include<GL/glut.h>
+    
+    void init(){
+        glClearColor(1,1,1,1); // خلفية بيضاء
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        gluOrtho2D(0,500,0,500); // نظام إحداثيات
+    }
+    
+    void display(){
+        glClear(GL_COLOR_BUFFER_BIT);
+        glColor3f(0.7,0.7,0.7);
+        glRectd(50,0, 200,150);
+    
+        glColor3f(0.7,0,0);
+        glBegin(GL_TRIANGLES);
+            glVertex2d(50,150);
+            glVertex2d(125,200);
+            glVertex2d(200,150);
+        glEnd();
+    
+        glColor3f(0.0,0.0,0.7);
+        glRectd(70,100, 100,130);
+        glRectd(150,100, 180,130);
+    
+        glColor3f(0.8,0.5,0.2);
+        glRectd(110,0, 150,60);
+    
+        glFlush();
+    }
+    
+    int main(int argc, char** argv){
+        glutInit(&argc, argv);
+        glutInitWindowPosition(100,50);
+        glutInitWindowSize(500,500);
+        glutCreateWindow("simple example");
+    
+        glutDisplayFunc(display);
+        init();
+        glutMainLoop();
+    }
+                    </code></pre>
+                </div>
+                <div class="tutorial-text">
+                    <p>في هذا الدرس، سنتعلم كيفية رسم خطوط وأشكال متعددة باستخدام مصفوفات الرؤوس في OpenGL. سنقوم برسم مستطيلات ومثلثات بألوان مختلفة لتوضيح كيفية استخدام الدوال الأساسية للرسم.</p>
+                    <ul>
+                        <li><strong>رسم المستطيلات:</strong> نستخدم <code>glRectd</code> لرسم مستطيلات بألوان مختلفة.</li>
+                        <li><strong>رسم المثلثات:</strong> نستخدم <code>GL_TRIANGLES</code> مع نقاط الرؤوس لرسم مثلث.</li>
+                        <li><strong>تغيير لون الأشكال:</strong> نستخدم <code>glColor3f</code> لتغيير لون الأشكال المرسومة.</li>
+                    </ul>
+                </div>
+            </div>
+        `,
+        expectedCode: "glBegin(GL_TRIANGLES)"
+    },
+    
+    // Tutorial 8
+    {
+        id: 8,
+        title: "رسم المستطيلات باستخدام وظائف glRect",
+        category: "الرسم الأساسي",
+        difficulty: "مبتدئ",
+        content: `
+            <div class="tutorial-content">
+                <div class="tutorial-code">
+                    <pre><code class="language-cpp">
+    #include <windows.h>
+    #include<GL/glut.h>
+    
+    void init(){
+        glClearColor(1,1,1,1); // خلفية بيضاء
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        gluOrtho2D(0,500,0,500); // نظام إحداثيات
+    }
+    
+    void display(){
+        glClear(GL_COLOR_BUFFER_BIT);
+        glColor3f(1,0,0);
+    
+        glRecti(100,100,300,400);
+        //glRectd(10,10,100,100);
+        //glRectf(10,10,100,100);
+        // يمكننا استخدام نقطتين فقط بدلاً من ذلك
+        GLfloat v1[]= {10,10}; // أو float
+        GLfloat v2[]= {100,100}; // أو float
+        glRectfv(v1,v2); // نقطتين كل واحدة لها إحداثيات x,y
+        //glRectiv(v1,v2); // يجب أن تكون v1 و v2 int
+        //glRectdv(v1,v2); // يجب أن تكون v1 و v2 double
+        glFlush();
+    }
+    
+    int main(int argc, char** argv){
+        glutInit(&argc, argv);
+        glutInitWindowPosition(50,50);
+        glutInitWindowSize(500,500);
+        glutCreateWindow("Output Primatives ");
+        glutDisplayFunc(display);
+        init();
+        glutMainLoop();
+    }
+                    </code></pre>
+                </div>
+                <div class="tutorial-text">
+                    <p>في هذا الدرس، سنتعلم كيفية رسم المستطيلات باستخدام دوال OpenGL المختلفة مثل <code>glRecti</code> و <code>glRectf</code> و <code>glRectd</code>. سنستعرض كيفية تحديد إحداثيات المستطيل باستخدام نقطتين.</p>
+                    <ul>
+                        <li><strong>رسم المستطيل باستخدام الأعداد الصحيحة:</strong> نستخدم <code>glRecti</code> لتحديد إحداثيات المستطيل باستخدام قيم صحيحة.</li>
+                        <li><strong>رسم المستطيل باستخدام المصفوفات:</strong> نستخدم <code>glRectfv</code> لتحديد إحداثيات المستطيل باستخدام مصفوفات من النقاط.</li>
+                        <li><strong>تغيير لون المستطيل:</strong> نستخدم <code>glColor3f</code> لتغيير لون المستطيل المرسوم.</li>
+                    </ul>
+                </div>
+            </div>
+        `,
+        expectedCode: "glRectfv(v1,v2)"
+    },
+    
+    // Tutorial 9
+    {
+        id: 9,
+        title: "رسم مثلثات باستخدام GL_TRIANGLES",
+        category: "الرسم الأساسي",
+        difficulty: "مبتدئ",
+        content: `
+            <div class="tutorial-content">
+                <div class="tutorial-code">
+                    <pre><code class="language-cpp">
+    #include <windows.h>
+    #include<GL/glut.h>
+    
+    void init(){
+        glClearColor(1,1,1,1); // خلفية بيضاء
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        gluOrtho2D(0,500,0,500); // نظام إحداثيات
+    }
+    
+    void display(){
+        glClear(GL_COLOR_BUFFER_BIT);
+        glColor3f(1,0,0);
+    
+        glBegin(GL_TRIANGLES);
+            glVertex2i(100,100);
+            glVertex2i(420,100);
+            glVertex2i(220,400);
+        glEnd();
+    
+        glFlush();
+    }
+    
+    int main(int argc, char** argv){
+        glutInit(&argc, argv);
+        glutInitWindowPosition(50,50);
+        glutInitWindowSize(500,500);
+        glutCreateWindow("Output Primatives ");
+        glutDisplayFunc(display);
+        init();
+        glutMainLoop();
+    }
+                    </code></pre>
+                </div>
+                <div class="tutorial-text">
+                    <p>في هذا الدرس، سنتعلم كيفية رسم مثلثات باستخدام OpenGL و GLUT. سنستخدم <code>GL_TRIANGLES</code> لتحديد رؤوس المثلثات وتلوينها بألوان مختلفة.</p>
+                    <ul>
+                        <li><strong>رسم المثلث:</strong> نستخدم <code>GL_TRIANGLES</code> مع ثلاث نقاط لرسم مثلث.</li>
+                        <li><strong>تغيير لون المثلث:</strong> نستخدم <code>glColor3f</code> لتحديد لون المثلث.</li>
+                        <li><strong>تحديد رؤوس المثلث:</strong> نستخدم <code>glVertex2i</code> لتحديد إحداثيات رؤوس المثلث.</li>
+                    </ul>
+                </div>
+            </div>
+        `,
+        expectedCode: "glBegin(GL_TRIANGLES)"
+    },
+    
+    // Tutorial 10
+    {
+        id: 10,
+        title: "رسم خطوط باستخدام أحداث الفأرة",
+        category: "معالجة الأحداث",
+        difficulty: "متوسط",
+        content: `
+            <div class="tutorial-content">
+                <div class="tutorial-code">
+                    <pre><code class="language-cpp">
+    #include<windows.h>
+    #include<GL/glut.h>
+    
+    void myMouse(int button,int state,int x,int y){
+        if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN){
+            glColor3f(0.5,0.5,0);
+            glutPostRedisplay();
         }
-    glEnd();
-
-    glFlush();
-}
-
-void reshape(int width, int height) {
-    if(height == 0) height = 1; // لتجنب القسمة على صفر
-    float aspect = (float)width / (float)height;
-
-    glViewport(0, 0, width, height);
-
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    gluPerspective(45.0, aspect, 1.0, 100.0);
-
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    gluLookAt(
-        0.0, 0.0, 5.0, // موقع الكاميرا
-        0.0, 0.0, 0.0, // النقطة المستهدفة
-        0.0, 1.0, 0.0  // اتجاه الأعلى
-    );
-}
-
-int main(int argc, char** argv) {
-    glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH);
-    glutInitWindowSize(800, 600);
-    glutCreateWindow("إنشاء دائرة ثلاثية الأبعاد");
-    glutDisplayFunc(display);
-    glutReshapeFunc(reshape);
-    glutMainLoop();
-    return 0;
-}</code></pre>
-    </div>
-    <div class="tutorial-text">
-        <p>تعلم كيفية إنشاء دائرة ثلاثية الأبعاد في FreeGLUT باستخدام مصفوفات العرض.</p>
-        <p><strong>خطوات التنفيذ:</strong></p>
-        <ol>
-            <li>تمكين اختبار العمق باستخدام \`glEnable(GL_DEPTH_TEST)\`.</li>
-            <li>تحديد مصفوفة العرض باستخدام \`gluPerspective\` و \`gluLookAt\` في دالة \`reshape\`.</li>
-            <li>رسم الدائرة ثلاثية الأبعاد باستخدام \`GL_TRIANGLE_FAN\`.</li>
-        </ol>
-    </div>
-</div>
+        if(button == GLUT_LEFT_BUTTON && state == GLUT_UP){
+            glColor3f(0.,0.5,0.5);
+            glutPostRedisplay();
+        }
+    }
+    
+    void init(){
+        glClearColor(1,1,1,1); // خلفية بيضاء
+        glClear(GL_COLOR_BUFFER_BIT);
+        glColor3f(0.5,0.6,0.7);
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        gluOrtho2D(0, 500.0, 0, 500.0); // نظام إحداثيات
+    }
+    
+    void display(){
+        glRectd(100,100, 400, 300);
+        glFlush();
+    }
+    
+    int main(int argc, char** argv){
+        glutInit(&argc, argv);
+        glutInitWindowPosition(100,100);
+        glutInitWindowSize(500,500);
+        glutCreateWindow("Mouse Event Example");
+        glutDisplayFunc(display);
+        glutMouseFunc(myMouse);
+        init();
+        glutMainLoop();
+    }
+                    </code></pre>
+                </div>
+                <div class="tutorial-text">
+                    <p>في هذا الدرس، سنتعلم كيفية تغيير لون المستطيل بناءً على نقرات الفأرة. عند النقر بزر الفأرة الأيسر، سيتغير لون المستطيل حسب حالة الضغط.</p>
+                    <ul>
+                        <li><strong>التعامل مع نقرات الفأرة:</strong> نستخدم <code>glutMouseFunc</code> لتسجيل دالة رد الفعل لنقرات الفأرة.</li>
+                        <li><strong>تغيير اللون:</strong> نغير لون المستطيل عند الضغط والإفلات باستخدام <code>glColor3f</code>.</li>
+                        <li><strong>إعادة رسم الشاشة:</strong> نستخدم <code>glutPostRedisplay()</code> لإعادة رسم النافذة بعد تغيير اللون.</li>
+                    </ul>
+                </div>
+            </div>
         `,
-    expectedCode: "gluLookAt(0.0, 0.0, 5.0",
-  },
-  {
-    id: 20,
-    title: "إضافة حركة ديناميكية باستخدام الوقت",
-    content: `
-<div class="tutorial-content">
-    <div class="tutorial-code">
-        <pre><code>#include <GL/freeglut.h>
-
-float angle = 0.0f;
-
-void display() {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glEnable(GL_DEPTH_TEST);
-
-    glPushMatrix();
-    glRotatef(angle, 0.0f, 1.0f, 0.0f); // دوران حول المحور Y
-    glColor3f(0.3f, 0.7f, 0.9f); // أزرق سماوي
-    glutSolidCube(1.0f);
-    glPopMatrix();
-
-    glFlush();
-}
-
-void update(int value) {
-    angle += 0.5f;
-    if(angle > 360.0f) angle -= 360.0f;
-    glutPostRedisplay();
-    glutTimerFunc(16, update, 0); // تقريبًا 60 FPS
-}
-
-int main(int argc, char** argv) {
-    glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH);
-    glutInitWindowSize(800, 600);
-    glutCreateWindow("إضافة حركة ديناميكية باستخدام الوقت");
-    glutDisplayFunc(display);
-    glutTimerFunc(0, update, 0);
-    glutMainLoop();
-    return 0;
-}</code></pre>
-    </div>
-    <div class="tutorial-text">
-        <p>تعلم كيفية إضافة حركة ديناميكية للأشكال في FreeGLUT باستخدام تحديثات تعتمد على الوقت.</p>
-        <p><strong>خطوات التنفيذ:</strong></p>
-        <ol>
-            <li>تعريف متغير <code>angle</code> للتحكم في زاوية الدوران.</li>
-            <li>استخدام دالة <code>glRotatef</code> لتدوير الشكل حول المحور Y.</li>
-            <li>إعداد مؤقت لتحديث الزاوية واستدعاء إعادة الرسم باستمرار.</li>
-            <li>رسم شكل ثلاثي الأبعاد مثل مكعب (<code>glutSolidCube</code>) بعد تطبيق التحويل.</li>
-        </ol>
-    </div>
-</div>
+        expectedCode: "glutMouseFunc(myMouse)"
+    },
+    
+    // Tutorial 11
+    {
+        id: 11,
+        title: "تغيير لون المستطيل عند النقر باستخدام المتغيرات الثابتة",
+        category: "معالجة الأحداث",
+        difficulty: "متقدم",
+        content: `
+            <div class="tutorial-content">
+                <div class="tutorial-code">
+                    <pre><code class="language-cpp">
+    #include<windows.h>
+    #include<GL/glut.h>
+    
+    void myMouse(int button,int state,int x,int y){
+        if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN){
+            static float r = 0;
+            static float g = 0;
+            r += 0.1;
+            g += 0.05;
+    
+            glColor3f(r, g, 0);
+            glutPostRedisplay();
+        }
+    }
+    
+    void init(){
+        glClearColor(1,1,1,1); // خلفية بيضاء
+        glClear(GL_COLOR_BUFFER_BIT);
+        glColor3f(0.5,0.6,0.7);
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        gluOrtho2D(0, 500.0, 0, 500.0); // نظام إحداثيات
+    }
+    
+    void display(){
+        glRectd(100,100, 400, 300);
+        glFlush();
+    }
+    
+    int main(int argc, char** argv){
+        glutInit(&argc, argv);
+        glutInitWindowPosition(100,100);
+        glutInitWindowSize(500,500);
+        glutCreateWindow("Mouse Event Example");
+        glutDisplayFunc(display);
+        glutMouseFunc(myMouse);
+        init();
+        glutMainLoop();
+    }
+                    </code></pre>
+                </div>
+                <div class="tutorial-text">
+                    <p>في هذا الدرس، سنتعلم كيفية تغيير لون المستطيل باستخدام متغيرات ثابتة (static variables) عند نقرات الفأرة. ستزداد قيم الألوان تدريجياً مع كل نقرة.</p>
+                    <ul>
+                        <li><strong>المتغيرات الثابتة:</strong> نستخدم <code>static</code> للحفاظ على قيم المتغيرات بين نقرات الفأرة.</li>
+                        <li><strong>تحديث اللون:</strong> نزيد قيم الألوان تدريجياً لتغيير لون المستطيل عند كل نقرة.</li>
+                        <li><strong>إعادة رسم الشاشة:</strong> نستخدم <code>glutPostRedisplay()</code> لإعادة رسم المستطيل باللون الجديد.</li>
+                    </ul>
+                </div>
+            </div>
         `,
-    expectedCode: "glutTimerFunc(16, update, 0)",
-  },
+        expectedCode: "static float r = 0;"
+    },
+    
+    // Tutorial 12
+    {
+        id: 12,
+        title: "رسم نقطة عند النقر بزر الفأرة",
+        category: "معالجة الأحداث",
+        difficulty: "مبتدئ",
+        content: `
+            <div class="tutorial-content">
+                <div class="tutorial-code">
+                    <pre><code class="language-cpp">
+    #include<windows.h>
+    #include <GL/glut.h>
+    #include<iostream>
+    using namespace std;
+    
+    void myMouse(int button,int state,int x,int y){
+        if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN){
+            glBegin(GL_POINTS);
+                glVertex2f (x,480-y);
+            glEnd();
+            glutPostRedisplay();
+        }
+    }
+    
+    void init(){
+        glClearColor(1,1,1,1); // خلفية بيضاء
+        glClear(GL_COLOR_BUFFER_BIT);
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        gluOrtho2D(0.0,640.0, 0.0, 480.0); // نظام إحداثيات
+    }
+    
+    void display(){
+        static float r = 0;
+        static float g = 0;
+        r += 0.1;
+        g += 0.05;
+    
+        glColor3f(r, g, 0);
+        glPointSize(15.0);
+        glFlush();
+    }
+    
+    int main(int argc, char** argv){
+        glutInit(&argc, argv);
+        glutInitWindowPosition(100,100);
+        glutInitWindowSize(640, 480);
+        glutCreateWindow("Mouse Event Example");
+        glutDisplayFunc(display);
+        glutMouseFunc(myMouse);
+        init();
+        glutMainLoop();
+    }
+                    </code></pre>
+                </div>
+                <div class="tutorial-text">
+                    <p>في هذا الدرس، سنتعلم كيفية رسم نقاط على الشاشة بناءً على نقرات الفأرة. عند النقر بزر الفأرة الأيسر، سيتم رسم نقطة في موقع النقر.</p>
+                    <ul>
+                        <li><strong>التعامل مع نقرات الفأرة:</strong> نستخدم <code>glutMouseFunc</code> لتسجيل دالة رد الفعل لنقرات الفأرة.</li>
+                        <li><strong>رسم النقاط:</strong> نستخدم <code>GL_POINTS</code> مع <code>glVertex2f</code> لرسم النقاط في مواقع النقر.</li>
+                        <li><strong>تغيير لون النقاط:</strong> نستخدم متغيرات ثابتة لتغيير لون النقاط مع كل نقرة.</li>
+                    </ul>
+                </div>
+            </div>
+        `,
+        expectedCode: "glBegin(GL_POINTS)"
+    },
+    
+    // Tutorial 13
+    {
+        id: 13,
+        title: "رسم مربع بناءً على نقرات الفأرة",
+        category: "معالجة الأحداث",
+        difficulty: "متوسط",
+        content: `
+            <div class="tutorial-content">
+                <div class="tutorial-code">
+                    <pre><code class="language-cpp">
+    #include<windows.h>
+    #include<GL/glut.h>
+    
+    void init(){
+        glClearColor(1,1,1,0); // خلفية بيضاء
+        glClear(GL_COLOR_BUFFER_BIT);
+        glColor3f(1, 0, 0);
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        gluOrtho2D(0,600,0,400); // نظام إحداثيات
+    }
+    
+    void mouseClick(int button, int state, int x, int y){
+        if (button == 0 && state == GLUT_DOWN){
+            static float r=0;
+            static float g=0;
+            r += 0.01;
+            g += 0.05;
+            glColor3f(r, g, 0.3);
+            glutPostRedisplay();
+        }
+    }
+    
+    void keyboardClick (unsigned char key, int x, int y){
+        if(key=='c' || key=='C'){
+            static float r=0;
+            static float g=0;
+            r += 0.01;
+            g += 0.05;
+            glColor3f(r, g, 0.3);
+            glutPostRedisplay();
+        }
+    }
+    
+    void display(){
+        glRectd(50,50,90,90);
+        glFlush();
+    }
+    
+    int main(int argc, char** argv){
+        glutInit(&argc, argv);
+        glutInitWindowSize(600, 400);
+        glutInitWindowPosition(100, 100);
+        glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+        glutCreateWindow("Mouse Click");
+        init();
+        glutDisplayFunc(display);
+        glutMouseFunc(mouseClick);
+        glutKeyboardFunc(keyboardClick);
+        glutMainLoop();
+    }
+                    </code></pre>
+                </div>
+                <div class="tutorial-text">
+                    <p>في هذا الدرس، سنتعلم كيفية رسم مربع بناءً على نقرات الفأرة أو الضغط على مفتاح معين. عند النقر بزر الفأرة الأيسر أو الضغط على مفتاح 'C'، سيتغير لون المربع.</p>
+                    <ul>
+                        <li><strong>التعامل مع نقرات الفأرة:</strong> نستخدم <code>glutMouseFunc</code> لتسجيل دالة رد الفعل لنقرات الفأرة.</li>
+                        <li><strong>التعامل مع ضغطات المفاتيح:</strong> نستخدم <code>glutKeyboardFunc</code> لتسجيل دالة رد الفعل لضغطات المفاتيح.</li>
+                        <li><strong>رسم المربع:</strong> نستخدم <code>glRectd</code> لرسم مربع بالإحداثيات المحددة.</li>
+                        <li><strong>تغيير لون المربع:</strong> نستخدم متغيرات ثابتة لتغيير لون المربع عند كل حدث.</li>
+                    </ul>
+                </div>
+            </div>
+        `,
+        expectedCode: "glutMouseFunc(mouseClick)"
+    },
+    
+    // Tutorial 14
+    {
+        id: 14,
+        title: "رسم خط بين نقطتين بالنقر مرتين على الفأرة",
+        category: "معالجة الأحداث",
+        difficulty: "متوسط",
+        content: `
+            <div class="tutorial-content">
+                <div class="tutorial-code">
+                    <pre><code class="language-cpp">
+    #include<windows.h>
+    #include <GL/glut.h>
+    
+    int initVertex=0;
+    int xi,yi;
+    
+    void myMouse(int button,int state,int x,int y){
+        if (button == GLUT_LEFT_BUTTON && state == GLUT_UP){
+            switch(initVertex){
+                case 0:
+                    xi = x;
+                    yi = 480 - y;
+                    glPointSize(5);
+                    glBegin(GL_POINTS);
+                        glVertex2i(xi, yi);
+                    glEnd();
+                    initVertex = 1;
+                    break;
+                case 1:
+                    glLineWidth(5.0);
+                    glBegin(GL_LINES);
+                        glVertex2i(xi, yi);
+                        glVertex2i(x, 480 - y);
+                    glEnd();
+                    initVertex = 0;
+                    break;
+            }
+            glFlush();
+        }
+    }
+    
+    void init(){
+        glClearColor(1,1,1,0); // خلفية بيضاء
+        glClear(GL_COLOR_BUFFER_BIT);
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        gluOrtho2D(0.0, 640.0, 0.0, 480.0); // نظام إحداثيات
+    }
+    
+    void display(){
+        glColor3f(1, 0, 1);
+    }
+    
+    int main(int argc, char** argv){
+        glutInit(&argc, argv);
+        glutInitWindowSize(640, 480);
+        glutInitWindowPosition(100, 100);
+        glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+        glutCreateWindow("Line Drawing");
+        init();
+        glutDisplayFunc(display);
+        glutMouseFunc(myMouse);
+        glutMainLoop();
+    }
+                    </code></pre>
+                </div>
+                <div class="tutorial-text">
+                    <p>في هذا الدرس، سنتعلم كيفية رسم خط بين نقطتين بناءً على نقرات الفأرة. عند النقر مرتين بزر الفأرة الأيسر، سيتم رسم خط بين النقطتين المحددتين.</p>
+                    <ul>
+                        <li><strong>تتبع النقرات:</strong> نستخدم متغيرات لتتبع النقرات الأولى والثانية.</li>
+                        <li><strong>رسم النقاط والخطوط:</strong> نستخدم <code>GL_POINTS</code> لرسم النقطة الأولى و <code>GL_LINES</code> لرسم الخط بين النقطتين.</li>
+                        <li><strong>تغيير عرض الخط:</strong> نستخدم <code>glLineWidth</code> لتحديد عرض الخط.</li>
+                    </ul>
+                </div>
+            </div>
+        `,
+        expectedCode: "glBegin(GL_LINES)"
+    },
+    
+    // Tutorial 15
+    {
+        id: 15,
+        title: "رسم خطوط أثناء سحب الفأرة",
+        category: "معالجة الأحداث",
+        difficulty: "متوسط",
+        content: `
+            <div class="tutorial-content">
+                <div class="tutorial-code">
+                    <pre><code class="language-cpp">
+    #include<windows.h>
+    #include <GL/glut.h>
+    
+    int state_update;
+    int x_update, y_update;
+    int x_init, y_init;
+    
+    void mouseClick(int button, int state, int x_click, int y_click){
+        if(state == GLUT_UP){
+            glClear(GL_COLOR_BUFFER_BIT);
+            glLineWidth(5);
+            glBegin(GL_LINES);
+                glVertex2i(x_init,480 - y_init);
+                glVertex2i(x_update,480 - y_update);
+            glEnd();
+            glFlush();
+        }
+        x_init = x_click;
+        y_init = y_click;
+        x_update = x_click;
+        y_update = y_click;
+        state_update = state;
+    }
+    
+    void mouseMotion(int x_motion, int y_motion){
+        if(state_update == 0){
+            glLineWidth(5);
+            glBegin(GL_LINES);
+                glVertex2i(x_update,480 - y_update);
+                glVertex2i(x_motion,480 - y_motion);
+            glEnd();
+        }
+        x_update = x_motion;
+        y_update = y_motion;
+        glFlush();
+    }
+    
+    void init(){
+        glClearColor(1,1,1,0); // خلفية بيضاء
+        glClear(GL_COLOR_BUFFER_BIT);
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        gluOrtho2D(0,640,0,480); // نظام إحداثيات
+    }
+    
+    void display(){
+        glColor3f(0, 0, 1);
+    }
+    
+    int main(int argc, char** argv){
+        glutInit(&argc, argv);
+        glutInitWindowSize(640, 480);
+        glutInitWindowPosition(100, 100);
+        glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+        glutCreateWindow("Draw line from point");
+        init();
+        glutDisplayFunc(display);
+        glutMouseFunc(mouseClick);
+        glutMotionFunc(mouseMotion);
+        glutMainLoop();
+    }
+                    </code></pre>
+                </div>
+                <div class="tutorial-text">
+                    <p>في هذا الدرس، سنتعلم كيفية رسم خطوط أثناء سحب الفأرة. عند الضغط والسحب بزر الفأرة، سيتم رسم خط يتبع حركة الفأرة.</p>
+                    <ul>
+                        <li><strong>التعامل مع أحداث السحب:</strong> نستخدم <code>glutMotionFunc</code> لتسجيل دالة رد الفعل لحركة الفأرة أثناء السحب.</li>
+                        <li><strong>رسم الخط:</strong> نستخدم <code>GL_LINES</code> لرسم الخط بين النقاط المتحركة.</li>
+                        <li><strong>تحديث الإحداثيات:</strong> نحدث إحداثيات النقاط أثناء حركة الفأرة لرسم الخط المتحرك.</li>
+                    </ul>
+                </div>
+            </div>
+        `,
+        expectedCode: "glutMotionFunc(mouseMotion)"
+    },
+    
+    // Tutorial 16
+    {
+        id: 16,
+        title: "رسم خطوط باستخدام خوارزميات مختلفة (Analytical, DDA, Midpoint)",
+        category: "الرسم المتقدم",
+        difficulty: "متقدم",
+        content: `
+            <div class="tutorial-content">
+                <div class="tutorial-code">
+                    <pre><code class="language-cpp">
+    #include <windows.h>
+    #include<GL/glut.h>
+    #include <cmath>
+    
+    void init(){
+        glClearColor(1,1,1,0); // خلفية بيضاء
+        glClear(GL_COLOR_BUFFER_BIT);
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        gluOrtho2D(0,640,0,480); // نظام إحداثيات
+    }
+    
+    void display(){
+        glColor3f(1,0,1);
+        int x1,y1,x2,y2; float m; float c;
+        // خط أفقي
+        x1= 50; x2= 350; y1=200;
+        glBegin(GL_POINTS);
+            for (int x=x1; x<=x2; x++)
+                glVertex2f(x,y1);
+        glEnd();
+        // خط عمودي
+        x1= 200; y1=100; y2=300;
+        glBegin(GL_POINTS);
+            for (int y=y1;y<=y2; y++)
+                glVertex2f(x1,y);
+        glEnd();
+        // رسم خط باستخدام الطريقة التحليلية
+        x1=50; y1=100; x2=250; y2=400;
+        m=(double)(y2-y1)/(x2-x1);
+        c= y1 - m*x1;
+    
+        if (m < 1){
+            float y;
+            glBegin(GL_POINTS);
+            for (int x =x1; x<=x2; x++){
+                y = x*m + c;
+                glVertex2f(x, round(y));
+            }
+            glEnd();
+        }
+        else if(m > 1){
+            float x;
+            glBegin(GL_POINTS);
+            for(int y=y1; y<=y2; y++){
+                x = (y - c)/m;
+                glVertex2f(round(x), y);
+            }
+            glEnd();
+        }
+        // رسم خط باستخدام خوارزمية DDA
+        if (m < 1){
+            float y; // y جديد
+            float y0=y1; // y القديم
+            glBegin(GL_POINTS);
+            for(int x=x1;x<=x2; x++){
+                y = y0 + m;
+                glVertex2f(x, round(y));
+                y0 = y;
+            }
+            glEnd();
+        }
+        else if(m > 1){
+            float x; // x جديد
+            float x0=x1; // x القديم
+            glBegin(GL_POINTS);
+            for(int y=y1;y<=y2; y++){
+                x = x0 + (1/m);
+                glVertex2f(round(x), y);
+                x0 = x;
+            }
+            glEnd();
+        }
+        glFlush();
+    }
+    
+    int main(int argc, char** argv){
+        glutInit(&argc, argv);
+        glutInitWindowSize(640, 480);
+        glutInitWindowPosition(100, 100);
+        glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+        glutCreateWindow("Template");
+        init();
+        glutDisplayFunc(display);
+        glutMainLoop();
+    }
+                    </code></pre>
+                </div>
+                <div class="tutorial-text">
+                    <p>في هذا الدرس، سنتعلم كيفية رسم خطوط باستخدام خوارزميات مختلفة مثل الطريقة التحليلية، خوارزمية DDA، وخوارزمية Midpoint. سنتعرف على كيفية تنفيذ كل خوارزمية وتحليل مزاياها.</p>
+                    <ul>
+                        <li><strong>الطريقة التحليلية:</strong> استخدام معادلة الخط لرسم النقاط.</li>
+                        <li><strong>خوارزمية DDA:</strong> استخدام حساب التغيرات الصغيرة لتحديد نقاط الخط.</li>
+                        <li><strong>خوارزمية Midpoint:</strong> استخدام النقطة الوسطى لاتخاذ قرارات رسم النقاط.</li>
+                    </ul>
+                </div>
+            </div>
+        `,
+        expectedCode: "glBegin(GL_POINTS)"
+    },
+    
+    // Tutorial 17
+    {
+        id: 17,
+        title: "رسم دوائر وأقواس باستخدام خوارزميات مختلفة",
+        category: "الرسم المتقدم",
+        difficulty: "متقدم",
+        content: `
+            <div class="tutorial-content">
+                <div class="tutorial-code">
+                    <pre><code class="language-cpp">
+    #include<windows.h>
+    #include<GL/glut.h>
+    #include<cmath>
+    
+    void init(){
+        glClearColor(1,1,1,0); // خلفية بيضاء
+        glClear(GL_COLOR_BUFFER_BIT);
+        glColor3f(0.3,0.3,0.3);
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        gluOrtho2D(0.0, 640.0, 0.0, 480.0); // نظام إحداثيات
+    }
+    
+    void display(){
+        glColor3f(1,0,0);
+        int Xc, Yc, r;
+        double theta, x, y;
+    
+        // رسم دائرة داخل مربع
+        Xc = 200; Yc = 300; r = 60;
+        glBegin(GL_POINTS);
+            for(theta = 0; theta <=360; theta+=1){
+                x = r * cos(3.14*theta/180) + Xc;
+                y = r * sin(3.14*theta/180) + Yc;
+                glVertex2f(x,y);
+            }
+        glEnd();
+    
+        glBegin(GL_LINE_LOOP);
+            glVertex2i(Xc - r, Yc - r);
+            glVertex2i(Xc - r, Yc + r);
+            glVertex2i(Xc + r, Yc + r);
+            glVertex2i(Xc + r, Yc - r);
+        glEnd();
+    
+        // رسم مربع داخل دائرة
+        Xc = 400; Yc = 300; r = 60;
+        glBegin(GL_POINTS);
+            for(theta = 0; theta <=360; theta+=0.5){
+                x = r * cos(3.14*theta/180) + Xc;
+                y = r * sin(3.14*theta/180) + Yc;
+                glVertex2f(x,y);
+            }
+        glEnd();
+    
+        glBegin(GL_LINE_LOOP);
+            for(theta = 45; theta <=360; theta+=90){
+                x = r * cos(3.14*theta/180) + Xc;
+                y = r * sin(3.14*theta/180) + Yc;
+                glVertex2f(x,y);
+            }
+        glEnd();
+    
+        // رسم مربع داخل دائرة بزاوية مختلفة
+        glBegin(GL_LINE_LOOP);
+            for(theta = 90; theta <=360; theta+=90){
+                x = r * cos(3.14*theta/180) + Xc;
+                y = r * sin(3.14*theta/180) + Yc;
+                glVertex2f(x,y);
+            }
+        glEnd();
+    
+        glFlush();
+    }
+    
+    int main(int argc, char** argv){
+        glutInit(&argc, argv);
+        glutInitWindowSize(640, 480);
+        glutInitWindowPosition(100, 100);
+        glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+        glutCreateWindow("Template");
+        init();
+        glutDisplayFunc(display);
+        glutMainLoop();
+    }
+                    </code></pre>
+                </div>
+                <div class="tutorial-text">
+                    <p>في هذا الدرس، سنتعلم كيفية رسم دوائر وأقواس داخل مربعات وعكس ذلك باستخدام خوارزميات مختلفة. سنتعرف على كيفية دمج الأشكال الهندسية وتطبيق التوجيهات الهندسية لرسم أنماط متداخلة.</p>
+                    <ul>
+                        <li><strong>رسم دائرة داخل مربع:</strong> نستخدم <code>GL_POINTS</code> و <code>GL_LINE_LOOP</code> لرسم دائرة ومربع متداخل.</li>
+                        <li><strong>رسم مربع داخل دائرة:</strong> نستخدم زوايا مختلفة لتدوير المربع داخل دائرة باستخدام <code>GL_LINE_LOOP</code>.</li>
+                        <li><strong>رسم الأشكال بزاوية مختلفة:</strong> نستخدم زوايا متعددة لرسم أشكال متداخلة وزوايا مختلفة داخل الأشكال.</li>
+                    </ul>
+                </div>
+            </div>
+        `,
+        expectedCode: "glBegin(GL_LINE_LOOP)"
+    },
+    
+    // Tutorial 18
+    {
+        id: 18,
+        title: "تطبيق الأنيميشن على مربع باستخدام التحويلات الهندسية",
+        category: "الأنيميشن",
+        difficulty: "متقدم",
+        content: `
+            <div class="tutorial-content">
+                <div class="tutorial-code">
+                    <pre><code class="language-cpp">
+    #include<windows.h>
+    #include <GL/glut.h>
+    
+    int tx=0;
+    int status=1;
+    
+    void init(){
+        glClearColor(1,1,1,0); // خلفية بيضاء
+        glClear(GL_COLOR_BUFFER_BIT);
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        gluOrtho2D(0, 640, 0, 480); // نظام إحداثيات
+    }
+    
+    void drawSquare(){
+        glBegin(GL_POLYGON);
+            glVertex2d(0,0);
+            glVertex2d(40,0);
+            glVertex2d(40,40);
+            glVertex2d(0,40);
+        glEnd();
+    }
+    
+    void display(){
+        glColor3f(1,0,0);
+        glClear(GL_COLOR_BUFFER_BIT);
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+        glTranslated(tx,0,0);
+        drawSquare();
+        glFlush();
+    }
+    
+    void update(int){
+        if (tx > 600 || tx < 0)
+            status = -status;
+        tx += 5 * status;
+        glutPostRedisplay();
+        glutTimerFunc(100, update, 0);
+    }
+    
+    int main(int argc, char** argv){
+        glutInit(&argc, argv);
+        glutInitWindowSize(640, 480);
+        glutInitWindowPosition(100, 100);
+        glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+        glutCreateWindow("Template");
+        init();
+        glutDisplayFunc(display);
+        glutTimerFunc(0, update, 0);
+        glutMainLoop();
+    }
+                    </code></pre>
+                </div>
+                <div class="tutorial-text">
+                    <p>في هذا الدرس، سنتعلم كيفية تطبيق الأنيميشن على مربع باستخدام التحويلات الهندسية. سنتحكم في حركة المربع على المحور x وعكس اتجاهه عند الوصول إلى حدود النافذة.</p>
+                    <ul>
+                        <li><strong>استخدام <code>glutTimerFunc</code>:</strong> لتحديد دالة التحديث التي تتحكم في حركة المربع.</li>
+                        <li><strong>تغيير موقع المربع:</strong> نستخدم <code>glTranslated</code> لتحريك المربع على المحور x.</li>
+                        <li><strong>عكس اتجاه الحركة:</strong> نغير قيمة المتغير <code>status</code> لعكس اتجاه الحركة عند الوصول إلى حدود الشاشة.</li>
+                    </ul>
+                </div>
+            </div>
+        `,
+        expectedCode: "glutTimerFunc(100, update, 0)"
+    },
+    
+    // Tutorial 19
+    {
+        id: 19,
+        title: "رسم إهليلجي باستخدام OpenGL",
+        category: "الرسم المتقدم",
+        difficulty: "متقدم",
+        content: `
+            <div class="tutorial-content">
+                <div class="tutorial-code">
+                    <pre><code class="language-cpp">
+    #include<windows.h>
+    #include <GL/glut.h>
+    #include <cmath>
+    
+    void init(){
+        glClearColor(1,1,1,0); // خلفية بيضاء
+        glClear(GL_COLOR_BUFFER_BIT);
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        gluOrtho2D(0,640,0,480); // نظام إحداثيات
+    }
+    
+    void display(){
+        glColor3f(1,0,1);
+        int Xc, Yc, r;
+        double theta, x, y;
+    
+        // رسم دائرة داخل مربع
+        Xc = 200; Yc = 300; r = 60;
+        glBegin(GL_POINTS);
+            for(theta =0; theta <=360; theta+=1){
+                x = r * cos(3.14*theta/180) + Xc;
+                y = r * sin(3.14*theta/180) + Yc;
+                glVertex2f(x,y);
+            }
+        glEnd();
+    
+        glBegin(GL_LINE_LOOP);
+            glVertex2i(Xc-r, Yc-r);
+            glVertex2i(Xc-r, Yc+r);
+            glVertex2i(Xc+r, Yc+r);
+            glVertex2i(Xc+r, Yc-r);
+        glEnd();
+    
+        // رسم مربع داخل دائرة
+        Xc = 400; Yc = 300; r = 60;
+        glBegin(GL_POINTS);
+            for(theta =0; theta <=360; theta+=0.5){
+                x = r * cos(3.14*theta/180) + Xc;
+                y = r * sin(3.14*theta/180) + Yc;
+                glVertex2f(x,y);
+            }
+        glEnd();
+    
+        glBegin(GL_LINE_LOOP);
+            for(theta =45; theta <=360; theta+=90){
+                x = r * cos(3.14*theta/180) + Xc;
+                y = r * sin(3.14*theta/180) + Yc;
+                glVertex2f(x,y);
+            }
+        glEnd();
+    
+        // رسم مربع داخل دائرة بزاوية مختلفة
+        glBegin(GL_LINE_LOOP);
+            for(theta =90; theta <=360; theta+=90){
+                x = r * cos(3.14*theta/180) + Xc;
+                y = r * sin(3.14*theta/180) + Yc;
+                glVertex2f(x,y);
+            }
+        glEnd();
+    
+        glFlush();
+    }
+    
+    int main(int argc, char** argv){
+        glutInit(&argc, argv);
+        glutInitWindowSize(640, 480);
+        glutInitWindowPosition(100, 100);
+        glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+        glutCreateWindow("Template");
+        init();
+        glutDisplayFunc(display);
+        glutMainLoop();
+    }
+                    </code></pre>
+                </div>
+                <div class="tutorial-text">
+                    <p>في هذا الدرس، سنتعلم كيفية رسم إهليلجات داخل مربعات وعكس ذلك باستخدام OpenGL. سنستخدم دوال رياضية لحساب نقاط الإهليلج ورسمها باستخدام <code>GL_POINTS</code> و <code>GL_LINE_LOOP</code>.</p>
+                    <ul>
+                        <li><strong>رسم الإهليلج:</strong> نستخدم الدوال الجيبية والتوافقية لحساب نقاط الإهليلج.</li>
+                        <li><strong>رسم المربع:</strong> نستخدم <code>GL_LINE_LOOP</code> لرسم مربع حول الإهليلج.</li>
+                        <li><strong>تكرار الأشكال:</strong> نكرر عملية الرسم لرسم مربعات داخل إهليلجات بزاويا مختلفة.</li>
+                    </ul>
+                </div>
+            </div>
+        `,
+        expectedCode: "glBegin(GL_POINTS)"
+    },
+    
+    // Tutorial 20
+    {
+        id: 20,
+        title: "رسم دائرة باستخدام خوارزمية Midpoint",
+        category: "الرسم المتقدم",
+        difficulty: "متقدم",
+        content: `
+            <div class="tutorial-content">
+                <div class="tutorial-code">
+                    <pre><code class="language-cpp">
+    #include<windows.h>
+    #include <GL/glut.h>
+    #include<cmath>
+    
+    void init(){
+        glClearColor(1,1,1,0); // خلفية بيضاء
+        glClear(GL_COLOR_BUFFER_BIT);
+        glColor3f(0.3,0.3,0.3);
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        gluOrtho2D(0.0, 640.0, 0.0, 480.0); // نظام إحداثيات
+    }
+    
+    void display(){
+        glColor3f(1,0,0);
+        double theta, x, y;
+    
+        glBegin(GL_POINTS);
+            for(theta =0; theta <=360; theta+=1){
+                x = 60 * cos(3.14*theta/180) + 0;
+                y = 60 * sin(3.14*theta/180) + 150;
+                glVertex2f(x,y);
+            }
+        glEnd();
+    
+        glFlush();
+    }
+    
+    int main(int argc, char** argv){
+        glutInit(&argc, argv);
+        glutInitWindowSize(640, 480);
+        glutInitWindowPosition(100, 100);
+        glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+        glutCreateWindow("Template");
+        init();
+        glutDisplayFunc(display);
+        glutMainLoop();
+    }
+                    </code></pre>
+                </div>
+                <div class="tutorial-text">
+                    <p>في هذا الدرس، سنتعلم كيفية رسم دائرة باستخدام خوارزمية Midpoint. سنستخدم الحلقات لحساب نقاط الدائرة ورسمها باستخدام <code>GL_POINTS</code>.</p>
+                    <ul>
+                        <li><strong>حساب نقاط الدائرة:</strong> نستخدم الدوال الجيبية والتوافقية لحساب إحداثيات نقاط الدائرة.</li>
+                        <li><strong>رسم الدائرة:</strong> نستخدم <code>GL_POINTS</code> لرسم كل نقطة على الدائرة.</li>
+                        <li><strong>تنفيذ الخوارزمية:</strong> نستخدم خوارزمية Midpoint لضمان رسم دائرة دقيقة وسلسة.</li>
+                    </ul>
+                </div>
+            </div>
+        `,
+        expectedCode: "glBegin(GL_POINTS)"
+    },
+    
+    // Tutorial 21
+    {
+        id: 21,
+        title: "رسم دائرة داخل مربع باستخدام التحويلات الهندسية",
+        category: "التحولات الهندسية",
+        difficulty: "متقدم",
+        content: `
+            <div class="tutorial-content">
+                <div class="tutorial-code">
+                    <pre><code class="language-cpp">
+    #include<windows.h>
+    #include<GL/glut.h>
+    
+    void init(){
+        glClearColor(1,1,1,0); // خلفية بيضاء
+        glClear(GL_COLOR_BUFFER_BIT);
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        gluOrtho2D(-400, 400, -400, 400); // نظام إحداثيات
+    }
+    
+    void axis(){
+        glBegin(GL_LINES);
+            glVertex2d(0,400);
+            glVertex2d(0,-400);
+            glVertex2d(-400,0);
+            glVertex2d(400,0);
+        glEnd();
+    }
+    
+    void drawSquare(){
+        glBegin(GL_POLYGON);
+            glVertex2d(0,0);
+            glVertex2d(40,0);
+            glVertex2d(40,40);
+            glVertex2d(0,40);
+        glEnd();
+    }
+    
+    void display(){
+        glColor3f(0, 0,0); // لون المحاور
+        axis(); // رسم المحاور
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+        glColor3f(0.5, 0.5,0); // لون المربع الأصلي
+        drawSquare();
+        glPushMatrix();
+        glTranslated(100,50,0);
+            glPushMatrix();
+            glScaled(2,2,1);
+                glPushMatrix();
+                glRotated(90,0,0,1);
+                    glColor3f(1,0,0); // لون المربع المتحول
+                    drawSquare();
+                glPopMatrix();
+            glPopMatrix();
+        glColor3f(0,1,0); // لون المربع بعد الترجمة
+        drawSquare();
+        glFlush();
+    }
+    
+    int main(int argc, char** argv){
+        glutInit(&argc, argv);
+        glutInitWindowSize(640, 480);
+        glutInitWindowPosition(100, 100);
+        glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+        glutCreateWindow("Template");
+        init();
+        glutDisplayFunc(display);
+        glutMainLoop();
+    }
+                    </code></pre>
+                </div>
+                <div class="tutorial-text">
+                    <p>في هذا الدرس، سنتعلم كيفية رسم دائرة داخل مربع واستخدام التحويلات الهندسية مثل الترجمة، التدوير، والتكبير. سنستخدم <code>GL_POLYGON</code> لرسم الأشكال وتطبيق التحويلات عليها.</p>
+                    <ul>
+                        <li><strong>رسم المحاور:</strong> نستخدم <code>GL_LINES</code> لرسم المحاور الأفقية والعمودية.</li>
+                        <li><strong>رسم المربع:</strong> نستخدم <code>GL_POLYGON</code> لرسم مربع.</li>
+                        <li><strong>تطبيق التحويلات:</strong> نستخدم <code>glTranslated</code> و <code>glScaled</code> و <code>glRotated</code> لتحريك، تكبير، وتدوير المربع.</li>
+                        <li><strong>تغيير لون المربع:</strong> نستخدم <code>glColor3f</code> لتغيير لون المربع بعد تطبيق التحويلات.</li>
+                    </ul>
+                </div>
+            </div>
+        `,
+        expectedCode: "glTranslated(100,50,0)"
+    },
+    
+    // Tutorial 22
+    {
+        id: 22,
+        title: "رسم دائرة باستخدام الدالة Midpoint",
+        category: "الرسم المتقدم",
+        difficulty: "متقدم",
+        content: `
+            <div class="tutorial-content">
+                <div class="tutorial-code">
+                    <pre><code class="language-cpp">
+    #include<windows.h>
+    #include <GL/glut.h>
+    #include<cmath>
+    
+    void init(){
+        glClearColor(1,1,1,0); // خلفية بيضاء
+        glClear(GL_COLOR_BUFFER_BIT);
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        gluOrtho2D(0,640,0,480); // نظام إحداثيات
+    }
+    
+    void display(){
+        glColor3f(1,0,1);
+        double theta, x, y;
+    
+        glBegin(GL_POINTS);
+            for(theta =0; theta <=360; theta+=1){
+                x = 60 * cos(3.14*theta/180) + 0;
+                y = 60 * sin(3.14*theta/180) + 150;
+                glVertex2f(x,y);
+            }
+        glEnd();
+    
+        glFlush();
+    }
+    
+    int main(int argc, char** argv){
+        glutInit(&argc, argv);
+        glutInitWindowSize(640, 480);
+        glutInitWindowPosition(100, 100);
+        glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+        glutCreateWindow("Template");
+        init();
+        glutDisplayFunc(display);
+        glutMainLoop();
+    }
+                    </code></pre>
+                </div>
+                <div class="tutorial-text">
+                    <p>في هذا الدرس، سنتعلم كيفية رسم دائرة باستخدام خوارزمية Midpoint. سنستخدم الحلقات لحساب نقاط الدائرة ورسمها باستخدام <code>GL_POINTS</code>.</p>
+                    <ul>
+                        <li><strong>حساب نقاط الدائرة:</strong> نستخدم الدوال الجيبية والتوافقية لحساب إحداثيات نقاط الدائرة.</li>
+                        <li><strong>رسم الدائرة:</strong> نستخدم <code>GL_POINTS</code> لرسم كل نقطة على الدائرة.</li>
+                        <li><strong>تنفيذ خوارزمية Midpoint:</strong> نستخدم خوارزمية Midpoint لضمان رسم دائرة دقيقة وسلسة.</li>
+                    </ul>
+                </div>
+            </div>
+        `,
+        expectedCode: "glBegin(GL_POINTS)"
+    }
 ];
 
-// بيانات الاختبارات
+
+// بيانات الاختبارات المصنفة حسب الدروس
 const quizzesData = [
-  {
-    id: 1,
-    tutorialId: 1,
-    question: "ما هو الاستخدام الرئيسي لـ FreeGLUT؟",
-    options: {
-      a: "معالجة عمليات الشبكة",
-      b: "إنشاء النوافذ ومعالجة المدخلات في تطبيقات OpenGL",
-      c: "إدارة قواعد البيانات",
-      d: "معالجة الصور",
+    // Quiz for Tutorial 1
+    {
+        id: 1,
+        tutorialId: 1,
+        question: "ما الدالة المستخدمة لتحديد لون الخلفية في OpenGL؟",
+        options: {
+            a: "glClear",
+            b: "glClearColor",
+            c: "glColor3f",
+            d: "glBegin"
+        },
+        correct: "b"
     },
-    correct: "b",
-  },
-  {
-    id: 2,
-    tutorialId: 2,
-    question: "أي دالة تستخدم لتحديد الأشكال الهندسية في OpenGL؟",
-    options: {
-      a: "glBegin()",
-      b: "glVertex2f()",
-      c: "glEnd()",
-      d: "جميع ما ذكر",
+    {
+        id: 2,
+        tutorialId: 1,
+        question: "أي نوع من البدائل يُستخدم لرسم خط مستقيم في OpenGL؟",
+        options: {
+            a: "GL_LINES",
+            b: "GL_LINE_STRIP",
+            c: "GL_LINE_LOOP",
+            d: "GL_POLYGON"
+        },
+        correct: "a"
     },
-    correct: "d",
-  },
-  {
-    id: 3,
-    tutorialId: 3,
-    question:
-      "ما هو الشكل الذي يتم إنشاؤه بدمج مربع ومثلث في مثال 'الأشكال الهندسية المنزل'؟",
-    options: {
-      a: "هرم",
-      b: "منزل",
-      c: "كرة",
-      d: "أسطوانة",
+    
+    // Quiz for Tutorial 2
+    {
+        id: 3,
+        tutorialId: 2,
+        question: "ما الدالة المستخدمة لبدء رسم مضلع في OpenGL؟",
+        options: {
+            a: "glBegin(GL_POLYGON)",
+            b: "glStart(GL_POLYGON)",
+            c: "glDraw(GL_POLYGON)",
+            d: "glPolygonBegin()"
+        },
+        correct: "a"
     },
-    correct: "b",
-  },
-  {
-    id: 4,
-    tutorialId: 4,
-    question:
-      "أي زر ماوس يغير اللون إلى الأزرق في مثال 'تغيير اللون عند النقر بالماوس'؟",
-    options: {
-      a: "الزر الأيسر",
-      b: "الزر الأوسط",
-      c: "الزر الأيمن",
-      d: "لا شيء مما ذكر",
+    {
+        id: 4,
+        tutorialId: 2,
+        question: "كيف يمكنك تحديد رأس المربع باستخدام قيم صحيحة؟",
+        options: {
+            a: "glVertex2f(100, 100)",
+            b: "glVertex2d(100, 100)",
+            c: "glVertex2i(100, 100)",
+            d: "glVertex2s(100, 100)"
+        },
+        correct: "c"
     },
-    correct: "c",
-  },
-  {
-    id: 5,
-    tutorialId: 5,
-    question:
-      "ماذا تفعل دالة 'glutPassiveMotionFunc' في مثال 'تغيير اللون تدريجيًا بحركة الماوس'؟",
-    options: {
-      a: "تعالج نقرات الماوس",
-      b: "تعالج إدخال لوحة المفاتيح",
-      c: "تعالج حركة الماوس بدون ضغط الأزرار",
-      d: "تعالج تغيير حجم النافذة",
+    
+    // Quiz for Tutorial 3
+    {
+        id: 5,
+        tutorialId: 3,
+        question: "ما الدالة المستخدمة لتسجيل رد الفعل لضغطات المفاتيح في GLUT؟",
+        options: {
+            a: "glutKeyboardFunc",
+            b: "glutKeyPressFunc",
+            c: "glutKeyFunc",
+            d: "glutKeyboardPress"
+        },
+        correct: "a"
     },
-    correct: "c",
-  },
-  {
-    id: 6,
-    tutorialId: 6,
-    question:
-      "في مثال 'رسم الأشكال عند نقر الماوس'، أي شكل هندسي يستخدم لرسم الأشكال؟",
-    options: {
-      a: "GL_TRIANGLES",
-      b: "GL_QUADS",
-      c: "GL_POINTS",
-      d: "GL_LINES",
+    {
+        id: 6,
+        tutorialId: 3,
+        question: "ما وظيفة <code>glutMainLoop()</code> في برنامج GLUT؟",
+        options: {
+            a: "تهيئة مكتبة GLUT",
+            b: "تسجيل دوال رد الفعل",
+            c: "الدخول إلى حلقة معالجة الأحداث",
+            d: "إنشاء نافذة العرض"
+        },
+        correct: "c"
     },
-    correct: "c",
-  },
-  {
-    id: 7,
-    tutorialId: 7,
-    question: "ما هي الدالة المستخدمة لتحديد الألوان في OpenGL؟",
-    options: {
-      a: "glColor3f()",
-      b: "glSetColor()",
-      c: "glColor()",
-      d: "glSetRGB()",
+    
+    // Quiz for Tutorial 4
+    {
+        id: 7,
+        tutorialId: 4,
+        question: "أي بديل يُستخدم لرسم نقاط فردية في OpenGL؟",
+        options: {
+            a: "GL_POINTS",
+            b: "GL_LINES",
+            c: "GL_TRIANGLES",
+            d: "GL_POLYGON"
+        },
+        correct: "a"
     },
-    correct: "a",
-  },
-  {
-    id: 8,
-    tutorialId: 8,
-    question: "ما هو الغرض من 'glPushMatrix()' و 'glPopMatrix()' في OpenGL؟",
-    options: {
-      a: "للتعامل مع الإضاءة",
-      b: "لإدارة مكدس المصفوفة للتحويلات",
-      c: "لتحميل الخامات",
-      d: "لإدارة المخازن",
+    {
+        id: 8,
+        tutorialId: 4,
+        question: "كيف تحدد حجم النقاط في OpenGL؟",
+        options: {
+            a: "glPointScale()",
+            b: "glPointDimension()",
+            c: "glPointSize()",
+            d: "glPointThickness()"
+        },
+        correct: "c"
     },
-    correct: "b",
-  },
-  {
-    id: 9,
-    tutorialId: 9,
-    question: "أي تحويل غير مغطى في درس 'التحويلات الأساسية'؟",
-    options: {
-      a: "الترجمة",
-      b: "التوسيع",
-      c: "القص",
-      d: "الدوران",
+    
+    // Quiz for Tutorial 5
+    {
+        id: 9,
+        tutorialId: 5,
+        question: "أي دالة تُستخدم لترجمة الأشكال في OpenGL؟",
+        options: {
+            a: "glRotated()",
+            b: "glTranslated()",
+            c: "glScaled()",
+            d: "glTranslated() و glScaled()"
+        },
+        correct: "b"
     },
-    correct: "c",
-  },
-  {
-    id: 10,
-    tutorialId: 10,
-    question:
-      "في مثال 'ترجمة الرسوم المتحركة'، ماذا يحدث عندما تصل الكائن إلى الحد الفاصل؟",
-    options: {
-      a: "يختفي",
-      b: "يتغير لونه",
-      c: "يعكس الاتجاه",
-      d: "يتوقف عن الحركة",
+    {
+        id: 10,
+        tutorialId: 5,
+        question: "كيف تقوم بتدوير الشكل حول المحور Z؟",
+        options: {
+            a: "glRotated(angle, 1, 0, 0)",
+            b: "glRotated(angle, 0, 1, 0)",
+            c: "glRotated(angle, 0, 0, 1)",
+            d: "glRotate(angle, 0, 0, 1)"
+        },
+        correct: "c"
     },
-    correct: "c",
-  },
-  {
-    id: 11,
-    tutorialId: 11,
-    question: "ما هو الغرض من `glEnable(GL_LIGHTING)` في FreeGLUT؟",
-    options: {
-      a: "تمكين الإضاءة",
-      b: "تعطيل الإضاءة",
-      c: "تمكين الألوان",
-      d: "تعطيل الألوان",
+    
+    // Quiz for Tutorial 6
+    {
+        id: 11,
+        tutorialId: 6,
+        question: "أي دالة تُستخدم لتحديد دالة رد الفعل للمؤقت في GLUT؟",
+        options: {
+            a: "glutTimerFunc",
+            b: "glutSetTimer",
+            c: "glutStartTimer",
+            d: "glutRegisterTimer"
+        },
+        correct: "a"
     },
-    correct: "a",
-  },
-  {
-    id: 12,
-    tutorialId: 12,
-    question: "كيف يتم تحديد لون الشكل في OpenGL؟",
-    options: {
-      a: "باستخدام `glColor3f()`",
-      b: "باستخدام `glSetColor()`",
-      c: "باستخدام `glColor()`",
-      d: "باستخدام `glSetRGB()`",
+    {
+        id: 12,
+        tutorialId: 6,
+        question: "ما هي وظيفة <code>glutTimerFunc</code> في الإنيميشن؟",
+        options: {
+            a: "تحديد معدل الإطارات",
+            b: "جدولة تحديثات دورية",
+            c: "التعامل مع إدخال المستخدم",
+            d: "رسم كل إطار"
+        },
+        correct: "b"
     },
-    correct: "a",
-  },
-  {
-    id: 13,
-    tutorialId: 13,
-    question: "ما هي الدالة المستخدمة لتدوير الشكل في OpenGL؟",
-    options: {
-      a: "glTranslatef()",
-      b: "glRotatef()",
-      c: "glScalef()",
-      d: "glRotate()",
+    
+    // Quiz for Tutorial 7
+    {
+        id: 13,
+        tutorialId: 7,
+        question: "أي بديل يُستخدم لرسم نقاط فردية في OpenGL؟",
+        options: {
+            a: "GL_POINTS",
+            b: "GL_LINES",
+            c: "GL_TRIANGLES",
+            d: "GL_POLYGON"
+        },
+        correct: "a"
     },
-    correct: "b",
-  },
-  {
-    id: 14,
-    tutorialId: 14,
-    question: "أي دالة تستخدم لرسم الخطوط في OpenGL؟",
-    options: {
-      a: "GL_LINES",
-      b: "GL_TRIANGLES",
-      c: "GL_QUADS",
-      d: "GL_POINTS",
+    {
+        id: 14,
+        tutorialId: 7,
+        question: "كيف تحدد حجم النقاط في OpenGL؟",
+        options: {
+            a: "glPointScale()",
+            b: "glPointDimension()",
+            c: "glPointSize()",
+            d: "glPointThickness()"
+        },
+        correct: "c"
     },
-    correct: "a",
-  },
-  {
-    id: 15,
-    tutorialId: 15,
-    question: "ما هو الغرض من `glutTimerFunc` في FreeGLUT؟",
-    options: {
-      a: "لإعداد مؤقت لإعادة الرسم",
-      b: "لتحديد سرعة الحركة",
-      c: "لتمكين الإضاءة",
-      d: "تعطيل الإضاءة",
+    
+    // Quiz for Tutorial 8
+    {
+        id: 15,
+        tutorialId: 8,
+        question: "أي دالة تُستخدم لبدء رسم مضلع في OpenGL؟",
+        options: {
+            a: "glBegin(GL_POLYGON)",
+            b: "glStart(GL_POLYGON)",
+            c: "glDraw(GL_POLYGON)",
+            d: "glPolygonBegin()"
+        },
+        correct: "a"
     },
-    correct: "a",
-  },
-  {
-    id: 16,
-    tutorialId: 16,
-    question: "ما هي الدالة المستخدمة لتعريف مصفوفة الإضاءة في OpenGL؟",
-    options: {
-      a: "glLightfv()",
-      b: "glMaterialfv()",
-      c: "glEnable()",
-      d: "glDisable()",
+    {
+        id: 16,
+        tutorialId: 8,
+        question: "كيف يمكنك رسم مستطيل باستخدام مصفوفات من النقاط؟",
+        options: {
+            a: "glRectfv(v1, v2)",
+            b: "glRectiv(v1, v2)",
+            c: "glRectdv(v1, v2)",
+            d: "جميع ما ذكر"
+        },
+        correct: "d"
     },
-    correct: "a",
-  },
-  {
-    id: 17,
-    tutorialId: 17,
-    question: "أي دالة تستخدم لتطبيق الترجمة في OpenGL؟",
-    options: {
-      a: "glRotatef()",
-      b: "glTranslatef()",
-      c: "glScalef()",
-      d: "glPushMatrix()",
+    
+    // Quiz for Tutorial 9
+    {
+        id: 17,
+        tutorialId: 9,
+        question: "أي بديل يُستخدم لرسم مثلثات في OpenGL؟",
+        options: {
+            a: "GL_POINTS",
+            b: "GL_LINES",
+            c: "GL_TRIANGLES",
+            d: "GL_POLYGON"
+        },
+        correct: "c"
     },
-    correct: "b",
-  },
-  {
-    id: 18,
-    tutorialId: 18,
-    question: "ما هو الغرض من دالة `reshape` في OpenGL؟",
-    options: {
-      a: "رسم الأشكال",
-      b: "تحديد مصفوفة العرض",
-      c: "إعداد الإضاءة",
-      d: "تحريك الكاميرا",
+    {
+        id: 18,
+        tutorialId: 9,
+        question: "ما الدالة المستخدمة لإنهاء رسم المثلث في OpenGL؟",
+        options: {
+            a: "glEnd()",
+            b: "glFinish()",
+            c: "glComplete()",
+            d: "glStop()"
+        },
+        correct: "a"
     },
-    correct: "b",
-  },
-  {
-    id: 19,
-    tutorialId: 19,
-    question: "كيف يتم تحديد موقع الكاميرا في OpenGL؟",
-    options: {
-      a: "باستخدام `glTranslatef()`",
-      b: "باستخدام `gluLookAt()`",
-      c: "باستخدام `glRotatef()`",
-      d: "باستخدام `glScalef()`",
+    
+    // Quiz for Tutorial 10
+    {
+        id: 19,
+        tutorialId: 10,
+        question: "أي دالة تُستخدم لتسجيل دالة رد الفعل لنقرات الفأرة في GLUT؟",
+        options: {
+            a: "glutMouseFunc",
+            b: "glutClickFunc",
+            c: "glutButtonFunc",
+            d: "glutMouseClickFunc"
+        },
+        correct: "a"
     },
-    correct: "b",
-  },
-  {
-    id: 20,
-    tutorialId: 20,
-    question: "ما هي الدالة المستخدمة لتمكين اختبار العمق في OpenGL؟",
-    options: {
-      a: "glEnable(GL_DEPTH_TEST)",
-      b: "glDisable(GL_DEPTH_TEST)",
-      c: "glEnable(GL_LIGHTING)",
-      d: "glDisable(GL_LIGHTING)",
+    {
+        id: 20,
+        tutorialId: 10,
+        question: "ما هو تأثير <code>glutPostRedisplay()</code> بعد تغيير اللون؟",
+        options: {
+            a: "تغيير لون الخلفية",
+            b: "إعادة رسم النافذة",
+            c: "إغلاق النافذة",
+            d: "تحديث دالة رد الفعل"
+        },
+        correct: "b"
     },
-    correct: "a",
-  },
+    
+    // Quiz for Tutorial 11
+    {
+        id: 21,
+        tutorialId: 11,
+        question: "ما هي وظيفة المتغيرات الثابتة (static variables) في تغيير لون الأشكال؟",
+        options: {
+            a: "تخزين اللون الأولي فقط",
+            b: "تخزين القيم بين نقرات الفأرة",
+            c: "تغيير لون الخلفية",
+            d: "عدم استخدامها"
+        },
+        correct: "b"
+    },
+    {
+        id: 22,
+        tutorialId: 11,
+        question: "كيف يتم تحديث لون المربع بعد كل نقرة؟",
+        options: {
+            a: "بزيادة قيم r و g",
+            b: "بخفض قيم r و g",
+            c: "بإعادة تعيين قيم r و g",
+            d: "لا يتغير"
+        },
+        correct: "a"
+    },
+    
+    // Quiz for Tutorial 12
+    {
+        id: 23,
+        tutorialId: 12,
+        question: "أي دالة تُستخدم لرسم نقاط فردية في OpenGL؟",
+        options: {
+            a: "GL_POINTS",
+            b: "GL_LINES",
+            c: "GL_TRIANGLES",
+            d: "GL_POLYGON"
+        },
+        correct: "a"
+    },
+    {
+        id: 24,
+        tutorialId: 12,
+        question: "كيف يمكنك رسم مستطيل باستخدام نقطتين في OpenGL؟",
+        options: {
+            a: "glRectfv(v1, v2)",
+            b: "glRectiv(v1, v2)",
+            c: "glRectdv(v1, v2)",
+            d: "جميع ما ذكر"
+        },
+        correct: "d"
+    },
+    
+    // Quiz for Tutorial 13
+    {
+        id: 25,
+        tutorialId: 13,
+        question: "أي دالة تُستخدم لبدء رسم خط في OpenGL؟",
+        options: {
+            a: "glBegin(GL_LINES)",
+            b: "glStart(GL_LINES)",
+            c: "glDraw(GL_LINES)",
+            d: "glLineBegin()"
+        },
+        correct: "a"
+    },
+    {
+        id: 26,
+        tutorialId: 13,
+        question: "ما الدالة المستخدمة لإنهاء رسم الخط في OpenGL؟",
+        options: {
+            a: "glEnd()",
+            b: "glFinish()",
+            c: "glComplete()",
+            d: "glStop()"
+        },
+        correct: "a"
+    },
+    
+    // Quiz for Tutorial 14
+    {
+        id: 27,
+        tutorialId: 14,
+        question: "أي دالة تُستخدم لتسجيل رد الفعل لحركة الفأرة أثناء السحب في GLUT؟",
+        options: {
+            a: "glutMotionFunc",
+            b: "glutPassiveMotionFunc",
+            c: "glutMouseDragFunc",
+            d: "glutDragFunc"
+        },
+        correct: "a"
+    },
+    {
+        id: 28,
+        tutorialId: 14,
+        question: "ما تأثير <code>glutPostRedisplay()</code> بعد تحديث إحداثيات الخط؟",
+        options: {
+            a: "تغيير لون الخط",
+            b: "إعادة رسم النافذة",
+            c: "إغلاق النافذة",
+            d: "تحديث دالة رد الفعل"
+        },
+        correct: "b"
+    },
+    
+    // Quiz for Tutorial 15
+    {
+        id: 29,
+        tutorialId: 15,
+        question: "أي خوارزمية تُستخدم لتحديد النقاط بين نقطتين بشكل تدريجي؟",
+        options: {
+            a: "الطريقة التحليلية",
+            b: "خوارزمية DDA",
+            c: "خوارزمية Midpoint",
+            d: "Bresenham's Algorithm"
+        },
+        correct: "b"
+    },
+    {
+        id: 30,
+        tutorialId: 15,
+        question: "ما هي الميزة الرئيسية لخوارزمية Midpoint مقارنة بالطريقة التحليلية؟",
+        options: {
+            a: "البساطة",
+            b: "الكفاءة واستخدام العمليات الصحيحة",
+            c: "قدرتها على التعامل مع الخطوط العمودية",
+            d: "لا توجد ميزة"
+        },
+        correct: "b"
+    },
+    
+    // Quiz for Tutorial 16
+    {
+        id: 31,
+        tutorialId: 16,
+        question: "ما الهدف الأساسي لخوارزمية Midpoint في رسم الدوائر؟",
+        options: {
+            a: "حساب إحداثيات نقاط الدائرة بدقة",
+            b: "رسم دوائر مملوءة",
+            c: "تطبيق تدرجات الألوان",
+            d: "رسم خطوط مائلة"
+        },
+        correct: "a"
+    },
+    {
+        id: 32,
+        tutorialId: 16,
+        question: "ما المتغير الذي يحدد ما إذا كان يجب تقليل إحداثيات y في خوارزمية Midpoint؟",
+        options: {
+            a: "theta",
+            b: "x",
+            c: "y",
+            d: "F"
+        },
+        correct: "d"
+    },
+    
+    // Quiz for Tutorial 17
+    {
+        id: 33,
+        tutorialId: 17,
+        question: "أي ميزة في OpenGL تتيح تعبئة المضلع بنقوش؟",
+        options: {
+            a: "Texture Mapping",
+            b: "Polygon Stippling",
+            c: "Shading",
+            d: "Lighting"
+        },
+        correct: "b"
+    },
+    {
+        id: 34,
+        tutorialId: 17,
+        question: "كيف تقوم بتعطيل تعبئة المضلع بنقوش بعد تطبيق النمط؟",
+        options: {
+            a: "glDisable(GL_POLYGON_STIPPLE)",
+            b: "glDisableStipple()",
+            c: "glPolygonStipple(0)",
+            d: "glClear(GL_POLYGON_STIPPLE)"
+        },
+        correct: "a"
+    },
+    
+    // Quiz for Tutorial 18
+    {
+        id: 35,
+        tutorialId: 18,
+        question: "ما وظيفة استخدام <code>glPushMatrix()</code> و <code>glPopMatrix()</code> في التحويلات الهندسية؟",
+        options: {
+            a: "تطبيق التحويلات بشكل عالمي",
+            b: "السماح بالتحويلات الهرمية",
+            c: "إعادة تعيين مصفوفة التحويل",
+            d: "تكرار المصفوفة الحالية"
+        },
+        correct: "b"
+    },
+    {
+        id: 36,
+        tutorialId: 18,
+        question: "بأي ترتيب يتم تطبيق التحويلات عند استخدام <code>glPushMatrix()</code> و <code>glPopMatrix()</code> بشكل متداخل؟",
+        options: {
+            a: "من الأبعد إلى الأقرب",
+            b: "من الأقرب إلى الأبعد",
+            c: "تُطبق بشكل متزامن",
+            d: "الترتيب غير مهم"
+        },
+        correct: "a"
+    },
+    
+    // Quiz for Tutorial 19
+    {
+        id: 37,
+        tutorialId: 19,
+        question: "أي دالة في GLUT ضرورية لإنشاء الإنيميشن عن طريق تحديث مواقع الأشكال بمرور الوقت؟",
+        options: {
+            a: "glutDisplayFunc",
+            b: "glutTimerFunc",
+            c: "glutIdleFunc",
+            d: "جميع ما ذكر"
+        },
+        correct: "d"
+    },
+    {
+        id: 38,
+        tutorialId: 19,
+        question: "كيف تُساهم <code>glutTimerFunc</code> في الإنيميشن في OpenGL؟",
+        options: {
+            a: "تحديد معدل الإطارات",
+            b: "جدولة تحديثات دورية",
+            c: "التعامل مع إدخال المستخدم",
+            d: "رسم كل إطار"
+        },
+        correct: "b"
+    },
+    
+    // Quiz for Tutorial 20
+    {
+        id: 39,
+        tutorialId: 20,
+        question: "كيف تحقق شكلًا إهليلجيًا باستخدام تقنيات رسم الدوائر؟",
+        options: {
+            a: "بزيادة نصف القطر",
+            b: "بتغيير عوامل التكبير في اتجاه x و y",
+            c: "بتطبيق تدرجات الألوان",
+            d: "باستخدام <code>GL_TRIANGLES</code>"
+        },
+        correct: "b"
+    },
+    {
+        id: 40,
+        tutorialId: 20,
+        question: "أي دوال رياضية تُستخدم لحساب نقاط الإهليلج؟",
+        options: {
+            a: "sin و cos",
+            b: "tan و cot",
+            c: "sec و csc",
+            d: "sinh و cosh"
+        },
+        correct: "a"
+    },
+    
+    // Quiz for Tutorial 21
+    {
+        id: 41,
+        tutorialId: 21,
+        question: "ما الدالة المستخدمة لتحديد منطقة العرض في نافذة OpenGL؟",
+        options: {
+            a: "glViewport(x, y, width, height)",
+            b: "glSetViewport(x, y, width, height)",
+            c: "glDefineViewport(x, y, width, height)",
+            d: "glViewportRegion(x, y, width, height)"
+        },
+        correct: "a"
+    },
+    {
+        id: 42,
+        tutorialId: 21,
+        question: "كيف يمكنك رسم محتوى مختلف في مناطق عرض منفصلة ضمن نفس النافذة؟",
+        options: {
+            a: "بإعادة استدعاء <code>glViewport</code> قبل كل عملية رسم",
+            b: "بإنشاء نوافذ متعددة",
+            c: "باستخدام قوائم العرض المختلفة",
+            d: "بالتبديل بين مصفوفات الإسقاط"
+        },
+        correct: "a"
+    },
+    
+    // Quiz for Tutorial 22
+    {
+        id: 43,
+        tutorialId: 22,
+        question: "ما الهدف الرئيسي من خوارزمية Midpoint في رسم الدوائر؟",
+        options: {
+            a: "حساب الإحداثيات الدقيقة باستخدام عمليات عشرية",
+            b: "استخدام العمليات الصحيحة لزيادة الكفاءة",
+            c: "رسم دوائر مملوءة",
+            d: "تطبيق تدرجات الألوان"
+        },
+        correct: "b"
+    },
+    {
+        id: 44,
+        tutorialId: 22,
+        question: "ما المتغير الذي يحدد ما إذا كان يجب تقليل إحداثيات y في خوارزمية Midpoint؟",
+        options: {
+            a: "theta",
+            b: "x",
+            c: "y",
+            d: "F"
+        },
+        correct: "d"
+    }
 ];
-function generateTutorials() {
-  const tutorialsSection = document.querySelector(".tutorials");
-  tutorialsData.forEach((tutorial) => {
-    const tutorialDiv = document.createElement("div");
-    tutorialDiv.classList.add("tutorial");
-    tutorialDiv.setAttribute("data-tutorial-id", tutorial.id);
 
-    tutorialDiv.innerHTML = `
+/*-------------------------------------------------------------------------------
+  توليد الدروس والاختبارات
+-------------------------------------------------------------------------------*/
+function generateTutorials() {
+    const tutorialsSection = document.querySelector('.tutorials');
+    tutorialsData.forEach(tutorial => {
+        const tutorialDiv = document.createElement('div');
+        tutorialDiv.classList.add('tutorial');
+        tutorialDiv.setAttribute('data-tutorial-id', tutorial.id);
+
+        tutorialDiv.innerHTML = `
             <h3>${tutorial.id}. ${tutorial.title}</h3>
             ${tutorial.content}
             <button class="btn-submit" onclick="completeTutorial(${tutorial.id})">تحديد كمكتمل</button>
             <div class="result" id="result-tutorial${tutorial.id}"></div>
         `;
 
-    tutorialsSection.appendChild(tutorialDiv);
-  });
+        tutorialsSection.appendChild(tutorialDiv);
+    });
 }
 
 function generateQuizzes() {
-  const quizzesSection = document.querySelector(".quizzes");
-  quizzesData.forEach((quiz) => {
-    const quizDiv = document.createElement("div");
-    quizDiv.classList.add("quiz");
-    quizDiv.setAttribute("data-quiz-id", quiz.id);
+    const quizzesSection = document.querySelector('.quizzes');
+    quizzesData.forEach(quiz => {
+        const quizDiv = document.createElement('div');
+        quizDiv.classList.add('quiz');
+        quizDiv.setAttribute('data-quiz-id', quiz.id);
 
-    const tutorialTitle = tutorialsData.find(
-      (t) => t.id === quiz.tutorialId
-    ).title;
-    quizDiv.innerHTML = `
+        const tutorialTitle = tutorialsData.find(t => t.id === quiz.tutorialId).title;
+        quizDiv.innerHTML = `
             <h3>اختبار ${quiz.id}: ${tutorialTitle}</h3>
             <p>${quiz.question}</p>
-            <ul class="options">
-                <li><input type="radio" name="quiz${quiz.id}" id="quiz${quiz.id}a" value="a"><label for="quiz${quiz.id}a">أ) ${quiz.options.a}</label></li>
-                <li><input type="radio" name="quiz${quiz.id}" id="quiz${quiz.id}b" value="b"><label for="quiz${quiz.id}b">ب) ${quiz.options.b}</label></li>
-                <li><input type="radio" name="quiz${quiz.id}" id="quiz${quiz.id}c" value="c"><label for="quiz${quiz.id}c">ج) ${quiz.options.c}</label></li>
-                <li><input type="radio" name="quiz${quiz.id}" id="quiz${quiz.id}d" value="d"><label for="quiz${quiz.id}d">د) ${quiz.options.d}</label></li>
+            <ul class="quiz-options">
+                <li class="quiz-option">
+                    <input type="radio" name="quiz${quiz.id}" id="quiz${quiz.id}a" value="a">
+                    <label for="quiz${quiz.id}a">أ) ${quiz.options.a}</label>
+                </li>
+                <li class="quiz-option">
+                    <input type="radio" name="quiz${quiz.id}" id="quiz${quiz.id}b" value="b">
+                    <label for="quiz${quiz.id}b">ب) ${quiz.options.b}</label>
+                </li>
+                <li class="quiz-option">
+                    <input type="radio" name="quiz${quiz.id}" id="quiz${quiz.id}c" value="c">
+                    <label for="quiz${quiz.id}c">ج) ${quiz.options.c}</label>
+                </li>
+                <li class="quiz-option">
+                    <input type="radio" name="quiz${quiz.id}" id="quiz${quiz.id}d" value="d">
+                    <label for="quiz${quiz.id}d">د) ${quiz.options.d}</label>
+                </li>
             </ul>
             <button class="btn-submit" onclick="submitQuiz(${quiz.id})">إرسال</button>
             <div class="result" id="result-quiz${quiz.id}"></div>
         `;
-    quizzesSection.appendChild(quizDiv);
-  });
+        quizzesSection.appendChild(quizDiv);
+    });
 }
 
 /*-------------------------------------------------------------------------------
   إكمال الدروس والاختبارات
 -------------------------------------------------------------------------------*/
 function completeTutorial(tutorialId) {
-  const tutorialDiv = document.querySelector(
-    `.tutorial[data-tutorial-id="${tutorialId}"]`
-  );
-  tutorialDiv.style.display = "none";
-  updateProgress("tutorial");
+    const tutorialDiv = document.querySelector(`.tutorial[data-tutorial-id="${tutorialId}"]`);
+    tutorialDiv.style.display = 'none';
+    updateProgress('tutorial');
 }
 
 function submitQuiz(quizId) {
-  const quiz = quizzesData.find((q) => q.id === quizId);
-  const selectedOption = document.querySelector(
-    `.quiz[data-quiz-id="${quizId}"] input[type="radio"]:checked`
-  );
-  const resultDiv = document.getElementById(`result-quiz${quizId}`);
+    const quiz = quizzesData.find(q => q.id === quizId);
+    const selectedOption = document.querySelector(`.quiz[data-quiz-id="${quizId}"] input[type="radio"]:checked`);
+    const resultDiv = document.getElementById(`result-quiz${quizId}`);
 
-  if (selectedOption) {
-    if (selectedOption.value === quiz.correct) {
-      resultDiv.innerHTML = '<span style="color: green;">صحيح!</span>';
-      updateProgress("quiz");
-      // Prompt user to write code
-      promptCodeWriting(quiz.tutorialId);
+    if (selectedOption) {
+        if (selectedOption.value === quiz.correct) {
+            resultDiv.innerHTML = '<span style="color: green;">صحيح!</span>';
+            updateProgress('quiz');
+            // يمكن إضافة وظيفة لتحفيز الطالب بعد الإجابة الصحيحة
+        } else {
+            resultDiv.innerHTML = '<span style="color: red;">خطأ. حاول مرة أخرى.</span>';
+        }
     } else {
-      resultDiv.innerHTML =
-        '<span style="color: red;">خطأ. حاول مرة أخرى.</span>';
+        resultDiv.innerHTML = '<span style="color: red;">يرجى اختيار خيار.</span>';
     }
-  } else {
-    resultDiv.innerHTML = '<span style="color: red;">يرجى اختيار خيار.</span>';
-  }
-}
-
-function promptCodeWriting(tutorialId) {
-  alert("عمل رائع! الآن، اكتب الشيفرة المقابلة في محرر الشيفرة وقم بتحميلها.");
-  scrollToSection("code-editor"); // إذا كانت لديك منطقة كود إيديتر
 }
 
 /*-------------------------------------------------------------------------------
@@ -1494,97 +2323,85 @@ const totalTutorials = tutorialsData.length;
 const totalQuizzes = quizzesData.length;
 
 function updateProgress(type) {
-  if (type === "tutorial") {
-    tutorialsCompleted = Math.min(tutorialsCompleted + 1, totalTutorials);
-    updateProgressBar("tutorial-progress", tutorialsCompleted, totalTutorials);
-  } else if (type === "quiz") {
-    quizzesCompleted = Math.min(quizzesCompleted + 1, totalQuizzes);
-    updateProgressBar("quiz-progress", quizzesCompleted, totalQuizzes);
-  }
+    if (type === 'tutorial') {
+        tutorialsCompleted = Math.min(tutorialsCompleted + 1, totalTutorials);
+        updateProgressBar('tutorial-progress', tutorialsCompleted, totalTutorials);
+    } else if (type === 'quiz') {
+        quizzesCompleted = Math.min(quizzesCompleted + 1, totalQuizzes);
+        updateProgressBar('quiz-progress', quizzesCompleted, totalQuizzes);
+    }
 }
 
 function updateProgressBar(elementId, completed, total) {
-  const progressPercentage = Math.min((completed / total) * 100, 100);
-  const progressBar = document.getElementById(elementId);
-  progressBar.style.width = `${progressPercentage}%`;
-  progressBar.textContent = `${Math.round(progressPercentage)}%`;
+    const progressPercentage = Math.min((completed / total) * 100, 100);
+    const progressBar = document.getElementById(elementId);
+    progressBar.style.width = `${progressPercentage}%`;
+    progressBar.textContent = `${Math.round(progressPercentage)}%`;
 }
 
 /*-------------------------------------------------------------------------------
   تشغيل التوليد وتهيئة الصفحات بعد التحميل
 -------------------------------------------------------------------------------*/
-document.addEventListener("DOMContentLoaded", () => {
-  // Generate Tutorials and Quizzes
-  generateTutorials();
-  generateQuizzes();
+document.addEventListener('DOMContentLoaded', () => {
+    // توليد الدروس والاختبارات
+    generateTutorials();
+    generateQuizzes();
 
-  // Initialize progress bars
-  updateProgressBar("tutorial-progress", tutorialsCompleted, totalTutorials);
-  updateProgressBar("quiz-progress", quizzesCompleted, totalQuizzes);
-
-  // إذا لديك محرر CodeMirror في صفحتك
-  // const editor = CodeMirror.fromTextArea(document.getElementById('code-editor-textarea'), {
-  //     lineNumbers: true,
-  //     mode: "text/x-c++src",
-  //     theme: "dracula",
-  //     tabSize: 4,
-  //     indentWithTabs: true,
-  //     lineWrapping: true
-  // });
-  // window.codeMirrorInstance = editor;
+    // تهيئة أشرطة التقدم
+    updateProgressBar('tutorial-progress', tutorialsCompleted, totalTutorials);
+    updateProgressBar('quiz-progress', quizzesCompleted, totalQuizzes);
 });
 
 /*-------------------------------------------------------------------------------
-  دوال اختيارية: التحميل والتحقق من الشيفرة
+  وظائف إضافية (اختيارية): تحميل الشيفرة، التحقق من الشيفرة، إلخ
 -------------------------------------------------------------------------------*/
 function downloadCode() {
-  if (!window.codeMirrorInstance) return;
-  const code = window.codeMirrorInstance.getValue();
-  const blob = new Blob([code], { type: "text/plain" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "main.cpp";
-  a.click();
-  URL.revokeObjectURL(url);
+    if (!window.codeMirrorInstance) return;
+    const code = window.codeMirrorInstance.getValue();
+    const blob = new Blob([code], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'main.cpp';
+    a.click();
+    URL.revokeObjectURL(url);
 
-  const output = document.getElementById("output");
-  if (output) {
-    output.innerHTML =
-      '<span style="color: green;">تم تحميل الشيفرة بنجاح!</span>';
-  }
+    const output = document.getElementById('output');
+    if (output) {
+        output.innerHTML = '<span style="color: green;">تم تحميل الشيفرة بنجاح!</span>';
+    }
 }
 
 function validateCode() {
-  if (!window.codeMirrorInstance) return;
-  const code = window.codeMirrorInstance.getValue();
+    if (!window.codeMirrorInstance) return;
+    const code = window.codeMirrorInstance.getValue();
 
-  if (code.includes("glutCreateWindow")) {
-    alert("شيفرتك تبدو جيدة!");
-  } else {
-    alert("يرجى التأكد من تضمين دالة glutCreateWindow.");
-  }
+    if (code.includes('glutCreateWindow')) {
+        alert('شيفرتك تبدو جيدة!');
+    } else {
+        alert('يرجى التأكد من تضمين دالة glutCreateWindow.');
+    }
 }
 
 /*-------------------------------------------------------------------------------
-  شيفرة التنقل في الأجهزة المحمولة
+  وظائف التنقل في الأجهزة المحمولة
 -------------------------------------------------------------------------------*/
-const menuToggle = document.querySelector(".menu-toggle");
-const navbar = document.querySelector(".navbar");
+const menuToggle = document.querySelector('.menu-toggle');
+const navbar = document.querySelector('.navbar');
 
-menuToggle.addEventListener("click", () => {
-  navbar.classList.toggle("active");
+menuToggle.addEventListener('click', () => {
+    navbar.classList.toggle('active');
 });
 
 /*-------------------------------------------------------------------------------
   التمرير السلس للأقسام
 -------------------------------------------------------------------------------*/
 function scrollToSection(sectionId) {
-  const section = document.getElementById(sectionId);
-  if (section) {
-    window.scrollTo({
-      top: section.offsetTop - 60,
-      behavior: "smooth",
-    });
-  }
+    const section = document.getElementById(sectionId);
+    if (section) {
+        window.scrollTo({
+            top: section.offsetTop - 60,
+            behavior: 'smooth'
+        });
+    }
 }
