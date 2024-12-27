@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FreeGLUT Learning Platform</title>
+    <!-- Meta Tags for Responsiveness -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrQkTyHJ9bgFKtAvf+6hb+6U3cLTBOGxR9ZKYf7qM6BOAAyfCnWm3+TmlkBSVByCFYcQjR+ER7NjaVprCg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- CSS Styles -->
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            line-height: 1.6;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        /* Navigation Bar */
+        .navbar {
+            background-color: #333;
+            color: #fff;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .navbar .logo {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        .navbar ul {
+            list-style: none;
+            display: flex;
+        }
+        .navbar ul li {
+            margin-left: 20px;
+        }
+        .navbar ul li a {
+            color: #fff;
+            transition: color 0.3s ease;
+        }
+        .navbar ul li a:hover {
+            color: #f4f4f4;
+        }
+        /* Hero Section */
+        .hero {
+            background: url('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
+            height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.6);
+        }
+        .hero-content {
+            position: relative;
+            color: #fff;
+            text-align: center;
+            max-width: 800px;
+        }
+        .hero-content h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+        .hero-content p {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+        .hero-content .btn {
+            background-color: #ff5722;
+            color: #fff;
+            padding: 15px 30px;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+        .hero-content .btn:hover {
+            background-color: #e64a19;
+        }
+        /* Main Content */
+        .container {
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: auto;
+        }
+        /* Tutorials Section */
+        .tutorials {
+            margin-bottom: 60px;
+        }
+        .tutorials h2 {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 2.5em;
+            color: #333;
+        }
+        .tutorial {
+            background-color: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 5px solid #ff5722;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .tutorial h3 {
+            margin-bottom: 15px;
+            color: #ff5722;
+        }
+        .tutorial p {
+            margin-bottom: 15px;
+        }
+        .tutorial pre {
+            background-color: #f0f0f0;
+            padding: 15px;
+            overflow-x: auto;
+            border-radius: 5px;
+        }
+        .tutorial code {
+            color: #d6336c;
+        }
+        /* Quizzes Section */
+        .quizzes {
+            margin-bottom: 60px;
+        }
+        .quizzes h2 {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 2.5em;
+            color: #333;
+        }
+        .quiz {
+            background-color: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 5px solid #2196f3;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .quiz h3 {
+            margin-bottom: 15px;
+            color: #2196f3;
+        }
+        .quiz .options {
+            list-style: none;
+            padding: 0;
+        }
+        .quiz .options li {
+            margin-bottom: 10px;
+        }
+        .quiz .options li label {
+            cursor: pointer;
+        }
+        .quiz .btn-submit {
+            background-color: #2196f3;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+        .quiz .btn-submit:hover {
+            background-color: #1976d2;
+        }
+        .quiz .result {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        /* Code Editor Section */
+        .code-editor-section {
+            margin-bottom: 60px;
+        }
+        .code-editor-section h2 {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 2.5em;
+            color: #333;
+        }
+        .editor-container {
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .editor-container textarea {
+            width: 100%;
+            height: 300px;
+            border: none;
+            outline: none;
+            resize: none;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1em;
+            padding: 10px;
+        }
+        .editor-container .btn-run {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+        .editor-container .btn-run:hover {
+            background-color: #388e3c;
+        }
+        .editor-container .output {
+            background-color: #f0f0f0;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+            min-height: 100px;
+        }
+        /* Progress Tracker */
+        .progress-tracker {
+            margin-bottom: 60px;
+        }
+        .progress-tracker h2 {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 2.5em;
+            color: #333;
+        }
+        .progress-bar {
+            background-color: #ddd;
+            border-radius: 25px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        .progress-bar-inner {
+            height: 30px;
+            width: 0;
+            background-color: #ff5722;
+            text-align: center;
+            line-height: 30px;
+            color: #fff;
+            transition: width 0.5s ease;
+        }
+        /* Footer */
+        .footer {
+            background-color: #333;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+        }
+        .footer p {
+            margin-bottom: 10px;
+        }
+        .footer .social-icons a {
+            color: #fff;
+            margin: 0 10px;
+            font-size: 1.2em;
+            transition: color 0.3s ease;
+        }
+        .footer .social-icons a:hover {
+            color: #ff5722;
+        }
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar ul {
+                flex-direction: column;
+                background-color: #444;
+                position: absolute;
+                top: 60px;
+                right: 0;
+                width: 200px;
+                display: none;
+            }
+            .navbar ul li {
+                margin: 15px 0;
+                text-align: center;
+            }
+            .navbar .menu-toggle {
+                display: block;
+                cursor: pointer;
+            }
+            .navbar.active ul {
+                display: flex;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="logo">FreeGLUT Learn</div>
+        <div class="menu-toggle"><i class="fas fa-bars"></i></div>
+        <ul>
+            <li><a href="#tutorials">Tutorials</a></li>
+            <li><a href="#quizzes">Quizzes</a></li>
+            <li><a href="#code-editor">Code Editor</a></li>
+            <li><a href="#progress">Progress</a></li>
+            <li><a href="#footer">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Master FreeGLUT</h1>
+            <p>Learn FreeGLUT step by step with interactive tutorials and quizzes.</p>
+            <button class="btn" onclick="scrollToSection('tutorials')">Start Learning</button>
+        </div>
+    </section>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Tutorials Section -->
+        <section id="tutorials" class="tutorials">
+            <h2>Tutorials</h2>
+            <!-- Tutorial 1 -->
+            <div class="tutorial">
+                <h3>1. Introduction to FreeGLUT</h3>
+                <p>FreeGLUT is an open-source alternative to the OpenGL Utility Toolkit (GLUT) library. It provides a simple API for creating windows, handling input, and managing the OpenGL context.</p>
+                <p><strong>Key Features:</strong></p>
+                <ul>
+                    <li>Window creation and management</li>
+                    <li>Input handling (keyboard, mouse)</li>
+                    <li>Callback functions for rendering and events</li>
+                </ul>
+                <pre><code>#include <GL/freeglut.h>
+
+int main(int argc, char** argv) {
+    glutInit(&argc, argv);
+    glutCreateWindow("FreeGLUT Window");
+    glutMainLoop();
+    return 0;
+}</code></pre>
+            </div>
+            <!-- Tutorial 2 -->
+            <div class="tutorial">
+                <h3>2. Setting Up Code::Blocks with FreeGLUT</h3>
+                <p>Follow these steps to set up FreeGLUT in Code::Blocks:</p>
+                <ol>
+                    <li><strong>Download FreeGLUT:</strong> Visit the <a href="https://sourceforge.net/projects/freeglut/" target="_blank">FreeGLUT SourceForge page</a> and download the latest version.</li>
+                    <li><strong>Extract Files:</strong> Extract the downloaded files to a directory, e.g., <code>C:\FreeGLUT</code>.</li>
+                    <li><strong>Configure Code::Blocks:</strong>
+                        <ul>
+                            <li>Open Code::Blocks and create a new project.</li>
+                            <li>Go to <strong>Project > Build options</strong>.</li>
+                            <li>Add the FreeGLUT <code>include</code> directory in the Compiler settings.</li>
+                            <li>Add the FreeGLUT <code>lib</code> directory in the Linker settings.</li>
+                            <li>Link against <code>freeglut.lib</code>, <code>opengl32.lib</code>, <code>glu32.lib</code>, and <code>gdi32.lib</code>.</li>
+                        </ul>
+                    </li>
+                </ol>
+                <pre><code>// Example Code::Blocks Configuration
+    // Compiler Settings > Search directories > Compiler: C:\FreeGLUT\include
+    // Linker Settings > Search directories > Linker: C:\FreeGLUT\lib
+    // Linker Settings > Link libraries: freeglut.lib; opengl32.lib; glu32.lib; gdi32.lib</code></pre>
+            </div>
+            <!-- Tutorial 3 -->
+            <div class="tutorial">
+                <h3>3. Basic OpenGL Rendering with FreeGLUT</h3>
+                <p>Learn how to render a simple triangle using FreeGLUT and OpenGL.</p>
+                <pre><code>#include <GL/freeglut.h>
+
+// Rotation angle
+float angle = 0.0f;
+
+// Display callback
+void display() {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glLoadIdentity();
+
+    // Rotate the triangle
+    glRotatef(angle, 0.0f, 1.0f, 0.0f);
+
+    // Draw a colored triangle
+    glBegin(GL_TRIANGLES);
+        glColor3f(1.0f, 0.0f, 0.0f); // Red
+        glVertex3f(-0.5f, -0.5f, 0.0f);
+        
+        glColor3f(0.0f, 1.0f, 0.0f); // Green
+        glVertex3f(0.5f, -0.5f, 0.0f);
+        
+        glColor3f(0.0f, 0.0f, 1.0f); // Blue
+        glVertex3f(0.0f, 0.5f, 0.0f);
+    glEnd();
+
+    glutSwapBuffers();
+}
+
+// Idle callback for animation
+void idle() {
+    angle += 0.1f;
+    if (angle > 360.0f)
+        angle -= 360.0f;
+    glutPostRedisplay();
+}
+
+// Initialize OpenGL settings
+void initGL() {
+    glEnable(GL_DEPTH_TEST);
+    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+}
+
+// Main function
+int main(int argc, char** argv) {
+    glutInit(&argc, argv);
+    // Use double buffering and RGB colors with depth buffer
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+    // Set window size
+    glutInitWindowSize(800, 600);
+    // Create window with title
+    glutCreateWindow("FreeGLUT Rotating Triangle");
+
+    initGL();
+
+    // Register callbacks
+    glutDisplayFunc(display);
+    glutIdleFunc(idle);
+
+    // Enter the main loop
+    glutMainLoop();
+    return 0;
+}</code></pre>
+            </div>
+            <!-- Add more tutorials as needed -->
+        </section>
+
+        <!-- Quizzes Section -->
+        <section id="quizzes" class="quizzes">
+            <h2>Quizzes</h2>
+            <!-- Quiz 1 -->
+            <div class="quiz" data-quiz-id="1">
+                <h3>Quiz 1: FreeGLUT Basics</h3>
+                <p>What is FreeGLUT primarily used for?</p>
+                <ul class="options">
+                    <li><input type="radio" name="quiz1" id="quiz1a" value="a"><label for="quiz1a">A) Handling network operations</label></li>
+                    <li><input type="radio" name="quiz1" id="quiz1b" value="b"><label for="quiz1b">B) Creating windows and handling input in OpenGL applications</label></li>
+                    <li><input type="radio" name="quiz1" id="quiz1c" value="c"><label for="quiz1c">C) Database management</label></li>
+                    <li><input type="radio" name="quiz1" id="quiz1d" value="d"><label for="quiz1d">D) Image processing</label></li>
+                </ul>
+                <button class="btn-submit" onclick="submitQuiz(1)">Submit</button>
+                <div class="result" id="result1"></div>
+            </div>
+            <!-- Quiz 2 -->
+            <div class="quiz" data-quiz-id="2">
+                <h3>Quiz 2: Code::Blocks Configuration</h3>
+                <p>Which library is NOT required to link when setting up FreeGLUT in Code::Blocks?</p>
+                <ul class="options">
+                    <li><input type="radio" name="quiz2" id="quiz2a" value="a"><label for="quiz2a">A) freeglut.lib</label></li>
+                    <li><input type="radio" name="quiz2" id="quiz2b" value="b"><label for="quiz2b">B) opengl32.lib</label></li>
+                    <li><input type="radio" name="quiz2" id="quiz2c" value="c"><label for="quiz2c">C) glu32.lib</label></li>
+                    <li><input type="radio" name="quiz2" id="quiz2d" value="d"><label for="quiz2d">D) socket.lib</label></li>
+                </ul>
+                <button class="btn-submit" onclick="submitQuiz(2)">Submit</button>
+                <div class="result" id="result2"></div>
+            </div>
+            <!-- Quiz 3 -->
+            <div class="quiz" data-quiz-id="3">
+                <h3>Quiz 3: OpenGL Rendering</h3>
+                <p>Which function is used to clear the color and depth buffers in OpenGL?</p>
+                <ul class="options">
+                    <li><input type="radio" name="quiz3" id="quiz3a" value="a"><label for="quiz3a">A) glClear()</label></li>
+                    <li><input type="radio" name="quiz3" id="quiz3b" value="b"><label for="quiz3b">B) glBegin()</label></li>
+                    <li><input type="radio" name="quiz3" id="quiz3c" value="c"><label for="quiz3c">C) glEnd()</label></li>
+                    <li><input type="radio" name="quiz3" id="quiz3d" value="d"><label for="quiz3d">D) glFlush()</label></li>
+                </ul>
+                <button class="btn-submit" onclick="submitQuiz(3)">Submit</button>
+                <div class="result" id="result3"></div>
+            </div>
+            <!-- Add more quizzes as needed -->
+        </section>
+
+        <!-- Code Editor Section -->
+        <section id="code-editor" class="code-editor-section">
+            <h2>Code Editor</h2>
+            <div class="editor-container">
+                <textarea id="code-editor-textarea">
+// Write your FreeGLUT code here
+#include <GL/freeglut.h>
+
+int main(int argc, char** argv) {
+    glutInit(&argc, argv);
+    glutCreateWindow("FreeGLUT Window");
+    glutMainLoop();
+    return 0;
+}
+                </textarea>
+                <button class="btn-run" onclick="downloadCode()">Download Code</button>
+                <div class="output" id="output">
+                    <!-- Output or messages will appear here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Progress Tracker Section -->
+        <section id="progress" class="progress-tracker">
+            <h2>Progress Tracker</h2>
+            <div class="progress">
+                <p>Tutorials Completed:</p>
+                <div class="progress-bar">
+                    <div class="progress-bar-inner" id="tutorial-progress" style="width: 0%;">0%</div>
+                </div>
+                <p>Quizzes Completed:</p>
+                <div class="progress-bar">
+                    <div class="progress-bar-inner" id="quiz-progress" style="width: 0%;">0%</div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer id="footer" class="footer">
+        <p>&copy; 2024 FreeGLUT Learn. All rights reserved.</p>
+        <div class="social-icons">
+            <a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" target="_blank"><i class="fab fa-twitter"></i></a>
+            <a href="#" target="_blank"><i class="fab fa-github"></i></a>
+            <a href="#" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Mobile Navigation Toggle
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navbar = document.querySelector('.navbar');
+
+        menuToggle.addEventListener('click', () => {
+            navbar.classList.toggle('active');
+        });
+
+        // Smooth Scroll Function
+        function scrollToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            window.scrollTo({
+                top: section.offsetTop - 60,
+                behavior: 'smooth'
+            });
+        }
+
+        // Quiz Submission Function
+        function submitQuiz(quizNumber) {
+            const quiz = document.querySelector('.quiz[data-quiz-id="' + quizNumber + '"]');
+            const selectedOption = quiz.querySelector('input[type="radio"]:checked');
+            const resultDiv = document.getElementById('result' + quizNumber);
+            let answer = '';
+            switch(quizNumber) {
+                case 1:
+                    answer = 'b';
+                    break;
+                case 2:
+                    answer = 'd';
+                    break;
+                case 3:
+                    answer = 'a';
+                    break;
+                // Add more cases as needed
+                default:
+                    answer = '';
+            }
+
+            if (selectedOption) {
+                if (selectedOption.value === answer) {
+                    resultDiv.innerHTML = '<span style="color: green;">Correct!</span>';
+                    updateProgress('quiz');
+                } else {
+                    resultDiv.innerHTML = '<span style="color: red;">Incorrect. Try again.</span>';
+                }
+            } else {
+                resultDiv.innerHTML = '<span style="color: red;">Please select an option.</span>';
+            }
+        }
+
+        // Progress Tracker
+        let tutorialsCompleted = 0;
+        let quizzesCompleted = 0;
+
+        function updateProgress(type) {
+            if(type === 'tutorial') {
+                tutorialsCompleted++;
+                updateProgressBar('tutorial-progress', tutorialsCompleted, 10); // Assuming 10 tutorials
+            } else if(type === 'quiz') {
+                quizzesCompleted++;
+                updateProgressBar('quiz-progress', quizzesCompleted, 5); // Assuming 5 quizzes
+            }
+        }
+
+        function updateProgressBar(elementId, completed, total) {
+            const progressPercentage = Math.min((completed / total) * 100, 100);
+            const progressBar = document.getElementById(elementId);
+            progressBar.style.width = `${progressPercentage}%`;
+            progressBar.textContent = `${Math.round(progressPercentage)}%`;
+        }
+
+        // Initialize Progress Tracker
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize progress bars
+            updateProgressBar('tutorial-progress', tutorialsCompleted, 10);
+            updateProgressBar('quiz-progress', quizzesCompleted, 5);
+        });
+
+        // Code Editor Download Function
+        function downloadCode() {
+            const code = document.getElementById('code-editor-textarea').value;
+            const blob = new Blob([code], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'main.cpp';
+            a.click();
+            URL.revokeObjectURL(url);
+            const output = document.getElementById('output');
+            output.innerHTML = '<span style="color: green;">Code downloaded successfully!</span>';
+            updateProgress('tutorial');
+        }
+
+        // Optional: Track Tutorials Completion
+        // This can be expanded to track when a user finishes reading a tutorial
+        // For simplicity, it's incremented when the user downloads code
+    </script>
+</body>
+</html>
