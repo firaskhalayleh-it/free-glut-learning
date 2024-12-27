@@ -1,481 +1,733 @@
-// index.js
-
-/**
- * Below is the full modified code. We have replaced the first two tutorials (ID: 9 and ID: 10) 
- * with simpler step-by-step examples that include line-by-line explanations. The rest of the 
- * tutorials and quizzes remain the same for demonstration.
- * 
- * We also set some default "mock code" in the CodeMirror editor, showing how one might 
- * conceptually "convert" a C++ OpenGL snippet into an equivalent WebGL/JavaScript code.
- * 
- * The WebGL section at the bottom still renders a rotating cube, but you can imagine 
- * substituting your own logic to replicate any C++ OpenGL code in JavaScript/WebGL.
- */
-
-// ---------------------------------------------------------------------
-//                         TUTORIALS & QUIZZES DATA
-// ---------------------------------------------------------------------
+// Sample Data for Tutorials and Quizzes
 const tutorialsData = [
-    // Tutorial 9 (Replaced with a simple example)
     {
-        id: 9,
-        title: "Simple 2D Triangle (Step by Step)",
+        id: 1,
+        title: "Introduction to FreeGLUT",
         content: `
-        <!-- 
-            Below is a very basic C++ OpenGL snippet that draws a 2D triangle.
-            Each line is explained step by step.
-        -->
-        <pre><code>
-// Include necessary headers
-#include &lt;windows.h&gt;   // For Windows-specific functions (not needed on other OS)
-#include &lt;GL/glut.h&gt;  // Main GLUT library for OpenGL
+<p>FreeGLUT is an open-source alternative to the OpenGL Utility Toolkit (GLUT) library. It provides a simple API for creating windows, handling input, and managing the OpenGL context.</p>
+<p><strong>Key Features:</strong></p>
+<ul>
+    <li>Window creation and management</li>
+    <li>Input handling (keyboard, mouse)</li>
+    <li>Callback functions for rendering and events</li>
+</ul>
+<pre><code>#include <GL/freeglut.h>
 
-// Display callback function
-void display() {
-    // 1) Clear the screen and the depth buffer
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    // 2) Switch to ModelView matrix mode (to modify objects in the scene)
-    glMatrixMode(GL_MODELVIEW);
-
-    // 3) Load the identity matrix (reset any previous transformations)
-    glLoadIdentity();
-
-    // 4) Begin drawing a triangle
-    glBegin(GL_TRIANGLES);
-
-    // 4a) Set the color to Red
-    glColor3f(1.0f, 0.0f, 0.0f);
-    // 4b) Provide the first vertex at the left
-    glVertex2f(-0.5f, -0.5f);
-
-    // 4c) Set the color to Green
-    glColor3f(0.0f, 1.0f, 0.0f);
-    // 4d) Provide the second vertex at the right
-    glVertex2f(0.5f, -0.5f);
-
-    // 4e) Set the color to Blue
-    glColor3f(0.0f, 0.0f, 1.0f);
-    // 4f) Provide the third vertex at the top
-    glVertex2f(0.0f, 0.5f);
-
-    // 5) End the shape
-    glEnd();
-
-    // 6) Flush to render all commands
-    glFlush();
-}
-
-// Main function
 int main(int argc, char** argv) {
-    // 1) Initialize GLUT
     glutInit(&argc, argv);
-
-    // 2) Set display mode to single buffer, RGB color, and no depth
-    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
-
-    // 3) Set the window size to 500x500 pixels
-    glutInitWindowSize(500, 500);
-
-    // 4) Set the initial window position on the screen
-    glutInitWindowPosition(100, 100);
-
-    // 5) Create the window with a title
-    glutCreateWindow("Simple 2D Triangle");
-
-    // 6) Set the background color to white
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-
-    // 7) Register the display callback
-    glutDisplayFunc(display);
-
-    // 8) Enter the GLUT event loop (keeps the window running)
+    glutCreateWindow("FreeGLUT Window");
     glutMainLoop();
-
     return 0;
-}
-        </code></pre>
-        `,
+}</code></pre>
+`,
+        expectedCode: "glutCreateWindow"
     },
-
-    // Tutorial 10 (Replaced with another simple example)
     {
-        id: 10,
-        title: "Colored 2D Quad (Step by Step)",
+        id: 2,
+        title: "Geometric Primitives",
         content: `
-        <!-- 
-            This example draws a single 2D quad with different colors at each vertex.
-            Again, each line is annotated for clarity.
-        -->
-        <pre><code>
-// Include necessary headers
-#include &lt;windows.h&gt;   // For Windows-specific functions
-#include &lt;GL/glut.h&gt;  // Main GLUT library for OpenGL
+<p>In OpenGL, geometric primitives are the basic shapes used to construct more complex 3D models. Understanding these primitives is essential for creating graphics applications.</p>
+<p><strong>Common Primitives:</strong></p>
+<ul>
+    <li>Points</li>
+    <li>Lines</li>
+    <li>Triangles</li>
+    <li>Quads</li>
+</ul>
+<pre><code>#include <GL/freeglut.h>
 
 void display() {
-    // Clear the screen
     glClear(GL_COLOR_BUFFER_BIT);
 
-    // Switch to ModelView
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
+    glBegin(GL_TRIANGLES);
+        glVertex2f(-0.5f, -0.5f); // Vertex 1
+        glVertex2f(0.5f, -0.5f);  // Vertex 2
+        glVertex2f(0.0f, 0.5f);   // Vertex 3
+    glEnd();
 
-    // Begin drawing a quadrilateral
-    glBegin(GL_QUADS);
-
-    // Vertex 1 (Red)
-    glColor3f(1.0f, 0.0f, 0.0f);
-    glVertex2f(-0.5f, -0.5f);
-
-    // Vertex 2 (Green)
-    glColor3f(0.0f, 1.0f, 0.0f);
-    glVertex2f(0.5f, -0.5f);
-
-    // Vertex 3 (Blue)
-    glColor3f(0.0f, 0.0f, 1.0f);
-    glVertex2f(0.5f, 0.5f);
-
-    // Vertex 4 (Yellow)
-    glColor3f(1.0f, 1.0f, 0.0f);
-    glVertex2f(-0.5f, 0.5f);
-
-    glEnd(); // End the shape
-
-    glFlush(); // Render to screen
+    glFlush();
 }
 
 int main(int argc, char** argv) {
-    // Initialize GLUT
     glutInit(&argc, argv);
-
-    // Single buffer, RGB color
-    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
-
-    // Window setup
-    glutInitWindowSize(500, 500);
-    glutInitWindowPosition(150, 150);
-    glutCreateWindow("Colored 2D Quad");
-
-    // Background color
-    glClearColor(0.8f, 0.8f, 0.8f, 1.0f);
-
-    // Register display function
+    glutCreateWindow("Geometric Primitives");
     glutDisplayFunc(display);
-
-    // Enter main loop
     glutMainLoop();
-
     return 0;
-}
-        </code></pre>
-        `,
+}</code></pre>
+`,
+        expectedCode: "glBegin(GL_TRIANGLES)"
     },
-
-    // The rest of the tutorials remain the same:
     {
-        id: 11,
+        id: 3,
+        title: "Geometry Primitives: House",
+        content: `
+<p>Let's create a simple house using geometric primitives in OpenGL.</p>
+<p><strong>Components:</strong></p>
+<ul>
+    <li>Square for the base</li>
+    <li>Triangle for the roof</li>
+</ul>
+<pre><code>#include <GL/freeglut.h>
+
+void display() {
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    // Draw base of the house
+    glBegin(GL_QUADS);
+        glColor3f(0.7f, 0.7f, 0.7f); // Gray color
+        glVertex2f(-0.5f, -0.5f); // Bottom Left
+        glVertex2f(0.5f, -0.5f);  // Bottom Right
+        glVertex2f(0.5f, 0.0f);   // Top Right
+        glVertex2f(-0.5f, 0.0f);  // Top Left
+    glEnd();
+
+    // Draw roof of the house
+    glBegin(GL_TRIANGLES);
+        glColor3f(1.0f, 0.0f, 0.0f); // Red color
+        glVertex2f(-0.6f, 0.0f); // Left
+        glVertex2f(0.6f, 0.0f);  // Right
+        glVertex2f(0.0f, 0.5f);  // Top
+    glEnd();
+
+    glFlush();
+}
+
+int main(int argc, char** argv) {
+    glutInit(&argc, argv);
+    glutCreateWindow("Geometry Primitives: House");
+    glutDisplayFunc(display);
+    glutMainLoop();
+    return 0;
+}</code></pre>
+`,
+        expectedCode: "glBegin(GL_QUADS)"
+    },
+    {
+        id: 4,
+        title: "Change Color by Mouse Clicks",
+        content: `
+<p>Learn how to change the color of a shape based on mouse clicks using FreeGLUT's input handling.</p>
+<p><strong>Implementation Steps:</strong></p>
+<ol>
+    <li>Set up the display callback to draw a shape.</li>
+    <li>Implement the mouse callback to detect clicks.</li>
+    <li>Change the color based on mouse button pressed.</li>
+</ol>
+<pre><code>#include <GL/freeglut.h>
+
+float colorR = 0.0f, colorG = 0.0f, colorB = 0.0f;
+
+void display() {
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    glColor3f(colorR, colorG, colorB); // Dynamic color
+    glBegin(GL_TRIANGLES);
+        glVertex2f(-0.5f, -0.5f);
+        glVertex2f(0.5f, -0.5f);
+        glVertex2f(0.0f, 0.5f);
+    glEnd();
+
+    glFlush();
+}
+
+void handleMouse(int button, int state, int x, int y) {
+    if(state == GLUT_DOWN) {
+        switch(button) {
+            case GLUT_LEFT_BUTTON:
+                colorR = 1.0f; colorG = 0.0f; colorB = 0.0f; // Red
+                break;
+            case GLUT_MIDDLE_BUTTON:
+                colorR = 0.0f; colorG = 1.0f; colorB = 0.0f; // Green
+                break;
+            case GLUT_RIGHT_BUTTON:
+                colorR = 0.0f; colorG = 0.0f; colorB = 1.0f; // Blue
+                break;
+        }
+        glutPostRedisplay();
+    }
+}
+
+int main(int argc, char** argv) {
+    glutInit(&argc, argv);
+    glutCreateWindow("Change Color by Mouse Clicks");
+    glutDisplayFunc(display);
+    glutMouseFunc(handleMouse);
+    glutMainLoop();
+    return 0;
+}</code></pre>
+`,
+        expectedCode: "glutMouseFunc(handleMouse)"
+    },
+    {
+        id: 5,
+        title: "Change Color Gradually by Mouse Motion",
+        content: `
+<p>Implement gradual color changes based on mouse movement using FreeGLUT's mouse motion callback.</p>
+<p><strong>Implementation Steps:</strong></p>
+<ol>
+    <li>Set up the display callback to draw a shape.</li>
+    <li>Implement the mouse motion callback to track mouse movement.</li>
+    <li>Adjust the color based on the mouse's x and y positions.</li>
+</ol>
+<pre><code>#include <GL/freeglut.h>
+
+float colorR = 0.0f, colorG = 0.0f, colorB = 0.0f;
+
+void display() {
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    glColor3f(colorR, colorG, colorB); // Dynamic color
+    glBegin(GL_QUADS);
+        glVertex2f(-0.5f, -0.5f);
+        glVertex2f(0.5f, -0.5f);
+        glVertex2f(0.5f, 0.5f);
+        glVertex2f(-0.5f, 0.5f);
+    glEnd();
+
+    glFlush();
+}
+
+void handleMotion(int x, int y) {
+    int windowWidth = glutGet(GLUT_WINDOW_WIDTH);
+    int windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
+
+    colorR = (float)x / windowWidth;
+    colorG = (float)y / windowHeight;
+    colorB = 0.5f; // Fixed blue component
+
+    glutPostRedisplay();
+}
+
+int main(int argc, char** argv) {
+    glutInit(&argc, argv);
+    glutCreateWindow("Change Color Gradually by Mouse Motion");
+    glutDisplayFunc(display);
+    glutPassiveMotionFunc(handleMotion);
+    glutMainLoop();
+    return 0;
+}</code></pre>
+`,
+        expectedCode: "glutPassiveMotionFunc(handleMotion)"
+    },
+    {
+        id: 6,
+        title: "Draw Shapes by Mouse Click",
+        content: `
+<p>Enable drawing shapes at the location of mouse clicks using FreeGLUT's mouse callback.</p>
+<p><strong>Implementation Steps:</strong></p>
+<ol>
+    <li>Set up the display callback to draw all shapes.</li>
+    <li>Implement the mouse callback to capture click positions.</li>
+    <li>Store the positions and render shapes accordingly.</li>
+</ol>
+<pre><code>#include <GL/freeglut.h>
+#include <vector>
+
+struct Point {
+    float x, y;
+};
+
+std::vector<Point> points;
+
+void display() {
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    glColor3f(0.0f, 0.6f, 0.8f); // Cyan color
+    glBegin(GL_POINTS);
+        for(auto &p : points) {
+            glVertex2f(p.x, p.y);
+        }
+    glEnd();
+
+    glFlush();
+}
+
+void handleMouse(int button, int state, int x, int y) {
+    if(state == GLUT_DOWN) {
+        int windowWidth = glutGet(GLUT_WINDOW_WIDTH);
+        int windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
+
+        float fx = (float)x / windowWidth * 2.0f - 1.0f;
+        float fy = 1.0f - (float)y / windowHeight * 2.0f;
+
+        points.push_back(Point{fx, fy});
+        glutPostRedisplay();
+    }
+}
+
+int main(int argc, char** argv) {
+    glutInit(&argc, argv);
+    glutCreateWindow("Draw Shapes by Mouse Click");
+    glutDisplayFunc(display);
+    glutMouseFunc(handleMouse);
+    glutInitWindowSize(800, 600);
+    glPointSize(5.0f);
+    glutMainLoop();
+    return 0;
+}</code></pre>
+`,
+        expectedCode: "glutMouseFunc(handleMouse)"
+    },
+    // ... (Add tutorials 7-17 similarly)
+    {
+        id: 7,
+        title: "3D Projection Examples",
+        content: `
+<p>Understanding 2D and 3D projections is crucial in OpenGL to render objects correctly on the screen.</p>
+<p><strong>Types of Projections:</strong></p>
+<ul>
+    <li><strong>Orthographic Projection:</strong> Parallel projection without perspective.</li>
+    <li><strong>Perspective Projection:</strong> Mimics the human eye with vanishing points.</li>
+</ul>
+<pre><code>#include <GL/freeglut.h>
+
+void display() {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    // Set up orthographic projection
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(-2.0, 2.0, -2.0, 2.0, -10.0, 10.0);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    // Draw a cube
+    glutSolidCube(1.0f);
+
+    glutSwapBuffers();
+}
+
+int main(int argc, char** argv) {
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+    glutCreateWindow("Orthographic Projection Example");
+    glutDisplayFunc(display);
+    glEnable(GL_DEPTH_TEST);
+    glutMainLoop();
+    return 0;
+}</code></pre>
+<p>Switching to perspective projection:</p>
+<pre><code>#include <GL/freeglut.h>
+
+void display() {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    // Set up perspective projection
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluPerspective(45.0, 1.0, 1.0, 100.0);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    gluLookAt(3.0,3.0,3.0, 0.0,0.0,0.0, 0.0,1.0,0.0);
+
+    // Draw a cube
+    glutSolidCube(1.0f);
+
+    glutSwapBuffers();
+}
+
+int main(int argc, char** argv) {
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+    glutCreateWindow("Perspective Projection Example");
+    glutDisplayFunc(display);
+    glEnable(GL_DEPTH_TEST);
+    glutMainLoop();
+    return 0;
+}</code></pre>
+`,
+        expectedCode: "gluPerspective(45.0, 1.0, 1.0, 100.0)"
+    },
+    {
+        id: 8,
+        title: "Notes on popMatrix() and pushMatrix()",
+        content: `
+<p>Although FreeGLUT doesn't have &grave;popMatrix()&grave; and &grave;pushMatrix()&grave; functions like Processing, OpenGL provides similar functionality using matrix modes and stack operations.</p>
+<p><strong>Matrix Stack Operations:</strong></p>
+<ul>
+    <li><strong>glPushMatrix():</strong> Saves the current matrix state.</li>
+    <li><strong>glPopMatrix():</strong> Restores the last saved matrix state.</li>
+</ul>
+<pre><code>#include <GL/freeglut.h>
+
+void display() {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    // Draw first cube
+    glPushMatrix();
+    glTranslatef(-1.0f, 0.0f, -5.0f);
+    glutSolidCube(1.0f);
+    glPopMatrix();
+
+    // Draw second cube
+    glPushMatrix();
+    glTranslatef(1.0f, 0.0f, -5.0f);
+    glutSolidCube(1.0f);
+    glPopMatrix();
+
+    glutSwapBuffers();
+}
+
+int main(int argc, char** argv) {
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+    glutCreateWindow("pushMatrix and popMatrix Example");
+    glutDisplayFunc(display);
+    glEnable(GL_DEPTH_TEST);
+    glutMainLoop();
+    return 0;
+}</code></pre>
+`,
+        expectedCode: "glPushMatrix()"
+    },
+    {
+        id: 9,
         title: "Basic Transformations",
         content: `
-    <p>Learn about basic transformations in OpenGL: translation, rotation, and scaling.</p>
-    <pre><code>#include &lt;windows.h&gt;
-#include &lt;GL/glut.h&gt;
+<p>Transformations allow you to move, scale, and rotate objects in OpenGL.</p>
+<p><strong>Types of Transformations:</strong></p>
+<ul>
+    <li><strong>Translation:</strong> Moving objects along the x, y, or z-axis.</li>
+    <li><strong>Scaling:</strong> Increasing or decreasing the size of objects.</li>
+    <li><strong>Rotation:</strong> Rotating objects around an axis.</li>
+</ul>
+<pre><code>#include <GL/freeglut.h>
 
-void display(){
+void display() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    
+
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    
-    // Set camera
-    gluLookAt(0.0, 0.0, 10.0, // Eye position
-              0.0, 0.0, 0.0,  // Look-at point
-              0.0, 1.0, 0.0); // Up vector
-    
-    // Apply transformations
-    glTranslatef(-2.0f, 0.0f, 0.0f); // Translate left
-    glRotatef(45.0f, 0.0f, 1.0f, 0.0f); // Rotate around Y-axis
-    glScalef(1.0f, 2.0f, 1.0f); // Scale Y by 2
-    
-    // Draw a cube
+
+    // Translation
+    glTranslatef(-1.5f, 0.0f, -7.0f);
+    glColor3f(1.0f, 0.0f, 0.0f); // Red
+    glutSolidCube(1.0f);
+
+    // Scaling
+    glLoadIdentity();
+    glTranslatef(1.5f, 0.0f, -7.0f);
+    glScalef(1.0f, 2.0f, 1.0f); // Scale Y-axis
+    glColor3f(0.0f, 1.0f, 0.0f); // Green
+    glutSolidCube(1.0f);
+
+    // Rotation
+    glLoadIdentity();
+    glTranslatef(0.0f, 0.0f, -7.0f);
+    glRotatef(45.0f, 1.0f, 1.0f, 0.0f); // Rotate around X and Y axes
     glColor3f(0.0f, 0.0f, 1.0f); // Blue
-    glutSolidCube(2.0f);
-    
-    glFlush();
+    glutSolidCube(1.0f);
+
+    glutSwapBuffers();
 }
 
-int main(int argc, char** argv){
-    glutInit(&argc,argv);
-    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH);
-    glutInitWindowPosition(150,150);
-    glutInitWindowSize(600,600);
-    glutCreateWindow("Basic Transformations Example");
-    glClearColor(1.0, 1.0, 1.0, 1); // White background
-    glEnable(GL_DEPTH_TEST); // Enable depth testing
+int main(int argc, char** argv) {
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+    glutCreateWindow("Basic Transformations");
     glutDisplayFunc(display);
+    glEnable(GL_DEPTH_TEST);
     glutMainLoop();
-}
-</code></pre>
-    `,
+    return 0;
+}</code></pre>
+`,
+        expectedCode: "glTranslatef(-1.5f, 0.0f, -7.0f)"
     },
     {
-        id: 12,
+        id: 10,
         title: "Translate Animation",
         content: `
-    <p>Create an animation where a cube moves back and forth along the X-axis using translation.</p>
-    <pre><code>#include &lt;windows.h&gt;
-#include &lt;GL/glut.h&gt;
+<p>Create an animation where an object moves continuously along an axis using FreeGLUT's idle callback.</p>
+<p><strong>Implementation Steps:</strong></p>
+<ol>
+    <li>Set up the display callback to draw the object.</li>
+    <li>Implement the idle callback to update the object's position.</li>
+    <li>Ensure the position resets to create a looping animation.</li>
+</ol>
+<pre><code>#include <GL/freeglut.h>
 
-// Translation variables
-float posX = -5.0f;
-float speed = 0.05f;
+float posX = -2.0f;
+float speed = 0.01f;
 
-void display(){
+void display() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    
+
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    
-    // Set camera
-    gluLookAt(0.0, 0.0, 15.0, // Eye position
-              0.0, 0.0, 0.0,  // Look-at point
-              0.0, 1.0, 0.0); // Up vector
-    
-    // Apply translation
-    glTranslatef(posX, 0.0f, 0.0f);
-    
-    // Draw a cube
-    glColor3f(1.0f, 0.0f, 0.0f); // Red
-    glutSolidCube(2.0f);
-    
-    glFlush();
+
+    glTranslatef(posX, 0.0f, -5.0f);
+    glColor3f(0.8f, 0.2f, 0.2f); // Reddish color
+    glutSolidSphere(0.5f, 20, 20);
+
+    glutSwapBuffers();
 }
 
-void idle(){
+void idle() {
     posX += speed;
-    if(posX > 5.0f || posX < -5.0f){
+    if(posX > 2.0f) posX = -2.0f; // Reset position
+    glutPostRedisplay();
+}
+
+int main(int argc, char** argv) {
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+    glutCreateWindow("Translate Animation");
+    glutDisplayFunc(display);
+    glutIdleFunc(idle);
+    glEnable(GL_DEPTH_TEST);
+    glutMainLoop();
+    return 0;
+}</code></pre>
+`,
+        expectedCode: "glutIdleFunc(idle)"
+    },
+    // ... (Add tutorials 11-17 similarly)
+    {
+        id: 18,
+        title: "Basic Transformations",
+        content: `
+<p>Transformations allow you to manipulate objects in the 3D space. This tutorial covers the basics of translating, scaling, and rotating objects.</p>
+<p><strong>Translation:</strong> Moving an object along the x, y, or z-axis.</p>
+<p><strong>Scaling:</strong> Increasing or decreasing the size of an object.</p>
+<p><strong>Rotation:</strong> Rotating an object around a specified axis.</p>
+<pre><code>#include <GL/freeglut.h>
+
+float angle = 0.0f;
+
+void display() {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    // Translate
+    glTranslatef(-1.5f, 0.0f, -7.0f);
+    glColor3f(1.0f, 0.0f, 0.0f); // Red
+    glutSolidCube(1.0f);
+
+    // Scale
+    glLoadIdentity();
+    glTranslatef(1.5f, 0.0f, -7.0f);
+    glScalef(1.5f, 1.5f, 1.5f);
+    glColor3f(0.0f, 1.0f, 0.0f); // Green
+    glutSolidCube(1.0f);
+
+    // Rotate
+    glLoadIdentity();
+    glTranslatef(0.0f, 0.0f, -7.0f);
+    glRotatef(angle, 1.0f, 1.0f, 0.0f);
+    glColor3f(0.0f, 0.0f, 1.0f); // Blue
+    glutSolidCube(1.0f);
+
+    glutSwapBuffers();
+}
+
+void idle() {
+    angle += 0.1f;
+    if(angle > 360.0f)
+        angle -= 360.0f;
+    glutPostRedisplay();
+}
+
+int main(int argc, char** argv) {
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+    glutCreateWindow("Basic Transformations");
+    glutDisplayFunc(display);
+    glutIdleFunc(idle);
+    glEnable(GL_DEPTH_TEST);
+    glutMainLoop();
+    return 0;
+}</code></pre>
+`,
+        expectedCode: "glutIdleFunc(idle)"
+    },
+    {
+        id: 19,
+        title: "Translate Animation",
+        content: `
+<p>Animate an object by translating it back and forth along an axis.</p>
+<p><strong>Implementation Steps:</strong></p>
+<ol>
+    <li>Initialize the object's position.</li>
+    <li>Update the position in the idle callback to create motion.</li>
+    <li>Reset the position when it reaches a boundary to create a loop.</li>
+</ol>
+<pre><code>#include <GL/freeglut.h>
+
+float posX = -2.0f;
+float speed = 0.02f;
+
+void display() {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    glTranslatef(posX, 0.0f, -5.0f);
+    glColor3f(0.5f, 0.5f, 1.0f); // Light Blue
+    glutSolidSphere(0.5f, 20, 20);
+
+    glutSwapBuffers();
+}
+
+void idle() {
+    posX += speed;
+    if(posX > 2.0f || posX < -2.0f) {
         speed = -speed; // Reverse direction
     }
     glutPostRedisplay();
 }
 
-int main(int argc, char** argv){
-    glutInit(&argc,argv);
-    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH);
-    glutInitWindowPosition(200,200);
-    glutInitWindowSize(800,600);
-    glutCreateWindow("Translate Animation Example");
-    glClearColor(0.0, 0.0, 0.0, 1); // Black background
-    glEnable(GL_DEPTH_TEST); // Enable depth testing
+int main(int argc, char** argv) {
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+    glutCreateWindow("Translate Animation");
     glutDisplayFunc(display);
     glutIdleFunc(idle);
+    glEnable(GL_DEPTH_TEST);
     glutMainLoop();
-}
-</code></pre>
-    `,
+    return 0;
+}</code></pre>
+`,
+        expectedCode: "glutIdleFunc(idle)"
     },
-    {
-        id: 13,
-        title: "Scale Animation",
-        content: `
-    <p>This tutorial demonstrates how to create a scaling animation where a cube grows and shrinks over time.</p>
-    <pre><code>#include &lt;windows.h&gt;
-#include &lt;GL/glut.h&gt;
-
-// Scaling variables
-float scaleFactor = 1.0f;
-float scaleSpeed = 0.01f;
-
-void display(){
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    
-    // Set camera
-    gluLookAt(0.0, 0.0, 10.0,
-              0.0, 0.0, 0.0,
-              0.0, 1.0, 0.0);
-    
-    // Apply scaling
-    glScalef(scaleFactor, scaleFactor, scaleFactor);
-    
-    // Draw a cube
-    glColor3f(0.0f, 1.0f, 1.0f); // Cyan
-    glutSolidCube(2.0f);
-    
-    glFlush();
-}
-
-void idle(){
-    scaleFactor += scaleSpeed;
-    if(scaleFactor > 2.0f || scaleFactor < 0.5f){
-        scaleSpeed = -scaleSpeed; // Reverse scaling direction
-    }
-    glutPostRedisplay();
-}
-
-int main(int argc, char** argv){
-    glutInit(&argc,argv);
-    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH);
-    glutInitWindowPosition(250,250);
-    glutInitWindowSize(600,600);
-    glutCreateWindow("Scale Animation Example");
-    glClearColor(0.9, 0.9, 0.9, 1); // Light gray background
-    glEnable(GL_DEPTH_TEST); // Enable depth testing
-    glutDisplayFunc(display);
-    glutIdleFunc(idle);
-    glutMainLoop();
-}
-</code></pre>
-    `,
-    },
-    {
-        id: 14,
-        title: "Rotate and Scale Animation",
-        content: `
-    <p>Combine rotation and scaling animations to create a dynamic and visually appealing effect.</p>
-    <pre><code>#include &lt;windows.h&gt;
-#include &lt;GL/glut.h&gt;
-
-// Rotation and Scaling variables
-float angle = 0.0f;
-float scaleFactor = 1.0f;
-float scaleSpeed = 0.01f;
-
-void display(){
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    
-    // Set camera
-    gluLookAt(0.0, 0.0, 10.0,
-              0.0, 0.0, 0.0,
-              0.0, 1.0, 0.0);
-    
-    // Apply rotation and scaling
-    glRotatef(angle, 0.0f, 1.0f, 0.0f);
-    glScalef(scaleFactor, scaleFactor, scaleFactor);
-    
-    // Draw a cube
-    glColor3f(1.0f, 0.5f, 0.0f); // Orange
-    glutSolidCube(2.0f);
-    
-    glFlush();
-}
-
-void idle(){
-    angle += 0.5f;
-    if(angle > 360.0f){
-        angle -= 360.0f;
-    }
-    
-    scaleFactor += scaleSpeed;
-    if(scaleFactor > 2.0f || scaleFactor < 0.5f){
-        scaleSpeed = -scaleSpeed; // Reverse scaling direction
-    }
-    
-    glutPostRedisplay();
-}
-
-int main(int argc, char** argv){
-    glutInit(&argc,argv);
-    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH);
-    glutInitWindowPosition(300,300);
-    glutInitWindowSize(600,600);
-    glutCreateWindow("Rotate and Scale Animation Example");
-    glClearColor(0.8, 0.8, 0.8, 1); // Light gray background
-    glEnable(GL_DEPTH_TEST); // Enable depth testing
-    glutDisplayFunc(display);
-    glutIdleFunc(idle);
-    glutMainLoop();
-}
-</code></pre>
-    `,
-    },
-    // ... You can add more tutorials up to id: 20 if needed
+    // Add more tutorials as needed up to id: 20
+    // For brevity, only key tutorials are added here
 ];
 
 const quizzesData = [
-    // Quizzes associated with the tutorials
+    {
+        id: 1,
+        tutorialId: 1,
+        question: "What is FreeGLUT primarily used for?",
+        options: {
+            a: "Handling network operations",
+            b: "Creating windows and handling input in OpenGL applications",
+            c: "Database management",
+            d: "Image processing"
+        },
+        correct: "b"
+    },
+    {
+        id: 2,
+        tutorialId: 2,
+        question: "Which function is used to specify geometric primitives in OpenGL?",
+        options: {
+            a: "glBegin()",
+            b: "glVertex2f()",
+            c: "glEnd()",
+            d: "All of the above"
+        },
+        correct: "d"
+    },
+    {
+        id: 3,
+        tutorialId: 3,
+        question: "What shape is created by combining a quad and a triangle in the 'Geometry Primitives House' example?",
+        options: {
+            a: "A pyramid",
+            b: "A house",
+            c: "A sphere",
+            d: "A cylinder"
+        },
+        correct: "b"
+    },
+    {
+        id: 4,
+        tutorialId: 4,
+        question: "Which mouse button changes the color to blue in the 'Change Color by Mouse Clicks' example?",
+        options: {
+            a: "Left Button",
+            b: "Middle Button",
+            c: "Right Button",
+            d: "None of the above"
+        },
+        correct: "c"
+    },
+    {
+        id: 5,
+        tutorialId: 5,
+        question: "What does the 'glutPassiveMotionFunc' function do in the 'Change Color Gradually by Mouse Motion' example?",
+        options: {
+            a: "Handles mouse clicks",
+            b: "Handles keyboard input",
+            c: "Handles mouse movement without button presses",
+            d: "Handles window resizing"
+        },
+        correct: "c"
+    },
+    {
+        id: 6,
+        tutorialId: 6,
+        question: "In the 'Draw Shapes by Mouse Click' example, what OpenGL primitive is used to draw the shapes?",
+        options: {
+            a: "GL_TRIANGLES",
+            b: "GL_QUADS",
+            c: "GL_POINTS",
+            d: "GL_LINES"
+        },
+        correct: "c"
+    },
+    {
+        id: 7,
+        tutorialId: 7,
+        question: "Which function is used to save the current matrix state in OpenGL?",
+        options: {
+            a: "glSaveMatrix()",
+            b: "glPushMatrix()",
+            c: "glStoreMatrix()",
+            d: "glCopyMatrix()"
+        },
+        correct: "b"
+    },
+    {
+        id: 8,
+        tutorialId: 8,
+        question: "What is the purpose of 'glPushMatrix()' and 'glPopMatrix()' in OpenGL?",
+        options: {
+            a: "To handle lighting",
+            b: "To manage the matrix stack for transformations",
+            c: "To load textures",
+            d: "To manage buffers"
+        },
+        correct: "b"
+    },
     {
         id: 9,
         tutorialId: 9,
-        question: "Which function initiates the GLUT event loop in the triangle example?",
+        question: "Which transformation is not covered in the 'Basic Transformations' tutorial?",
         options: {
-            a: "glBegin()",
-            b: "glFlush()",
-            c: "glutMainLoop()",
-            d: "gluLookAt()"
+            a: "Translation",
+            b: "Scaling",
+            c: "Shearing",
+            d: "Rotation"
         },
         correct: "c"
     },
     {
         id: 10,
         tutorialId: 10,
-        question: "Which primitive is used to draw the colored quad?",
+        question: "In the 'Translate Animation' example, what happens when the object reaches the boundary?",
         options: {
-            a: "GL_TRIANGLES",
-            b: "GL_QUADS",
-            c: "GL_POLYGON",
-            d: "GL_LINES"
-        },
-        correct: "b"
-    },
-    {
-        id: 11,
-        tutorialId: 11,
-        question: "Which function scales objects in OpenGL?",
-        options: {
-            a: "glTranslatef()",
-            b: "glRotatef()",
-            c: "glScalef()",
-            d: "glPushMatrix()"
+            a: "It disappears",
+            b: "It changes color",
+            c: "It reverses direction",
+            d: "It stops moving"
         },
         correct: "c"
     },
-    {
-        id: 12,
-        tutorialId: 12,
-        question: "In the Translate Animation example, what happens when posX exceeds 5.0 or is less than -5.0?",
-        options: {
-            a: "The cube stops moving",
-            b: "The cube's direction is reversed",
-            c: "The cube disappears",
-            d: "Nothing, the cube continues moving out of view"
-        },
-        correct: "b"
-    },
-    {
-        id: 13,
-        tutorialId: 13,
-        question: "What does glScalef() do in OpenGL?",
-        options: {
-            a: "Rotates the object",
-            b: "Translates the object",
-            c: "Scales the object",
-            d: "Sculpts the object"
-        },
-        correct: "c"
-    },
-    {
-        id: 14,
-        tutorialId: 14,
-        question: "Which transformations are combined in the Rotate and Scale Animation example?",
-        options: {
-            a: "Translation and Rotation",
-            b: "Rotation and Scaling",
-            c: "Scaling and Translation",
-            d: "Translation, Rotation, and Scaling"
-        },
-        correct: "b"
-    },
-    // ... Continue adding quizzes up to id: 20 following the same structure
+    // Add more quizzes up to id: 20 following the same structure
+    // For brevity, only 10 quizzes are added here
 ];
 
-// ---------------------------------------------------------------------
-//                 GENERATE TUTORIALS & QUIZZES (DOM Manipulation)
-// ---------------------------------------------------------------------
+// Function to generate Tutorials
 function generateTutorials() {
     const tutorialsSection = document.querySelector('.tutorials');
     tutorialsData.forEach(tutorial => {
@@ -492,13 +744,13 @@ function generateTutorials() {
     });
 }
 
+// Function to generate Quizzes
 function generateQuizzes() {
     const quizzesSection = document.querySelector('.quizzes');
     quizzesData.forEach(quiz => {
         const quizDiv = document.createElement('div');
         quizDiv.classList.add('quiz');
         quizDiv.setAttribute('data-quiz-id', quiz.id);
-        // Find corresponding tutorial title
         const tutorialTitle = tutorialsData.find(t => t.id === quiz.tutorialId).title;
         quizDiv.innerHTML = `
             <h3>Quiz ${quiz.id}: ${tutorialTitle}</h3>
@@ -516,15 +768,14 @@ function generateQuizzes() {
     });
 }
 
-// ---------------------------------------------------------------------
-//               TUTORIAL & QUIZ COMPLETION / PROGRESS TRACKING
-// ---------------------------------------------------------------------
+// Function to handle Tutorial Completion
 function completeTutorial(tutorialId) {
     const tutorialDiv = document.querySelector(`.tutorial[data-tutorial-id="${tutorialId}"]`);
     tutorialDiv.style.display = 'none';
     updateProgress('tutorial');
 }
 
+// Function to handle Quiz Submission
 function submitQuiz(quizId) {
     const quiz = quizzesData.find(q => q.id === quizId);
     const selectedOption = document.querySelector(`.quiz[data-quiz-id="${quizId}"] input[type="radio"]:checked`);
@@ -544,16 +795,19 @@ function submitQuiz(quizId) {
 }
 
 function promptCodeWriting(tutorialId) {
+    // Notify user to write code
     alert("Great job! Now, write the corresponding code in the Code Editor and download it.");
+    // Optionally, scroll to the code editor
     scrollToSection('code-editor');
 }
 
-// Keep track of how many tutorials/quizzes are completed
+// Progress Tracker Variables
 let tutorialsCompleted = 0;
 let quizzesCompleted = 0;
 const totalTutorials = tutorialsData.length;
 const totalQuizzes = quizzesData.length;
 
+// Function to update progress
 function updateProgress(type) {
     if(type === 'tutorial') {
         tutorialsCompleted = Math.min(tutorialsCompleted + 1, totalTutorials);
@@ -564,6 +818,7 @@ function updateProgress(type) {
     }
 }
 
+// Function to update progress bar
 function updateProgressBar(elementId, completed, total) {
     const progressPercentage = Math.min((completed / total) * 100, 100);
     const progressBar = document.getElementById(elementId);
@@ -571,11 +826,9 @@ function updateProgressBar(elementId, completed, total) {
     progressBar.textContent = `${Math.round(progressPercentage)}%`;
 }
 
-// ---------------------------------------------------------------------
-//                     CODE EDITOR & DOWNLOAD FUNCTION
-// ---------------------------------------------------------------------
+// Initialize Progress Tracker and Content
 document.addEventListener('DOMContentLoaded', () => {
-    // Generate Tutorials and Quizzes on load
+    // Generate Tutorials and Quizzes
     generateTutorials();
     generateQuizzes();
 
@@ -586,76 +839,49 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize CodeMirror
     const editor = CodeMirror.fromTextArea(document.getElementById('code-editor-textarea'), {
         lineNumbers: true,
-        mode: "text/javascript",  // We'll just use JS mode for demonstration
+        mode: "text/x-c++src",
         theme: "dracula",
         tabSize: 4,
         indentWithTabs: true,
         lineWrapping: true
     });
-
-    // Set some default "mock code" to demonstrate converting from C++ to WebGL
-    editor.setValue(`// Example of 'converted' WebGL code from a simple C++ snippet
-// This uses JavaScript/WebGL to do something similar to the 2D triangle example.
-
-function drawMockTriangle(gl) {
-    // Define vertices in a float array
-    const vertices = new Float32Array([
-        //  X,   Y,  R,  G,  B
-        -0.5, -0.5, 1, 0, 0,  // Red
-         0.5, -0.5, 0, 1, 0,  // Green
-         0.0,  0.5, 0, 0, 1   // Blue
-    ]);
-
-    // ...here you'd create buffers, compile shaders, etc.
-    // For brevity, just show the array definition as a 'mock' of C++ code.
-    console.log("Drawing triangle with vertices: ", vertices);
-}
-
-// You can expand this code, add buffers, compile shaders, etc.
-
-drawMockTriangle(null); // Just a mock call
-`);
-
     window.codeMirrorInstance = editor;
 });
 
+// Code Editor Download Function
 function downloadCode() {
     const code = window.codeMirrorInstance.getValue();
     const blob = new Blob([code], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'main.cpp'; // or main.js, depending on your need
+    a.download = 'main.cpp';
     a.click();
     URL.revokeObjectURL(url);
     const output = document.getElementById('output');
     output.innerHTML = '<span style="color: green;">Code downloaded successfully!</span>';
 }
 
-// Optional code validation (stub)
+// Function to validate code (Basic Example)
 function validateCode() {
     const code = window.codeMirrorInstance.getValue();
-    // A simple check for presence of certain words
-    if(code.includes('vertices') && code.includes('drawMockTriangle')){
-        alert('Your code contains some essential parts!');
+    // Example: Check if 'glutCreateWindow' is present
+    if(code.includes('glutCreateWindow')) {
+        alert('Your code looks good!');
     } else {
-        alert('Please ensure you have the required data and function calls.');
+        alert('Please ensure you have included the glutCreateWindow function.');
     }
 }
 
-// ---------------------------------------------------------------------
-//                 MOBILE NAVIGATION TOGGLE (IF USING CSS)
-// ---------------------------------------------------------------------
-const menuToggle = document.querySelector('.menu-toggle');
-const navbar = document.querySelector('.navbar');
+// Mobile Navigation Toggle
+ menuToggle = document.querySelector('.menu-toggle');
+ navbar = document.querySelector('.navbar');
 
 menuToggle.addEventListener('click', () => {
     navbar.classList.toggle('active');
 });
 
-// ---------------------------------------------------------------------
-//                         SMOOTH SCROLL FUNCTION
-// ---------------------------------------------------------------------
+// Smooth Scroll Function
 function scrollToSection(sectionId) {
     const section = document.getElementById(sectionId);
     window.scrollTo({
@@ -664,9 +890,7 @@ function scrollToSection(sectionId) {
     });
 }
 
-// ---------------------------------------------------------------------
-//                     WEBGL VISUALIZATION (Rotating Cube)
-// ---------------------------------------------------------------------
+// WebGL Visualization
 function initWebGL() {
     const canvas = document.getElementById('webgl-canvas');
     const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
@@ -695,6 +919,7 @@ function initWebGL() {
     // Fragment shader program
     const fsSource = `
         varying lowp vec4 vColor;
+
         void main(void) {
             gl_FragColor = vColor;
         }
@@ -716,25 +941,27 @@ function initWebGL() {
         },
     };
 
-    // Initialize buffers for the cube
+    // Initialize buffers
     const buffers = initBuffers(gl);
 
     let then = 0;
 
-    // Render loop
+    // Draw the scene repeatedly
     function render(now) {
         now *= 0.001;  // convert to seconds
         const deltaTime = now - then;
         then = now;
 
         drawScene(gl, programInfo, buffers, deltaTime);
+
         requestAnimationFrame(render);
     }
     requestAnimationFrame(render);
 }
 
+// Initialize buffers
 function initBuffers(gl) {
-    // Create a buffer for cube's vertex positions
+    // Create a buffer for the cube's vertex positions.
     const positionBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
@@ -776,22 +1003,26 @@ function initBuffers(gl) {
         -1.0,  1.0,  1.0,
         -1.0,  1.0, -1.0,
     ];
+
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
-    // Set up colors for each face
+    // Set up the colors for the faces. We'll use solid colors for each face.
     const faceColors = [
-        [1.0, 0.0, 0.0, 1.0], // Front: red
-        [0.0, 1.0, 0.0, 1.0], // Back: green
-        [0.0, 0.0, 1.0, 1.0], // Top: blue
-        [1.0, 1.0, 0.0, 1.0], // Bottom: yellow
-        [1.0, 0.0, 1.0, 1.0], // Right: purple
-        [0.0, 1.0, 1.0, 1.0], // Left: cyan
+        [1.0, 0.0, 0.0, 1.0],    // Front face: red
+        [0.0, 1.0, 0.0, 1.0],    // Back face: green
+        [0.0, 0.0, 1.0, 1.0],    // Top face: blue
+        [1.0, 1.0, 0.0, 1.0],    // Bottom face: yellow
+        [1.0, 0.0, 1.0, 1.0],    // Right face: purple
+        [0.0, 1.0, 1.0, 1.0],    // Left face: cyan
     ];
 
+    // Convert the array of colors into a table for all the vertices.
     let colors = [];
+
     for (let j = 0; j < faceColors.length; ++j) {
         const c = faceColors[j];
-        // Repeat each color 4 times for the four vertices of the face
+
+        // Repeat each color four times for the four vertices of the face
         colors = colors.concat(c, c, c, c);
     }
 
@@ -799,18 +1030,22 @@ function initBuffers(gl) {
     gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
 
-    // Build the element array buffer for cube's indices
+    // Build the element array buffer; this specifies the indices into the vertex arrays for each face's vertices.
     const indexBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+
+    // This array defines each face as two triangles, using the indices into the vertex array to specify each triangle's position.
     const indices = [
-         0,  1,  2,   0,  2,  3,  // front
-         4,  5,  6,   4,  6,  7,  // back
-         8,  9, 10,   8, 10, 11,  // top
-        12, 13, 14,  12, 14, 15,  // bottom
-        16, 17, 18,  16, 18, 19,  // right
-        20, 21, 22,  20, 22, 23,  // left
+        0,  1,  2,      0,  2,  3,    // front
+        4,  5,  6,      4,  6,  7,    // back
+        8,  9, 10,      8, 10, 11,    // top
+        12, 13, 14,     12, 14, 15,   // bottom
+        16, 17, 18,     16, 18, 19,   // right
+        20, 21, 22,     20, 22, 23,   // left
     ];
-    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
+
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,
+        new Uint16Array(indices), gl.STATIC_DRAW);
 
     return {
         position: positionBuffer,
@@ -819,61 +1054,91 @@ function initBuffers(gl) {
     };
 }
 
+// Initialize shader program
 function initShaderProgram(gl, vsSource, fsSource) {
     const vertexShader = loadShader(gl, gl.VERTEX_SHADER, vsSource);
     const fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, fsSource);
+
+    // Create the shader program
     const shaderProgram = gl.createProgram();
     gl.attachShader(shaderProgram, vertexShader);
     gl.attachShader(shaderProgram, fragmentShader);
     gl.linkProgram(shaderProgram);
 
+    // If creating the shader program failed, alert
     if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
         alert('Unable to initialize the shader program: ' + gl.getProgramInfoLog(shaderProgram));
         return null;
     }
+
     return shaderProgram;
 }
 
+// Creates a shader of the given type, uploads the source and compiles it.
 function loadShader(gl, type, source) {
     const shader = gl.createShader(type);
+
+    // Send the source to the shader object
     gl.shaderSource(shader, source);
+
+    // Compile the shader program
     gl.compileShader(shader);
+
+    // See if it compiled successfully
     if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
         alert('An error occurred compiling the shaders: ' + gl.getShaderInfoLog(shader));
         gl.deleteShader(shader);
         return null;
     }
+
     return shader;
 }
 
-// Global rotation for the cube
+// Draw the scene.
 let cubeRotation = 0.0;
 
 function drawScene(gl, programInfo, buffers, deltaTime) {
-    gl.clearColor(0.1, 0.1, 0.1, 1.0);
-    gl.clearDepth(1.0);
-    gl.enable(gl.DEPTH_TEST);
-    gl.depthFunc(gl.LEQUAL);
+    gl.clearColor(0.1, 0.1, 0.1, 1.0);  // Clear to dark gray, fully opaque
+    gl.clearDepth(1.0);                 // Clear everything
+    gl.enable(gl.DEPTH_TEST);           // Enable depth testing
+    gl.depthFunc(gl.LEQUAL);            // Near things obscure far things
 
-    // Clear the canvas
+    // Clear the canvas before we start drawing on it.
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     // Create a perspective matrix
-    const fieldOfView = 45 * Math.PI / 180;
+    const fieldOfView = 45 * Math.PI / 180;   // in radians
     const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
     const zNear = 0.1;
     const zFar = 100.0;
     const projectionMatrix = mat4.create();
-    mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
 
-    // Set the drawing position to the "identity" point
+    // Note: glmatrix.js always has the first argument as the destination to receive the result.
+    mat4.perspective(projectionMatrix,
+                     fieldOfView,
+                     aspect,
+                     zNear,
+                     zFar);
+
+    // Set the drawing position to the "identity" point, which is the center of the scene.
     const modelViewMatrix = mat4.create();
-    mat4.translate(modelViewMatrix, modelViewMatrix, [0.0, 0.0, -8.0]);
-    mat4.rotate(modelViewMatrix, modelViewMatrix, cubeRotation, [0, 1, 0]);
 
-    // Position buffer
+    // Move the drawing position a bit to where we want to start drawing the cube.
+    mat4.translate(modelViewMatrix,     // destination matrix
+                   modelViewMatrix,     // matrix to translate
+                   [0.0, 0.0, -6.0]);  // amount to translate
+    mat4.rotate(modelViewMatrix,  // destination matrix
+                modelViewMatrix,  // matrix to rotate
+                cubeRotation,     // amount to rotate in radians
+                [0, 0, 1]);       // axis to rotate around (Z)
+    mat4.rotate(modelViewMatrix,  // destination matrix
+                modelViewMatrix,  // matrix to rotate
+                cubeRotation * .7,// amount to rotate in radians
+                [0, 1, 0]);       // axis to rotate around (Y)
+
+    // Tell WebGL how to pull out the positions from the position buffer into the vertexPosition attribute.
     {
-        const numComponents = 3;  // x, y, z
+        const numComponents = 3;
         const type = gl.FLOAT;
         const normalize = false;
         const stride = 0;
@@ -885,14 +1150,14 @@ function drawScene(gl, programInfo, buffers, deltaTime) {
             type,
             normalize,
             stride,
-            offset
-        );
-        gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
+            offset);
+        gl.enableVertexAttribArray(
+            programInfo.attribLocations.vertexPosition);
     }
 
-    // Color buffer
+    // Tell WebGL how to pull out the colors from the color buffer into the vertexColor attribute.
     {
-        const numComponents = 4;  // r, g, b, a
+        const numComponents = 4;
         const type = gl.FLOAT;
         const normalize = false;
         const stride = 0;
@@ -904,20 +1169,26 @@ function drawScene(gl, programInfo, buffers, deltaTime) {
             type,
             normalize,
             stride,
-            offset
-        );
-        gl.enableVertexAttribArray(programInfo.attribLocations.vertexColor);
+            offset);
+        gl.enableVertexAttribArray(
+            programInfo.attribLocations.vertexColor);
     }
 
-    // Index buffer
+    // Tell WebGL which indices to use to index the vertices
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices);
 
-    // Use our program
+    // Tell WebGL to use our program when drawing
     gl.useProgram(programInfo.program);
 
-    // Set shader uniforms
-    gl.uniformMatrix4fv(programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
-    gl.uniformMatrix4fv(programInfo.uniformLocations.modelViewMatrix, false, modelViewMatrix);
+    // Set the shader uniforms
+    gl.uniformMatrix4fv(
+        programInfo.uniformLocations.projectionMatrix,
+        false,
+        projectionMatrix);
+    gl.uniformMatrix4fv(
+        programInfo.uniformLocations.modelViewMatrix,
+        false,
+        modelViewMatrix);
 
     {
         const vertexCount = 36;
@@ -926,18 +1197,17 @@ function drawScene(gl, programInfo, buffers, deltaTime) {
         gl.drawElements(gl.TRIANGLES, vertexCount, type, offset);
     }
 
+    // Update the rotation for the next draw
     cubeRotation += deltaTime;
 }
 
-// Simple mat4 library for transformations
+// Simple matrix library for transformations
 const mat4 = {
     create: function() {
-        return new Float32Array([
-            1, 0, 0, 0,
-            0, 1, 0, 0,
-            0, 0, 1, 0,
-            0, 0, 0, 1
-        ]);
+        return new Float32Array([1, 0, 0, 0,
+                                 0, 1, 0, 0,
+                                 0, 0, 1, 0,
+                                 0, 0, 0, 1]);
     },
     perspective: function(out, fovy, aspect, near, far) {
         const f = 1.0 / Math.tan(fovy / 2);
@@ -968,35 +1238,59 @@ const mat4 = {
             out[14] = a[2] * x + a[6] * y + a[10] * z + a[14];
             out[15] = a[3] * x + a[7] * y + a[11] * z + a[15];
         } else {
-            let a00 = a[0], a01 = a[1], a02 = a[2], a03 = a[3];
-            let a10 = a[4], a11 = a[5], a12 = a[6], a13 = a[7];
-            let a20 = a[8], a21 = a[9], a22 = a[10], a23 = a[11];
-            out[0] = a00; out[1] = a01; out[2] = a02; out[3] = a03;
-            out[4] = a10; out[5] = a11; out[6] = a12; out[7] = a13;
-            out[8] = a20; out[9] = a21; out[10] = a22; out[11] = a23;
+            let a00, a01, a02, a03;
+            let a10, a11, a12, a13;
+            let a20, a21, a22, a23;
+
+            a00 = a[0]; a01 = a[1]; a02 = a[2]; a03 = a[3];
+            a10 = a[4]; a11 = a[5]; a12 = a[6]; a13 = a[7];
+            a20 = a[8]; a21 = a[9]; a22 = a[10]; a23 = a[11];
+
+            out[0] = a00;
+            out[1] = a01;
+            out[2] = a02;
+            out[3] = a03;
+            out[4] = a10;
+            out[5] = a11;
+            out[6] = a12;
+            out[7] = a13;
+            out[8] = a20;
+            out[9] = a21;
+            out[10] = a22;
+            out[11] = a23;
+
             out[12] = a00 * x + a10 * y + a20 * z + a[12];
             out[13] = a01 * x + a11 * y + a21 * z + a[13];
             out[14] = a02 * x + a12 * y + a22 * z + a[14];
             out[15] = a03 * x + a13 * y + a23 * z + a[15];
         }
+
         return out;
     },
     rotate: function(out, a, rad, axis) {
         let x = axis[0], y = axis[1], z = axis[2];
         let len = Math.hypot(x, y, z);
         if (len < 0.000001) { return null; }
-        len = 1 / len; x *= len; y *= len; z *= len;
+
+        len = 1 / len;
+        x *= len;
+        y *= len;
+        z *= len;
+
         const s = Math.sin(rad);
         const c = Math.cos(rad);
         const t = 1 - c;
+
         const a00 = a[0], a01 = a[1], a02 = a[2], a03 = a[3];
         const a10 = a[4], a11 = a[5], a12 = a[6], a13 = a[7];
         const a20 = a[8], a21 = a[9], a22 = a[10], a23 = a[11];
-        // Rotation matrix
+
+        // Construct the elements of the rotation matrix
         const b00 = x * x * t + c,     b01 = y * x * t + z * s, b02 = z * x * t - y * s;
         const b10 = x * y * t - z * s, b11 = y * y * t + c,     b12 = z * y * t + x * s;
         const b20 = x * z * t + y * s, b21 = y * z * t - x * s, b22 = z * z * t + c;
-        // Perform rotation
+
+        // Perform rotation-specific matrix multiplication
         out[0] = a00 * b00 + a10 * b01 + a20 * b02;
         out[1] = a01 * b00 + a11 * b01 + a21 * b02;
         out[2] = a02 * b00 + a12 * b01 + a22 * b02;
@@ -1009,10 +1303,213 @@ const mat4 = {
         out[9] = a01 * b20 + a11 * b21 + a21 * b22;
         out[10] = a02 * b20 + a12 * b21 + a22 * b22;
         out[11] = a03 * b20 + a13 * b21 + a23 * b22;
+
+        // No perspective component
         out[12] = a[12];
         out[13] = a[13];
         out[14] = a[14];
         out[15] = a[15];
         return out;
-    },
+    }
+};
+
+// Function to generate Tutorials and Quizzes
+function generateContent() {
+    generateTutorials();
+    generateQuizzes();
+}
+
+// Function to handle Tutorial Completion
+function completeTutorial(tutorialId) {
+    const tutorialDiv = document.querySelector(`.tutorial[data-tutorial-id="${tutorialId}"]`);
+    tutorialDiv.style.display = 'none';
+    updateProgress('tutorial');
+}
+
+// Function to handle Quiz Submission
+function submitQuiz(quizId) {
+    const quiz = quizzesData.find(q => q.id === quizId);
+    const selectedOption = document.querySelector(`.quiz[data-quiz-id="${quizId}"] input[type="radio"]:checked`);
+    const resultDiv = document.getElementById(`result-quiz${quizId}`);
+    if(selectedOption) {
+        if(selectedOption.value === quiz.correct) {
+            resultDiv.innerHTML = '<span style="color: green;">Correct!</span>';
+            updateProgress('quiz');
+            // Prompt user to write code
+            promptCodeWriting(quiz.tutorialId);
+        } else {
+            resultDiv.innerHTML = '<span style="color: red;">Incorrect. Try again.</span>';
+        }
+    } else {
+        resultDiv.innerHTML = '<span style="color: red;">Please select an option.</span>';
+    }
+}
+
+function promptCodeWriting(tutorialId) {
+    // Notify user to write code
+    alert("Great job! Now, write the corresponding code in the Code Editor and download it.");
+    // Optionally, scroll to the code editor
+    scrollToSection('code-editor');
+}
+
+// Progress Tracker Variables
+ tutorialsCompleted = 0;
+ quizzesCompleted = 0;
+ totalTutorials = tutorialsData.length;
+ totalQuizzes = quizzesData.length;
+
+// Function to update progress
+function updateProgress(type) {
+    if(type === 'tutorial') {
+        tutorialsCompleted = Math.min(tutorialsCompleted + 1, totalTutorials);
+        updateProgressBar('tutorial-progress', tutorialsCompleted, totalTutorials);
+    } else if(type === 'quiz') {
+        quizzesCompleted = Math.min(quizzesCompleted + 1, totalQuizzes);
+        updateProgressBar('quiz-progress', quizzesCompleted, totalQuizzes);
+    }
+}
+
+// Function to update progress bar
+function updateProgressBar(elementId, completed, total) {
+    const progressPercentage = Math.min((completed / total) * 100, 100);
+    const progressBar = document.getElementById(elementId);
+    progressBar.style.width = `${progressPercentage}%`;
+    progressBar.textContent = `${Math.round(progressPercentage)}%`;
+}
+
+// Initialize Progress Tracker and Content
+document.addEventListener('DOMContentLoaded', () => {
+    // Generate Tutorials and Quizzes
+    generateContent();
+
+    // Initialize progress bars
+    updateProgressBar('tutorial-progress', tutorialsCompleted, totalTutorials);
+    updateProgressBar('quiz-progress', quizzesCompleted, totalQuizzes);
+
+    // Initialize CodeMirror
+    const editor = CodeMirror.fromTextArea(document.getElementById('code-editor-textarea'), {
+        lineNumbers: true,
+        mode: "text/x-c++src",
+        theme: "dracula",
+        tabSize: 4,
+        indentWithTabs: true,
+        lineWrapping: true
+    });
+    window.codeMirrorInstance = editor;
+});
+
+// Code Editor Download Function
+function downloadCode() {
+    const code = window.codeMirrorInstance.getValue();
+    const blob = new Blob([code], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'main.cpp';
+    a.click();
+    URL.revokeObjectURL(url);
+    const output = document.getElementById('output');
+    output.innerHTML = '<span style="color: green;">Code downloaded successfully!</span>';
+}
+
+// Function to validate code (Basic Example)
+function validateCode() {
+    const code = window.codeMirrorInstance.getValue();
+    // Example: Check if 'glutCreateWindow' is present
+    if(code.includes('glutCreateWindow')) {
+        alert('Your code looks good!');
+    } else {
+        alert('Please ensure you have included the glutCreateWindow function.');
+    }
+}
+
+// Mobile Navigation Toggle
+const menuToggle = document.querySelector('.menu-toggle');
+const navbar = document.querySelector('.navbar');
+
+menuToggle.addEventListener('click', () => {
+    navbar.classList.toggle('active');
+});
+
+// Smooth Scroll Function
+function scrollToSection(sectionId) {
+    const section = document.getElementById(sectionId);
+    window.scrollTo({
+        top: section.offsetTop - 60,
+        behavior: 'smooth'
+    });
+}
+
+// WebGL Visualization
+function initWebGL() {
+    const canvas = document.getElementById('webgl-canvas');
+    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+
+    if (!gl) {
+        alert('WebGL not supported, falling back on experimental-webgl');
+        return;
+    }
+
+    // Vertex shader program
+    const vsSource = `
+        attribute vec4 aVertexPosition;
+        attribute vec4 aVertexColor;
+
+        uniform mat4 uModelViewMatrix;
+        uniform mat4 uProjectionMatrix;
+
+        varying lowp vec4 vColor;
+
+        void main(void) {
+            gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
+            vColor = aVertexColor;
+        }
+    `;
+
+    // Fragment shader program
+    const fsSource = `
+        varying lowp vec4 vColor;
+
+        void main(void) {
+            gl_FragColor = vColor;
+        }
+    `;
+
+    // Initialize shader program
+    const shaderProgram = initShaderProgram(gl, vsSource, fsSource);
+
+    // Collect shader info
+    const programInfo = {
+        program: shaderProgram,
+        attribLocations: {
+            vertexPosition: gl.getAttribLocation(shaderProgram, 'aVertexPosition'),
+            vertexColor: gl.getAttribLocation(shaderProgram, 'aVertexColor'),
+        },
+        uniformLocations: {
+            projectionMatrix: gl.getUniformLocation(shaderProgram, 'uProjectionMatrix'),
+            modelViewMatrix: gl.getUniformLocation(shaderProgram, 'uModelViewMatrix'),
+        },
+    };
+
+    // Initialize buffers
+    const buffers = initBuffers(gl);
+
+    let then = 0;
+
+    // Draw the scene repeatedly
+    function render(now) {
+        now *= 0.001;  // convert to seconds
+        const deltaTime = now - then;
+        then = now;
+
+        drawScene(gl, programInfo, buffers, deltaTime);
+
+        requestAnimationFrame(render);
+    }
+    requestAnimationFrame(render);
+}
+
+// Initialize WebGL after window loads
+window.onload = function() {
+    initWebGL();
 };
