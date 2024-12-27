@@ -151,6 +151,23 @@
         .tutorial code {
             color: #f8f8f2;
         }
+        .tutorial .btn-submit {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+        .tutorial .btn-submit:hover {
+            background-color: #388e3c;
+        }
+        .tutorial .result {
+            margin-top: 15px;
+            font-weight: bold;
+        }
         /* Quizzes Section */
         .quizzes {
             margin-bottom: 60px;
@@ -240,6 +257,7 @@
             border-radius: 5px;
             min-height: 100px;
             white-space: pre-wrap;
+            font-family: monospace;
         }
         /* 3D Visualization Section */
         .visualization-section {
@@ -362,17 +380,92 @@
         <!-- Tutorials Section -->
         <section id="tutorials" class="tutorials">
             <h2>Tutorials</h2>
-            <!-- Tutorial 1 -->
-            <div class="tutorial" data-tutorial-id="1">
-                <h3>1. Introduction to FreeGLUT</h3>
-                <p>FreeGLUT is an open-source alternative to the OpenGL Utility Toolkit (GLUT) library. It provides a simple API for creating windows, handling input, and managing the OpenGL context.</p>
-                <p><strong>Key Features:</strong></p>
-                <ul>
-                    <li>Window creation and management</li>
-                    <li>Input handling (keyboard, mouse)</li>
-                    <li>Callback functions for rendering and events</li>
-                </ul>
-                <pre><code>#include <GL/freeglut.h>
+            <!-- Tutorials will be dynamically inserted here -->
+        </section>
+
+        <!-- Quizzes Section -->
+        <section id="quizzes" class="quizzes">
+            <h2>Quizzes</h2>
+            <!-- Quizzes will be dynamically inserted here -->
+        </section>
+
+        <!-- Code Editor Section -->
+        <section id="code-editor" class="code-editor-section">
+            <h2>Code Editor</h2>
+            <div class="editor-container">
+                <textarea id="code-editor-textarea">
+// Write your FreeGLUT code here
+#include <GL/freeglut.h>
+
+int main(int argc, char** argv) {
+    glutInit(&argc, argv);
+    glutCreateWindow("FreeGLUT Window");
+    glutMainLoop();
+    return 0;
+}
+                </textarea>
+                <button class="btn-run" onclick="downloadCode()">Download Code</button>
+                <div class="output" id="output">
+                    <!-- Output or messages will appear here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 3D Visualization Section -->
+        <section id="visualization" class="visualization-section">
+            <h2>3D Visualization</h2>
+            <div class="visualization-container">
+                <p>Explore a simple 3D rotating cube using WebGL.</p>
+                <canvas id="webgl-canvas" width="400" height="400"></canvas>
+            </div>
+        </section>
+
+        <!-- Progress Tracker Section -->
+        <section id="progress" class="progress-tracker">
+            <h2>Progress Tracker</h2>
+            <div class="progress">
+                <p>Tutorials Completed:</p>
+                <div class="progress-bar">
+                    <div class="progress-bar-inner" id="tutorial-progress" style="width: 0%;">0%</div>
+                </div>
+                <p>Quizzes Completed:</p>
+                <div class="progress-bar">
+                    <div class="progress-bar-inner" id="quiz-progress" style="width: 0%;">0%</div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer id="footer" class="footer">
+        <p>&copy; 2024 FreeGLUT Learn. All rights reserved.</p>
+        <div class="social-icons">
+            <a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" target="_blank"><i class="fab fa-twitter"></i></a>
+            <a href="#" target="_blank"><i class="fab fa-github"></i></a>
+            <a href="#" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+    </footer>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/clike/clike.min.js"></script>
+    <!-- WebGL Helper Library -->
+    <script>
+        // Sample Data for Tutorials and Quizzes
+        const tutorialsData = [
+            {
+                id: 1,
+                title: "Introduction to FreeGLUT",
+                content: `
+<p>FreeGLUT is an open-source alternative to the OpenGL Utility Toolkit (GLUT) library. It provides a simple API for creating windows, handling input, and managing the OpenGL context.</p>
+<p><strong>Key Features:</strong></p>
+<ul>
+    <li>Window creation and management</li>
+    <li>Input handling (keyboard, mouse)</li>
+    <li>Callback functions for rendering and events</li>
+</ul>
+<pre><code>#include <GL/freeglut.h>
 
 int main(int argc, char** argv) {
     glutInit(&argc, argv);
@@ -380,38 +473,38 @@ int main(int argc, char** argv) {
     glutMainLoop();
     return 0;
 }</code></pre>
-                <button class="btn-submit" onclick="completeTutorial(1)">Mark as Completed</button>
-                <div class="result" id="result-tutorial1"></div>
-            </div>
-            <!-- Tutorial 2 -->
-            <div class="tutorial" data-tutorial-id="2">
-                <h3>2. Setting Up Code::Blocks with FreeGLUT</h3>
-                <p>Follow these steps to set up FreeGLUT in Code::Blocks:</p>
-                <ol>
-                    <li><strong>Download FreeGLUT:</strong> Visit the <a href="https://sourceforge.net/projects/freeglut/" target="_blank">FreeGLUT SourceForge page</a> and download the latest version.</li>
-                    <li><strong>Extract Files:</strong> Extract the downloaded files to a directory, e.g., <code>C:\FreeGLUT</code>.</li>
-                    <li><strong>Configure Code::Blocks:</strong>
-                        <ul>
-                            <li>Open Code::Blocks and create a new project.</li>
-                            <li>Go to <strong>Project > Build options</strong>.</li>
-                            <li>Add the FreeGLUT <code>include</code> directory in the Compiler settings.</li>
-                            <li>Add the FreeGLUT <code>lib</code> directory in the Linker settings.</li>
-                            <li>Link against <code>freeglut.lib</code>, <code>opengl32.lib</code>, <code>glu32.lib</code>, and <code>gdi32.lib</code>.</li>
-                        </ul>
-                    </li>
-                </ol>
-                <pre><code>// Example Code::Blocks Configuration
-// Compiler Settings > Search directories > Compiler: C:\FreeGLUT\include
-// Linker Settings > Search directories > Linker: C:\FreeGLUT\lib
+`
+            },
+            {
+                id: 2,
+                title: "Setting Up Code::Blocks with FreeGLUT",
+                content: `
+<p>Follow these steps to set up FreeGLUT in Code::Blocks:</p>
+<ol>
+    <li><strong>Download FreeGLUT:</strong> Visit the <a href="https://sourceforge.net/projects/freeglut/" target="_blank">FreeGLUT SourceForge page</a> and download the latest version.</li>
+    <li><strong>Extract Files:</strong> Extract the downloaded files to a directory, e.g., <code>C:\\FreeGLUT</code>.</li>
+    <li><strong>Configure Code::Blocks:</strong>
+        <ul>
+            <li>Open Code::Blocks and create a new project.</li>
+            <li>Go to <strong>Project > Build options</strong>.</li>
+            <li>Add the FreeGLUT <code>include</code> directory in the Compiler settings.</li>
+            <li>Add the FreeGLUT <code>lib</code> directory in the Linker settings.</li>
+            <li>Link against <code>freeglut.lib</code>, <code>opengl32.lib</code>, <code>glu32.lib</code>, and <code>gdi32.lib</code>.</li>
+        </ul>
+    </li>
+</ol>
+<pre><code>// Example Code::Blocks Configuration
+// Compiler Settings > Search directories > Compiler: C:\\FreeGLUT\\include
+// Linker Settings > Search directories > Linker: C:\\FreeGLUT\\lib
 // Linker Settings > Link libraries: freeglut.lib; opengl32.lib; glu32.lib; gdi32.lib</code></pre>
-                <button class="btn-submit" onclick="completeTutorial(2)">Mark as Completed</button>
-                <div class="result" id="result-tutorial2"></div>
-            </div>
-            <!-- Tutorial 3 -->
-            <div class="tutorial" data-tutorial-id="3">
-                <h3>3. Basic OpenGL Rendering with FreeGLUT</h3>
-                <p>Learn how to render a simple triangle using FreeGLUT and OpenGL.</p>
-                <pre><code>#include <GL/freeglut.h>
+`
+            },
+            {
+                id: 3,
+                title: "Basic OpenGL Rendering with FreeGLUT",
+                content: `
+<p>Learn how to render a simple triangle using FreeGLUT and OpenGL.</p>
+<pre><code>#include <GL/freeglut.h>
 
 // Rotation angle
 float angle = 0.0f;
@@ -473,14 +566,15 @@ int main(int argc, char** argv) {
     glutMainLoop();
     return 0;
 }</code></pre>
-                <button class="btn-submit" onclick="completeTutorial(3)">Mark as Completed</button>
-                <div class="result" id="result-tutorial3"></div>
-            </div>
-            <!-- Tutorial 4 -->
-            <div class="tutorial" data-tutorial-id="4">
-                <h3>4. Handling Keyboard and Mouse Input</h3>
-                <p>Learn how to handle user input using FreeGLUT's callback functions.</p>
-                <pre><code>#include <GL/freeglut.h>
+`
+            },
+            // Add more tutorials as needed up to 20-30
+            {
+                id: 4,
+                title: "Handling Keyboard and Mouse Input",
+                content: `
+<p>Learn how to handle user input using FreeGLUT's callback functions.</p>
+<pre><code>#include <GL/freeglut.h>
 
 // Rotation angle
 float angle = 0.0f;
@@ -563,14 +657,14 @@ int main(int argc, char** argv) {
     glutMainLoop();
     return 0;
 }</code></pre>
-                <button class="btn-submit" onclick="completeTutorial(4)">Mark as Completed</button>
-                <div class="result" id="result-tutorial4"></div>
-            </div>
-            <!-- Tutorial 5 -->
-            <div class="tutorial" data-tutorial-id="5">
-                <h3>5. Animations and Timers</h3>
-                <p>Implement animations using FreeGLUT's timer functions.</p>
-                <pre><code>#include <GL/freeglut.h>
+`
+            },
+            {
+                id: 5,
+                title: "Animations and Timers",
+                content: `
+<p>Implement animations using FreeGLUT's timer functions.</p>
+<pre><code>#include <GL/freeglut.h>
 
 // Rotation angle
 float angle = 0.0f;
@@ -616,7 +710,7 @@ void initGL() {
 // Main function
 int main(int argc, char** argv) {
     glutInit(&argc, argv);
-    // Use double buffering and RGB colors with depth buffer
+    // Use double buffering, RGB colors, and depth buffer
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     // Set window size
     glutInitWindowSize(800, 600);
@@ -633,14 +727,14 @@ int main(int argc, char** argv) {
     glutMainLoop();
     return 0;
 }</code></pre>
-                <button class="btn-submit" onclick="completeTutorial(5)">Mark as Completed</button>
-                <div class="result" id="result-tutorial5"></div>
-            </div>
-            <!-- Tutorial 6 -->
-            <div class="tutorial" data-tutorial-id="6">
-                <h3>6. 3D Rendering with FreeGLUT</h3>
-                <p>Extend your knowledge to render 3D objects using FreeGLUT and OpenGL.</p>
-                <pre><code>#include <GL/freeglut.h>
+`
+            },
+            {
+                id: 6,
+                title: "3D Rendering with FreeGLUT",
+                content: `
+<p>Extend your knowledge to render 3D objects using FreeGLUT and OpenGL.</p>
+<pre><code>#include <GL/freeglut.h>
 
 // Rotation angles
 float angleX = 0.0f;
@@ -679,9 +773,6 @@ void idle() {
 void initGL() {
     glEnable(GL_DEPTH_TEST);
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-    glEnable(GL_COLOR_MATERIAL);
-    glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
 }
 
 // Main function
@@ -700,22 +791,18 @@ int main(int argc, char** argv) {
     glutDisplayFunc(display);
     glutIdleFunc(idle);
 
-    // Set light properties
-    GLfloat light_pos[] = {1.0f, 1.0f, 1.0f, 0.0f};
-    glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
-
     // Enter the main loop
     glutMainLoop();
     return 0;
 }</code></pre>
-                <button class="btn-submit" onclick="completeTutorial(6)">Mark as Completed</button>
-                <div class="result" id="result-tutorial6"></div>
-            </div>
-            <!-- Tutorial 7 -->
-            <div class="tutorial" data-tutorial-id="7">
-                <h3>7. Lighting and Shading</h3>
-                <p>Implement basic lighting and shading to enhance the visual appearance of your 3D objects.</p>
-                <pre><code>#include <GL/freeglut.h>
+`
+            },
+            {
+                id: 7,
+                title: "Lighting and Shading",
+                content: `
+<p>Implement basic lighting and shading to enhance the visual appearance of your 3D objects.</p>
+<pre><code>#include <GL/freeglut.h>
 
 // Rotation angles
 float angleX = 0.0f;
@@ -727,7 +814,7 @@ void display() {
     glLoadIdentity();
 
     // Move back to see the cube
-    glTranslatef(0.0f, 0.0f, -7.0f);
+    glTranslatef(0.0f, 0.0f, -5.0f);
 
     // Rotate the cube
     glRotatef(angleX, 1.0f, 0.0f, 0.0f);
@@ -796,14 +883,14 @@ int main(int argc, char** argv) {
     glutMainLoop();
     return 0;
 }</code></pre>
-                <button class="btn-submit" onclick="completeTutorial(7)">Mark as Completed</button>
-                <div class="result" id="result-tutorial7"></div>
-            </div>
-            <!-- Tutorial 8 -->
-            <div class="tutorial" data-tutorial-id="8">
-                <h3>8. Texture Mapping</h3>
-                <p>Apply textures to your 3D objects to add realism.</p>
-                <pre><code>#include <GL/freeglut.h>
+`
+            },
+            {
+                id: 8,
+                title: "Texture Mapping",
+                content: `
+<p>Apply textures to your 3D objects to add realism.</p>
+<pre><code>#include <GL/freeglut.h>
 #include <SOIL/SOIL.h>
 
 // Rotation angles
@@ -829,7 +916,7 @@ void display() {
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, texture);
 
-    // Draw textured cube
+    // Draw a textured cube
     glutSolidCube(2.0f);
 
     glDisable(GL_TEXTURE_2D);
@@ -892,240 +979,165 @@ int main(int argc, char** argv) {
     glutMainLoop();
     return 0;
 }</code></pre>
-                <button class="btn-submit" onclick="completeTutorial(8)">Mark as Completed</button>
-                <div class="result" id="result-tutorial8"></div>
-            </div>
-            <!-- Add more tutorials as needed -->
-        </section>
+`
+            },
+            // Add more tutorials up to 20-30 following the same structure
+        ];
 
-        <!-- Quizzes Section -->
-        <section id="quizzes" class="quizzes">
-            <h2>Quizzes</h2>
-            <!-- Quiz 1 -->
-            <div class="quiz" data-quiz-id="1">
-                <h3>Quiz 1: FreeGLUT Basics</h3>
-                <p>What is FreeGLUT primarily used for?</p>
-                <ul class="options">
-                    <li><input type="radio" name="quiz1" id="quiz1a" value="a"><label for="quiz1a">A) Handling network operations</label></li>
-                    <li><input type="radio" name="quiz1" id="quiz1b" value="b"><label for="quiz1b">B) Creating windows and handling input in OpenGL applications</label></li>
-                    <li><input type="radio" name="quiz1" id="quiz1c" value="c"><label for="quiz1c">C) Database management</label></li>
-                    <li><input type="radio" name="quiz1" id="quiz1d" value="d"><label for="quiz1d">D) Image processing</label></li>
-                </ul>
-                <button class="btn-submit" onclick="submitQuiz(1)">Submit</button>
-                <div class="result" id="result-quiz1"></div>
-            </div>
-            <!-- Quiz 2 -->
-            <div class="quiz" data-quiz-id="2">
-                <h3>Quiz 2: Code::Blocks Configuration</h3>
-                <p>Which library is NOT required to link when setting up FreeGLUT in Code::Blocks?</p>
-                <ul class="options">
-                    <li><input type="radio" name="quiz2" id="quiz2a" value="a"><label for="quiz2a">A) freeglut.lib</label></li>
-                    <li><input type="radio" name="quiz2" id="quiz2b" value="b"><label for="quiz2b">B) opengl32.lib</label></li>
-                    <li><input type="radio" name="quiz2" id="quiz2c" value="c"><label for="quiz2c">C) glu32.lib</label></li>
-                    <li><input type="radio" name="quiz2" id="quiz2d" value="d"><label for="quiz2d">D) socket.lib</label></li>
-                </ul>
-                <button class="btn-submit" onclick="submitQuiz(2)">Submit</button>
-                <div class="result" id="result-quiz2"></div>
-            </div>
-            <!-- Quiz 3 -->
-            <div class="quiz" data-quiz-id="3">
-                <h3>Quiz 3: OpenGL Rendering</h3>
-                <p>Which function is used to clear the color and depth buffers in OpenGL?</p>
-                <ul class="options">
-                    <li><input type="radio" name="quiz3" id="quiz3a" value="a"><label for="quiz3a">A) glClear()</label></li>
-                    <li><input type="radio" name="quiz3" id="quiz3b" value="b"><label for="quiz3b">B) glBegin()</label></li>
-                    <li><input type="radio" name="quiz3" id="quiz3c" value="c"><label for="quiz3c">C) glEnd()</label></li>
-                    <li><input type="radio" name="quiz3" id="quiz3d" value="d"><label for="quiz3d">D) glFlush()</label></li>
-                </ul>
-                <button class="btn-submit" onclick="submitQuiz(3)">Submit</button>
-                <div class="result" id="result-quiz3"></div>
-            </div>
-            <!-- Quiz 4 -->
-            <div class="quiz" data-quiz-id="4">
-                <h3>Quiz 4: Input Handling</h3>
-                <p>Which callback function handles keyboard input in FreeGLUT?</p>
-                <ul class="options">
-                    <li><input type="radio" name="quiz4" id="quiz4a" value="a"><label for="quiz4a">A) glutKeyboardFunc()</label></li>
-                    <li><input type="radio" name="quiz4" id="quiz4b" value="b"><label for="quiz4b">B) glutMouseFunc()</label></li>
-                    <li><input type="radio" name="quiz4" id="quiz4c" value="c"><label for="quiz4c">C) glutDisplayFunc()</label></li>
-                    <li><input type="radio" name="quiz4" id="quiz4d" value="d"><label for="quiz4d">D) glutIdleFunc()</label></li>
-                </ul>
-                <button class="btn-submit" onclick="submitQuiz(4)">Submit</button>
-                <div class="result" id="result-quiz4"></div>
-            </div>
-            <!-- Quiz 5 -->
-            <div class="quiz" data-quiz-id="5">
-                <h3>Quiz 5: Timer Functions</h3>
-                <p>What is the purpose of glutTimerFunc() in FreeGLUT?</p>
-                <ul class="options">
-                    <li><input type="radio" name="quiz5" id="quiz5a" value="a"><label for="quiz5a">A) To handle keyboard input</label></li>
-                    <li><input type="radio" name="quiz5" id="quiz5b" value="b"><label for="quiz5b">B) To create a window</label></li>
-                    <li><input type="radio" name="quiz5" id="quiz5c" value="c"><label for="quiz5c">C) To set up a recurring timer callback</label></li>
-                    <li><input type="radio" name="quiz5" id="quiz5d" value="d"><label for="quiz5d">D) To draw shapes</label></li>
-                </ul>
-                <button class="btn-submit" onclick="submitQuiz(5)">Submit</button>
-                <div class="result" id="result-quiz5"></div>
-            </div>
-            <!-- Quiz 6 -->
-            <div class="quiz" data-quiz-id="6">
-                <h3>Quiz 6: 3D Rendering</h3>
-                <p>Which function is used to create a solid cube in FreeGLUT?</p>
-                <ul class="options">
-                    <li><input type="radio" name="quiz6" id="quiz6a" value="a"><label for="quiz6a">A) glutWireCube()</label></li>
-                    <li><input type="radio" name="quiz6" id="quiz6b" value="b"><label for="quiz6b">B) glutSolidCube()</label></li>
-                    <li><input type="radio" name="quiz6" id="quiz6c" value="c"><label for="quiz6c">C) glutCube()</label></li>
-                    <li><input type="radio" name="quiz6" id="quiz6d" value="d"><label for="quiz6d">D) glutCreateCube()</label></li>
-                </ul>
-                <button class="btn-submit" onclick="submitQuiz(6)">Submit</button>
-                <div class="result" id="result-quiz6"></div>
-            </div>
-            <!-- Quiz 7 -->
-            <div class="quiz" data-quiz-id="7">
-                <h3>Quiz 7: Lighting</h3>
-                <p>Which function enables lighting in OpenGL?</p>
-                <ul class="options">
-                    <li><input type="radio" name="quiz7" id="quiz7a" value="a"><label for="quiz7a">A) glEnable(GL_DEPTH_TEST)</label></li>
-                    <li><input type="radio" name="quiz7" id="quiz7b" value="b"><label for="quiz7b">B) glEnable(GL_LIGHTING)</label></li>
-                    <li><input type="radio" name="quiz7" id="quiz7c" value="c"><label for="quiz7c">C) glEnable(GL_COLOR_MATERIAL)</label></li>
-                    <li><input type="radio" name="quiz7" id="quiz7d" value="d"><label for="quiz7d">D) glEnable(GL_TEXTURE_2D)</label></li>
-                </ul>
-                <button class="btn-submit" onclick="submitQuiz(7)">Submit</button>
-                <div class="result" id="result-quiz7"></div>
-            </div>
-            <!-- Quiz 8 -->
-            <div class="quiz" data-quiz-id="8">
-                <h3>Quiz 8: Texture Mapping</h3>
-                <p>Which library is commonly used to load textures in OpenGL?</p>
-                <ul class="options">
-                    <li><input type="radio" name="quiz8" id="quiz8a" value="a"><label for="quiz8a">A) SDL</label></li>
-                    <li><input type="radio" name="quiz8" id="quiz8b" value="b"><label for="quiz8b">B) GLFW</label></li>
-                    <li><input type="radio" name="quiz8" id="quiz8c" value="c"><label for="quiz8c">C) SOIL</label></li>
-                    <li><input type="radio" name="quiz8" id="quiz8d" value="d"><label for="quiz8d">D) FreeImage</label></li>
-                </ul>
-                <button class="btn-submit" onclick="submitQuiz(8)">Submit</button>
-                <div class="result" id="result-quiz8"></div>
-            </div>
-            <!-- Add more quizzes as needed -->
-        </section>
+        const quizzesData = [
+            {
+                id: 1,
+                tutorialId: 1,
+                question: "What is FreeGLUT primarily used for?",
+                options: {
+                    a: "Handling network operations",
+                    b: "Creating windows and handling input in OpenGL applications",
+                    c: "Database management",
+                    d: "Image processing"
+                },
+                correct: "b"
+            },
+            {
+                id: 2,
+                tutorialId: 2,
+                question: "Which library is NOT required to link when setting up FreeGLUT in Code::Blocks?",
+                options: {
+                    a: "freeglut.lib",
+                    b: "opengl32.lib",
+                    c: "glu32.lib",
+                    d: "socket.lib"
+                },
+                correct: "d"
+            },
+            {
+                id: 3,
+                tutorialId: 3,
+                question: "Which function initializes GLUT and processes command-line arguments?",
+                options: {
+                    a: "glutInit()",
+                    b: "glutCreateWindow()",
+                    c: "glutMainLoop()",
+                    d: "glutDisplayFunc()"
+                },
+                correct: "a"
+            },
+            {
+                id: 4,
+                tutorialId: 4,
+                question: "Which callback function handles keyboard input in FreeGLUT?",
+                options: {
+                    a: "glutKeyboardFunc()",
+                    b: "glutMouseFunc()",
+                    c: "glutDisplayFunc()",
+                    d: "glutIdleFunc()"
+                },
+                correct: "a"
+            },
+            {
+                id: 5,
+                tutorialId: 5,
+                question: "What is the purpose of glutTimerFunc() in FreeGLUT?",
+                options: {
+                    a: "To handle keyboard input",
+                    b: "To create a window",
+                    c: "To set up a recurring timer callback",
+                    d: "To draw shapes"
+                },
+                correct: "c"
+            },
+            {
+                id: 6,
+                tutorialId: 6,
+                question: "Which function is used to create a solid cube in FreeGLUT?",
+                options: {
+                    a: "glutWireCube()",
+                    b: "glutSolidCube()",
+                    c: "glutCube()",
+                    d: "glutCreateCube()"
+                },
+                correct: "b"
+            },
+            {
+                id: 7,
+                tutorialId: 7,
+                question: "Which function enables lighting in OpenGL?",
+                options: {
+                    a: "glEnable(GL_DEPTH_TEST)",
+                    b: "glEnable(GL_LIGHTING)",
+                    c: "glEnable(GL_COLOR_MATERIAL)",
+                    d: "glEnable(GL_TEXTURE_2D)"
+                },
+                correct: "b"
+            },
+            {
+                id: 8,
+                tutorialId: 8,
+                question: "Which library is commonly used to load textures in OpenGL?",
+                options: {
+                    a: "SDL",
+                    b: "GLFW",
+                    c: "SOIL",
+                    d: "FreeImage"
+                },
+                correct: "c"
+            },
+            // Add more quizzes up to 20-30 following the same structure
+        ];
 
-        <!-- Code Editor Section -->
-        <section id="code-editor" class="code-editor-section">
-            <h2>Code Editor</h2>
-            <div class="editor-container">
-                <textarea id="code-editor-textarea">
-// Write your FreeGLUT code here
-#include <GL/freeglut.h>
-
-int main(int argc, char** argv) {
-    glutInit(&argc, argv);
-    glutCreateWindow("FreeGLUT Window");
-    glutMainLoop();
-    return 0;
-}
-                </textarea>
-                <button class="btn-run" onclick="downloadCode()">Download Code</button>
-                <div class="output" id="output">
-                    <!-- Output or messages will appear here -->
-                </div>
-            </div>
-        </section>
-
-        <!-- 3D Visualization Section -->
-        <section id="visualization" class="visualization-section">
-            <h2>3D Visualization</h2>
-            <div class="visualization-container">
-                <p>Explore a simple 3D rotating cube using WebGL.</p>
-                <canvas id="webgl-canvas" width="400" height="400"></canvas>
-            </div>
-        </section>
-
-        <!-- Progress Tracker Section -->
-        <section id="progress" class="progress-tracker">
-            <h2>Progress Tracker</h2>
-            <div class="progress">
-                <p>Tutorials Completed:</p>
-                <div class="progress-bar">
-                    <div class="progress-bar-inner" id="tutorial-progress" style="width: 0%;">0%</div>
-                </div>
-                <p>Quizzes Completed:</p>
-                <div class="progress-bar">
-                    <div class="progress-bar-inner" id="quiz-progress" style="width: 0%;">0%</div>
-                </div>
-            </div>
-        </section>
-    </div>
-
-    <!-- Footer -->
-    <footer id="footer" class="footer">
-        <p>&copy; 2024 FreeGLUT Learn. All rights reserved.</p>
-        <div class="social-icons">
-            <a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a>
-            <a href="#" target="_blank"><i class="fab fa-twitter"></i></a>
-            <a href="#" target="_blank"><i class="fab fa-github"></i></a>
-            <a href="#" target="_blank"><i class="fab fa-linkedin-in"></i></a>
-        </div>
-    </footer>
-
-    <!-- JavaScript Libraries -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/clike/clike.min.js"></script>
-    <!-- WebGL Helper Library -->
-    <script>
-        // Mobile Navigation Toggle
-        const menuToggle = document.querySelector('.menu-toggle');
-        const navbar = document.querySelector('.navbar');
-
-        menuToggle.addEventListener('click', () => {
-            navbar.classList.toggle('active');
-        });
-
-        // Smooth Scroll Function
-        function scrollToSection(sectionId) {
-            const section = document.getElementById(sectionId);
-            window.scrollTo({
-                top: section.offsetTop - 60,
-                behavior: 'smooth'
+        // Function to generate Tutorials
+        function generateTutorials() {
+            const tutorialsSection = document.querySelector('.tutorials');
+            tutorialsData.forEach(tutorial => {
+                const tutorialDiv = document.createElement('div');
+                tutorialDiv.classList.add('tutorial');
+                tutorialDiv.setAttribute('data-tutorial-id', tutorial.id);
+                tutorialDiv.innerHTML = `
+                    <h3>${tutorial.id}. ${tutorial.title}</h3>
+                    ${tutorial.content}
+                    <button class="btn-submit" onclick="completeTutorial(${tutorial.id})">Mark as Completed</button>
+                    <div class="result" id="result-tutorial${tutorial.id}"></div>
+                `;
+                tutorialsSection.appendChild(tutorialDiv);
             });
         }
 
-        // Quiz Submission Function
-        function submitQuiz(quizNumber) {
-            const quiz = document.querySelector('.quiz[data-quiz-id="' + quizNumber + '"]');
-            const selectedOption = quiz.querySelector('input[type="radio"]:checked');
-            const resultDiv = document.getElementById('result-quiz' + quizNumber);
-            let answer = '';
-            switch(quizNumber) {
-                case 1:
-                    answer = 'b';
-                    break;
-                case 2:
-                    answer = 'd';
-                    break;
-                case 3:
-                    answer = 'a';
-                    break;
-                case 4:
-                    answer = 'a';
-                    break;
-                case 5:
-                    answer = 'c';
-                    break;
-                case 6:
-                    answer = 'b';
-                    break;
-                case 7:
-                    answer = 'b';
-                    break;
-                case 8:
-                    answer = 'c';
-                    break;
-                // Add more cases as needed
-                default:
-                    answer = '';
-            }
+        // Function to generate Quizzes
+        function generateQuizzes() {
+            const quizzesSection = document.querySelector('.quizzes');
+            quizzesData.forEach(quiz => {
+                const quizDiv = document.createElement('div');
+                quizDiv.classList.add('quiz');
+                quizDiv.setAttribute('data-quiz-id', quiz.id);
+                quizDiv.innerHTML = `
+                    <h3>Quiz ${quiz.id}: ${tutorialsData.find(t => t.id === quiz.tutorialId).title}</h3>
+                    <p>${quiz.question}</p>
+                    <ul class="options">
+                        <li><input type="radio" name="quiz${quiz.id}" id="quiz${quiz.id}a" value="a"><label for="quiz${quiz.id}a">A) ${quiz.options.a}</label></li>
+                        <li><input type="radio" name="quiz${quiz.id}" id="quiz${quiz.id}b" value="b"><label for="quiz${quiz.id}b">B) ${quiz.options.b}</label></li>
+                        <li><input type="radio" name="quiz${quiz.id}" id="quiz${quiz.id}c" value="c"><label for="quiz${quiz.id}c">C) ${quiz.options.c}</label></li>
+                        <li><input type="radio" name="quiz${quiz.id}" id="quiz${quiz.id}d" value="d"><label for="quiz${quiz.id}d">D) ${quiz.options.d}</label></li>
+                    </ul>
+                    <button class="btn-submit" onclick="submitQuiz(${quiz.id})">Submit</button>
+                    <div class="result" id="result-quiz${quiz.id}"></div>
+                `;
+                quizzesSection.appendChild(quizDiv);
+            });
+        }
 
-            if (selectedOption) {
-                if (selectedOption.value === answer) {
+        // Function to handle Tutorial Completion
+        function completeTutorial(tutorialId) {
+            const tutorialDiv = document.querySelector(`.tutorial[data-tutorial-id="${tutorialId}"]`);
+            tutorialDiv.style.display = 'none';
+            updateProgress('tutorial');
+        }
+
+        // Function to handle Quiz Submission
+        function submitQuiz(quizId) {
+            const quiz = quizzesData.find(q => q.id === quizId);
+            const selectedOption = document.querySelector(`.quiz[data-quiz-id="${quizId}"] input[type="radio"]:checked`);
+            const resultDiv = document.getElementById(`result-quiz${quizId}`);
+            if(selectedOption) {
+                if(selectedOption.value === quiz.correct) {
                     resultDiv.innerHTML = '<span style="color: green;">Correct!</span>';
                     updateProgress('quiz');
                 } else {
@@ -1136,18 +1148,11 @@ int main(int argc, char** argv) {
             }
         }
 
-        // Tutorial Completion Function
-        function completeTutorial(tutorialNumber) {
-            const resultDiv = document.getElementById('result-tutorial' + tutorialNumber);
-            resultDiv.innerHTML = '<span style="color: green;">Tutorial Completed!</span>';
-            updateProgress('tutorial');
-        }
-
         // Progress Tracker
-        let tutorialsCompleted = 0;
-        let quizzesCompleted = 0;
-        const totalTutorials = document.querySelectorAll('.tutorials .tutorial').length;
-        const totalQuizzes = document.querySelectorAll('.quizzes .quiz').length;
+         tutorialsCompleted = 0;
+        quizzesCompleted = 0;
+         totalTutorials = tutorialsData.length;
+         totalQuizzes = quizzesData.length;
 
         function updateProgress(type) {
             if(type === 'tutorial') {
@@ -1168,6 +1173,10 @@ int main(int argc, char** argv) {
 
         // Initialize Progress Tracker
         document.addEventListener('DOMContentLoaded', () => {
+            // Generate Tutorials and Quizzes
+            generateTutorials();
+            generateQuizzes();
+
             // Initialize progress bars
             updateProgressBar('tutorial-progress', tutorialsCompleted, totalTutorials);
             updateProgressBar('quiz-progress', quizzesCompleted, totalQuizzes);
@@ -1196,7 +1205,23 @@ int main(int argc, char** argv) {
             URL.revokeObjectURL(url);
             const output = document.getElementById('output');
             output.innerHTML = '<span style="color: green;">Code downloaded successfully!</span>';
-            // Optionally mark tutorial as completed
+        }
+
+        // Mobile Navigation Toggle
+         menuToggle = document.querySelector('.menu-toggle');
+         navbar = document.querySelector('.navbar');
+
+        menuToggle.addEventListener('click', () => {
+            navbar.classList.toggle('active');
+        });
+
+        // Smooth Scroll Function
+        function scrollToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            window.scrollTo({
+                top: section.offsetTop - 60,
+                behavior: 'smooth'
+            });
         }
 
         // WebGL Visualization
@@ -1255,7 +1280,7 @@ int main(int argc, char** argv) {
                 },
             };
 
-            // Here's where we call the routine that builds all the objects we'll be drawing.
+            // Initialize buffers
             const buffers = initBuffers(gl);
 
             let then = 0;
@@ -1412,7 +1437,7 @@ int main(int argc, char** argv) {
         let cubeRotation = 0.0;
 
         function drawScene(gl, programInfo, buffers, deltaTime) {
-            gl.clearColor(0.1, 0.1, 0.1, 1.0);  // Clear to black, fully opaque
+            gl.clearColor(0.1, 0.1, 0.1, 1.0);  // Clear to dark gray, fully opaque
             gl.clearDepth(1.0);                 // Clear everything
             gl.enable(gl.DEPTH_TEST);           // Enable depth testing
             gl.depthFunc(gl.LEQUAL);            // Near things obscure far things
@@ -1437,7 +1462,7 @@ int main(int argc, char** argv) {
             // Set the drawing position to the "identity" point, which is the center of the scene.
             const modelViewMatrix = mat4.create();
 
-            // Move the drawing position a bit to where we want to start drawing the square.
+            // Move the drawing position a bit to where we want to start drawing the cube.
             mat4.translate(modelViewMatrix,     // destination matrix
                            modelViewMatrix,     // matrix to translate
                            [0.0, 0.0, -6.0]);  // amount to translate
@@ -1627,7 +1652,186 @@ int main(int argc, char** argv) {
             }
         };
 
-        // WebGL Initialization
+        // Function to generate Tutorials and Quizzes
+        function generateContent() {
+            generateTutorials();
+            generateQuizzes();
+        }
+
+        // Function to handle Tutorial Completion
+        function completeTutorial(tutorialId) {
+            const tutorialDiv = document.querySelector(`.tutorial[data-tutorial-id="${tutorialId}"]`);
+            tutorialDiv.style.display = 'none';
+            updateProgress('tutorial');
+        }
+
+        // Function to handle Quiz Submission
+        function submitQuiz(quizId) {
+            const quiz = quizzesData.find(q => q.id === quizId);
+            const selectedOption = document.querySelector(`.quiz[data-quiz-id="${quizId}"] input[type="radio"]:checked`);
+            const resultDiv = document.getElementById(`result-quiz${quizId}`);
+            if(selectedOption) {
+                if(selectedOption.value === quiz.correct) {
+                    resultDiv.innerHTML = '<span style="color: green;">Correct!</span>';
+                    updateProgress('quiz');
+                } else {
+                    resultDiv.innerHTML = '<span style="color: red;">Incorrect. Try again.</span>';
+                }
+            } else {
+                resultDiv.innerHTML = '<span style="color: red;">Please select an option.</span>';
+            }
+        }
+
+        // Progress Tracker Variables
+        let tutorialsCompleted = 0;
+        let quizzesCompleted = 0;
+        const totalTutorials = tutorialsData.length;
+        const totalQuizzes = quizzesData.length;
+
+        function updateProgress(type) {
+            if(type === 'tutorial') {
+                tutorialsCompleted = Math.min(tutorialsCompleted + 1, totalTutorials);
+                updateProgressBar('tutorial-progress', tutorialsCompleted, totalTutorials);
+            } else if(type === 'quiz') {
+                quizzesCompleted = Math.min(quizzesCompleted + 1, totalQuizzes);
+                updateProgressBar('quiz-progress', quizzesCompleted, totalQuizzes);
+            }
+        }
+
+        function updateProgressBar(elementId, completed, total) {
+            const progressPercentage = Math.min((completed / total) * 100, 100);
+            const progressBar = document.getElementById(elementId);
+            progressBar.style.width = `${progressPercentage}%`;
+            progressBar.textContent = `${Math.round(progressPercentage)}%`;
+        }
+
+        // Initialize Progress Tracker
+        document.addEventListener('DOMContentLoaded', () => {
+            // Generate content
+            generateContent();
+
+            // Initialize progress bars
+            updateProgressBar('tutorial-progress', tutorialsCompleted, totalTutorials);
+            updateProgressBar('quiz-progress', quizzesCompleted, totalQuizzes);
+
+            // Initialize CodeMirror
+            const editor = CodeMirror.fromTextArea(document.getElementById('code-editor-textarea'), {
+                lineNumbers: true,
+                mode: "text/x-c++src",
+                theme: "dracula",
+                tabSize: 4,
+                indentWithTabs: true,
+                lineWrapping: true
+            });
+            window.codeMirrorInstance = editor;
+        });
+
+        // Code Editor Download Function
+        function downloadCode() {
+            const code = window.codeMirrorInstance.getValue();
+            const blob = new Blob([code], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'main.cpp';
+            a.click();
+            URL.revokeObjectURL(url);
+            const output = document.getElementById('output');
+            output.innerHTML = '<span style="color: green;">Code downloaded successfully!</span>';
+        }
+
+        // Mobile Navigation Toggle
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navbar = document.querySelector('.navbar');
+
+        menuToggle.addEventListener('click', () => {
+            navbar.classList.toggle('active');
+        });
+
+        // Smooth Scroll Function
+        function scrollToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            window.scrollTo({
+                top: section.offsetTop - 60,
+                behavior: 'smooth'
+            });
+        }
+
+        // WebGL Visualization
+        function initWebGL() {
+            const canvas = document.getElementById('webgl-canvas');
+            const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+
+            if (!gl) {
+                alert('WebGL not supported, falling back on experimental-webgl');
+                return;
+            }
+
+            if (!gl) {
+                alert('Your browser does not support WebGL');
+                return;
+            }
+
+            // Vertex shader program
+            const vsSource = `
+                attribute vec4 aVertexPosition;
+                attribute vec4 aVertexColor;
+
+                uniform mat4 uModelViewMatrix;
+                uniform mat4 uProjectionMatrix;
+
+                varying lowp vec4 vColor;
+
+                void main(void) {
+                    gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
+                    vColor = aVertexColor;
+                }
+            `;
+
+            // Fragment shader program
+            const fsSource = `
+                varying lowp vec4 vColor;
+
+                void main(void) {
+                    gl_FragColor = vColor;
+                }
+            `;
+
+            // Initialize shader program
+            const shaderProgram = initShaderProgram(gl, vsSource, fsSource);
+
+            // Collect shader info
+            const programInfo = {
+                program: shaderProgram,
+                attribLocations: {
+                    vertexPosition: gl.getAttribLocation(shaderProgram, 'aVertexPosition'),
+                    vertexColor: gl.getAttribLocation(shaderProgram, 'aVertexColor'),
+                },
+                uniformLocations: {
+                    projectionMatrix: gl.getUniformLocation(shaderProgram, 'uProjectionMatrix'),
+                    modelViewMatrix: gl.getUniformLocation(shaderProgram, 'uModelViewMatrix'),
+                },
+            };
+
+            // Initialize buffers
+            const buffers = initBuffers(gl);
+
+            let then = 0;
+
+            // Draw the scene repeatedly
+            function render(now) {
+                now *= 0.001;  // convert to seconds
+                const deltaTime = now - then;
+                then = now;
+
+                drawScene(gl, programInfo, buffers, deltaTime);
+
+                requestAnimationFrame(render);
+            }
+            requestAnimationFrame(render);
+        }
+
+        // Initialize WebGL after window loads
         window.onload = function() {
             initWebGL();
         };
