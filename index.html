@@ -4,12 +4,14 @@
     <meta charset="UTF-8">
     <title>مركز تعلم FreeGLUT</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- خطوط وأيقونات -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- CodeMirror CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/dracula.min.css">
-   <style>
-            :root {
+    <style>
+        :root {
             /* Enhanced Color Palette */
             --primary: #6366f1;
             --primary-dark: #4f46e5;
@@ -200,7 +202,7 @@
             font-size: 2rem;
             margin-bottom: 2rem;
             color: var(--primary);
-            text-align: left; /* لضبط العنوان لليمين */
+            text-align: left; /* لضمان العنوان يبدأ من اليمين في اللغة العربية */
         }
 
         /* Enhanced Cards */
@@ -241,14 +243,13 @@
             overflow-x: auto;
         }
 
-        /* Code Editor */
+        /* Code Editor (اختياري إذا أحببت وضعه في نفس الصفحة) */
         .editor-container {
             background: var(--dark);
             border-radius: 1rem;
             overflow: hidden;
             box-shadow: var(--shadow-lg);
         }
-
         .CodeMirror {
             height: 500px !important;
             font-family: var(--font-code);
@@ -372,9 +373,8 @@
             color: var(--primary);
             transform: translateY(-3px);
         }
-   
-   </style>
-    
+
+    </style>
 </head>
 <body>
     <!-- Enhanced Navigation -->
@@ -385,7 +385,6 @@
             <ul>
                 <li><a href="#tutorials">الدروس</a></li>
                 <li><a href="#quizzes">الاختبارات</a></li>
-               
                 <li><a href="#progress">التقدم</a></li>
             </ul>
         </div>
@@ -400,12 +399,12 @@
         </div>
     </section>
 
-    <!-- Main Content -->
+    <!-- Main Container -->
     <div class="container">
         <!-- Tutorials Section -->
         <section id="tutorials" class="tutorials">
             <h2>الدروس التفاعلية</h2>
-            <!-- سيتم إدراج الدروس ديناميكيًا هنا -->
+            <!-- سيتم إدراج الدروس ديناميكيًا هنا عبر index.js -->
         </section>
 
         <!-- Quizzes Section -->
@@ -413,12 +412,6 @@
             <h2>الاختبارات</h2>
             <!-- سيتم إدراج الاختبارات ديناميكيًا هنا -->
         </section>
-
-        <!-- Code Editor Section -->
-       
-
-        <!-- 3D Visualization Lab Section -->
-      
 
         <!-- Progress Tracker Section -->
         <section id="progress" class="progress-tracker">
@@ -447,13 +440,13 @@
     </footer>
 
     <!-- Scripts -->
+    <!-- سكربت الشيفرة الرئيسية -->
     <script src="index.js"></script>
 
+    <!-- مكتبات CodeMirror الإضافية -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/hint/anyword-hint.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/hint/javascript-hint.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/hint/css-hint.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/hint/html-hint.min.js"></script>
-
-    
 </body>
 </html>
